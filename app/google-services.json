@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "338778095184",
+    "project_id": "coverstar-168de",
+    "storage_bucket": "coverstar-168de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338778095184:android:9f428cf6ea984d767bdb55",
+        "android_client_info": {
+          "package_name": "com.shinleeholdings.coverstar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338778095184-vr8sdds5d9oj0b4t48j0mqrij66fch0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDojKxrxLN7tegKIk_NwD78rkPoolOXSOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338778095184-vr8sdds5d9oj0b4t48j0mqrij66fch0k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "338778095184-2td6heqbcihdc8pngkkhvhilse3br96t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shinleeholdings.coverstar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
