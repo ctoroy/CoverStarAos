@@ -29,5 +29,6 @@ public class MessagingService extends FirebaseMessagingService {
         if (remoteMessage == null) {
             return;
         }
+        // TODO 푸시 처리
     }
 }
