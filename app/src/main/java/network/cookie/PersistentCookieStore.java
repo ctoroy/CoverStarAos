@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.docu.hubtalk.AppConstants;
+import com.shinleeholdings.coverstar.AppConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

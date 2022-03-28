@@ -1,20 +1,25 @@
 package com.shinleeholdings.coverstar.service;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.shinleeholdings.coverstar.CoverStarSchemeActivity;
+import com.shinleeholdings.coverstar.MyApplication;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
 public class MessagingService extends FirebaseMessagingService {
 
-    private static final String NOTIFICATION_ID = "HubTalk";
-    public static final int NOTIFICATION_ID_PUSH_MESSAGE = 1111;
-    private static final String NOTICIFATION_NAME = "HUBTALK";
-
-    public static final String PUSHTYPE_DEFAULT = "0";
-    public static final String PUSHTYPE_CHAT_TEXT = "1";
-    public static final String PUSHTYPE_CHAT_FILE = "2";
-    public static final String PUSHTYPE_NOTICE = "3";
+    public static final int PUSH_GROUP_ID = 1983;
 
     @Override
     public void onNewToken(String s) {
@@ -30,5 +35,33 @@ public class MessagingService extends FirebaseMessagingService {
             return;
         }
         // TODO 푸시 처리
+        showNotification(remoteMessage);
+    }
+
+    private void showNotification(RemoteMessage remoteMessage) {
+        Context context = MyApplication.getContext();
+        int time =  (int) (System.currentTimeMillis() / 1000);
+        String pushLink = "";
+        NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, time, pushLink).
+                setSmallIcon(R.drawable.ic_launcher_background) // TODO 푸시 아이콘 필요
+                .setContentTitle("test") // TODO
+                .setContentText("message") // TODO
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("message")); // TODO
+        ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID + "", time, notiBuilder.build());
+    }
+
+    private NotificationCompat.Builder getNotificationBuilder(Context context, int time, String pushLink) {
+        PendingIntent pi = PendingIntent.getActivity(context, time, getNotificationIntent(context, pushLink), PendingIntent.FLAG_UPDATE_CURRENT);
+        return new NotificationCompat.Builder(context).setColor(ContextCompat.getColor(context, R.color.colorAccent))
+                .setContentIntent(pi)
+                .setLocalOnly(true).setAutoCancel(true)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+    }
+
+    private Intent getNotificationIntent(Context context, String pushLink) {
+        Intent intent = new Intent(context, CoverStarSchemeActivity.class);
+        intent.setData(Uri.parse(pushLink));
+        return intent;
     }
 }

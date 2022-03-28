@@ -5,8 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
-import com.google.firebase.FirebaseApp;
-
 public class MyApplication extends Application {
 
     private static MyApplication appContext = null;
