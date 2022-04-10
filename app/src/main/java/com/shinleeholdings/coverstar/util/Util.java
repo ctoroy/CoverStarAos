@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
 
 import com.shinleeholdings.coverstar.R;
@@ -78,6 +81,31 @@ public class Util {
     }
 
     /**
+     * bolder 로 변경해주는 함수
+     *
+     * @param fulltext   전체 텍스트
+     * @param textToBold 변경할 텍스트
+     * @return
+     */
+    public static SpannableStringBuilder getSectionOfTextBold(String fulltext, String... textToBold) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(fulltext);
+
+        for (String textItem : textToBold) {
+            if (textItem.length() > 0 && !textItem.trim().equals("")) {
+                //for counting start/end indexes
+                int startingIndex = fulltext.indexOf(textItem);
+                int endingIndex = startingIndex + textItem.length();
+
+                if (startingIndex >= 0 && endingIndex >= 0) {
+                    builder.setSpan(new StyleSpan(Typeface.BOLD), startingIndex, endingIndex, 0);
+                }
+            }
+        }
+
+        return builder;
+    }
+
+    /**
      * 색상 변경 함수
      *
      * @param context
@@ -85,7 +113,7 @@ public class Util {
      * @param textToColor 변경할 텍스트
      * @return
      */
-    public static SpannableStringBuilder getSectionOfTextColor(Context context, String fulltext, String... textToColor) {
+    public static SpannableStringBuilder getSectionOfTextColor(Context context, @ColorRes int colorResId, String fulltext, String... textToColor) {
         SpannableStringBuilder builder = new SpannableStringBuilder(fulltext);
 
         for (String textItem : textToColor) {
@@ -95,8 +123,7 @@ public class Util {
                 int endingIndex = startingIndex + textItem.length();
 
                 if (startingIndex >= 0 && endingIndex >= 0) {
-                    builder.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.white)), startingIndex, endingIndex, 0);
-                    builder.setSpan(new BackgroundColorSpan(ContextCompat.getColor(context, R.color.black)), startingIndex, endingIndex, 0);
+                    builder.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, colorResId)), startingIndex, endingIndex, 0);
                 }
             }
         }

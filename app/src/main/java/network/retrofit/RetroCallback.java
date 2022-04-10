@@ -2,9 +2,12 @@ package network.retrofit;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.shinleeholdings.coverstar.MyApplication;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.util.DebugLogger;
+import com.shinleeholdings.coverstar.util.DialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 import network.ServerAPIConstants;
@@ -43,13 +46,9 @@ public abstract class RetroCallback<T> implements Callback<T> {
                 String resultMessage = requestResult.getMessage();
                 if (requestResult.isSuccess() == false && TextUtils.isEmpty(resultMessage) == false && needPopupPassRequestMethod(call) == false) {
                     if (Util.isActivityAvailable(getCurrentActivity())) {
-//                        DialogHelper.showDialog(getCurrentActivity(), requestResult.getMessage(), new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                sendResult(requestResult);
-//                            }
-//                        });
-//                        return;
+                        // TODO
+//                        DialogHelper.showDialog(getCurrentActivity(), requestResult.getMessage(), v -> sendResult(requestResult));
+                        return;
                     }
                 }
                 sendResult(requestResult);
@@ -63,8 +62,9 @@ public abstract class RetroCallback<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         if (t instanceof ConnectivityInterceptor.NoConnectivityException) {
-            if (Util.isActivityAvailable(getCurrentActivity())) {
-//                DialogHelper.showNetWorkCheckDialog(getCurrentActivity());
+            Activity activity = getCurrentActivity();
+            if (Util.isActivityAvailable(activity)) {
+                DialogHelper.showToast(activity, activity.getString(R.string.network_not_connected), false);
             }
         }
 

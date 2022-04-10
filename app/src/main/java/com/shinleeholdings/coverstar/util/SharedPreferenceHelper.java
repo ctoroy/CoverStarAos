@@ -10,6 +10,8 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MyApplication;
 
 public class SharedPreferenceHelper {
+    public static final String LOGIN_ID = "LOGIN_ID";
+    public static final String LOGIN_PW = "LOGIN_PW";
     public static final String PUSH_ID = "PUSH_ID";
 
     private static volatile SharedPreferenceHelper instance;

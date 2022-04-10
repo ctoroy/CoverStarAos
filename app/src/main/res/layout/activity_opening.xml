@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.45"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"/>
+    
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:text="@string/login"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/rounded_corner_box_ff7a9a"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:id="@+id/loginButton"/>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:text="@string/join"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_corner_box_bg_white_border_ff7a9a"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:id="@+id/joinButton"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.55"/>
+</LinearLayout>

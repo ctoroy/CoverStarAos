@@ -15,7 +15,7 @@ public interface ApiInterface {
 
     @POST("/HubTalk_API/user/deleteContact")
     @FormUrlEncoded
-    Call<BaseResponse> deleteContact(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse> login(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @GET
     Call<ResponseBody> getInputStreamFromUrl(@Url String url);

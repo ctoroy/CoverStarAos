@@ -1,14 +1,44 @@
 <resources>
     <string name="app_name">CoverStar</string>
     <string name="scheme">coverstar</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="information">안내</string>
+    <string name="network_not_connected">네트워크 연결 상태를 확인해주세요.</string>
+
+    <string name="login">로그인</string>
+    <string name="join">가입하기</string>
+    <string name="rule_agree">약관 동의</string>
+    <string name="use_rule">이용 약관</string>
+    <string name="use_rule_agree_need">이용 약관에 동의해주세요.</string>
+    <string name="agree_all_rule">모든 약관에 동의합니다.</string>
+    <string name="agree_use_rule">[필수] 이용자 약관에 동의</string>
+    <string name="agree_private_rule">[필수] 개인정보 처리방침 동의</string>
+
+    <string name="phone_cert">본인 인증</string>
+    <string name="phone_cert_agree_need">본인 인증을 진행합니다.</string>
+    <string name="phone_input_hint">‘-’를 제외한 휴대폰 번호를 입력해주세요.</string>
+
+    <string name="cert_num_send">인증번호 발송 완료</string>
+    <string name="cert_num_send_complete">인증번호를 발송하였습니다</string>
+    <string name="send">발송</string>
+
+    <string name="insert_sended_number">전송된 인증번호를 입력하세요.</string>
+    <string name="sended_number">전송된 인증번호</string>
+
+    <string name="insert_six_number">인증번호 6자리를 입력하세요.</string>
+    <string name="resend">재전송</string>
+    <string name="cert_complete">인증완료</string>
+    <string name="remain_time_format" formatted="false">%02d:%02d 남음</string>
+
+    <string name="registered_num">가입하신 번호</string>
+    <string name="insert_registered_num">가입하신 번호를 입력해주세요.</string>
+
+    <string name="welcome_user">%s님 반갑습니다.</string>
+    <string name="login_hint">다른 사용자로 로그인 할 경우\n해당 사용자의 휴대폰 번호를 입력해 주세요.</string>
+
+    <string name="backpressed_finish">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
+    <string name="next">다음</string>
+    <string name="send_phone_auth">인증번호 전송</string>
 </resources>

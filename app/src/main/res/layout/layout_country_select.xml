@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="345dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/closeLayout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_close"/>
+    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/countryRecyclerView"
+        android:layout_width="345dp"
+        android:layout_height="480dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_marginBottom="35dp"/>
+
+</LinearLayout>
