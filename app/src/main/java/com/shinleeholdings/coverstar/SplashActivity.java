@@ -10,19 +10,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.shinleeholdings.coverstar.databinding.ActivitySplashBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
-import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private ActivitySplashBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySplashBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(ActivitySplashBinding.inflate(getLayoutInflater()).getRoot());
 
         if (isTaskRoot() == false) {
             Intent intent = getIntent();

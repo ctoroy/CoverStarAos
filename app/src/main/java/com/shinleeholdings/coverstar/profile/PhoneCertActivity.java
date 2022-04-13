@@ -9,11 +9,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +23,7 @@ import com.shinleeholdings.coverstar.data.CountryData;
 import com.shinleeholdings.coverstar.databinding.ActivityPhoneCertBinding;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.DialogHelper;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.concurrent.TimeUnit;
@@ -36,7 +34,7 @@ public class PhoneCertActivity extends AppCompatActivity {
     public static final String PHONE_CERT_MODE_LOGIN = "LOGIN";
     public static final String PHONE_CERT_MODE_RECERT = "RECERT";
 
-    private static final long SMS_AUTH_TIME = 3 * 60 * 1000;
+    private static final long SMS_AUTH_TIME_SEC = 2 * 60;
 
     private String certMode = "";
 
@@ -73,13 +71,11 @@ public class PhoneCertActivity extends AppCompatActivity {
 
         binding.selectCountryLayout.setOnClickListener(view ->
             // TODO test
-
-                binding.ccp.performClick()
-
-//            DialogHelper.showCountrySelectPopup(PhoneCertActivity.this, country -> {
-//                selectedCountry = country;
-//                setCountrySelected();
-//            })
+//                binding.ccp.performClick();
+            DialogHelper.showCountrySelectPopup(PhoneCertActivity.this, country -> {
+                selectedCountry = country;
+                setCountrySelected();
+            })
         );
 
         binding.nextButton.setOnClickListener(view -> {
@@ -147,15 +143,6 @@ public class PhoneCertActivity extends AppCompatActivity {
 
         binding.nextButton.setText(getString(R.string.cert_complete));
         binding.nextButton.setOnClickListener(view -> {
-            String certNum = binding.certNumEditText.getText().toString();
-            if (TextUtils.isEmpty(certNum) || TextUtils.isEmpty(verificationId)) {
-                return;
-            }
-
-            if (authCredential == null) {
-                authCredential = PhoneAuthProvider.getCredential(verificationId, certNum);
-            }
-            cancelCertificationTimer();
             startFirebaseUserAuth();
         });
     }
@@ -185,24 +172,30 @@ public class PhoneCertActivity extends AppCompatActivity {
         initAuthInfo();
         // TODO 사용자의 국가 설정
 //        mFirebaseAuth.setLanguageCode("kr");
-        // TODO 이걸로 on / off 해보자
-//        mFirebaseAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
-
+        ProgressDialogHelper.show(this);
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mFirebaseAuth)
                         .setPhoneNumber("+8201031240677")       // Phone number to verify
-                        .setTimeout(SMS_AUTH_TIME, TimeUnit.MILLISECONDS) // Timeout and unit
+                        .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
+                        // disable "auto-retrieval" by setting the timeout of verifyPhoneNumber to 0
+                        // (Reference: https://firebase.google.com/docs/reference/android/com/google/firebase/auth/PhoneAuthProvider.html)
                         .setActivity(this)                 // Activity (for callback binding)
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+//                                즉시 인증(Instant verification) : 때에 따라서는 인증 코드를 보내거나 입력하지 않고 전화번호를 즉시 인증
+//                                자동 검색(Auto-retrieval) : 일부 기기에서는 수신되는 인증 SMS를 Google Play 서비스가 자동으로 감지하여 사용자의 개입 없이 인증을 수행
+//                                일부 이동통신사에서는 이 기능을 제공하지 않을 수 있습니다. SMS 메시지 끝에 11자리 해시를 포함하는 SMS Retriever API를 사용
+                                ProgressDialogHelper.dismiss();
                                 DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks Complete : " + phoneAuthCredential);
                                 PhoneCertActivity.this.authCredential = phoneAuthCredential;
-                                // TODO 이미 코드 설정까지 된거라 이걸로 로그인?
-                                showCertNumInputLayout();
+                                // 이미 코드 설정까지 된거라 이걸로 로그인?
+                                startFirebaseUserAuth();
                             }
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
+                                ProgressDialogHelper.dismiss();
+
                                 DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks fail : " + e.getMessage());
                                 // TODO 에러 문구 노출 필요
                                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
@@ -212,8 +205,9 @@ public class PhoneCertActivity extends AppCompatActivity {
 
                             @Override
                             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                                ProgressDialogHelper.dismiss();
+
                                 DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks onCodeSent");
-                                // TODO
                                 PhoneCertActivity.this.verificationId = verificationId;
                                 PhoneCertActivity.this.token = token;
                                 DialogHelper.showCertNumSendCompletePopup(PhoneCertActivity.this);
@@ -225,8 +219,21 @@ public class PhoneCertActivity extends AppCompatActivity {
     }
 
     private void startFirebaseUserAuth() {
-        // TODO 파베 인증 완료 API 처리 작업
+        if (authCredential == null) {
+            String certNum = binding.certNumEditText.getText().toString();
+            if (TextUtils.isEmpty(certNum) || TextUtils.isEmpty(verificationId)) {
+                return;
+            }
+            authCredential = PhoneAuthProvider.getCredential(verificationId, certNum);
+        }
+
+        cancelCertificationTimer();
+
+        ProgressDialogHelper.show(this);
+
         mFirebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, task -> {
+            ProgressDialogHelper.dismiss();
+
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
                 DebugLogger.i("PhoneAuth signInWithCredential:success");
@@ -244,10 +251,11 @@ public class PhoneCertActivity extends AppCompatActivity {
     }
 
     private void startCertificationTimer() {
+        long remainTime = SMS_AUTH_TIME_SEC * 1000;
         cancelCertificationTimer();
-        setRemainTimeText(SMS_AUTH_TIME);
+        setRemainTimeText(remainTime);
 
-        cTimer = new CountDownTimer(SMS_AUTH_TIME, 1000) {
+        cTimer = new CountDownTimer(remainTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 setRemainTimeText(millisUntilFinished);

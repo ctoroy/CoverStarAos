@@ -7,6 +7,8 @@ plugins {
 android {
     compileSdk 31
 
+    // shinlee12#$
+
     defaultConfig {
         applicationId "com.shinleeholdings.coverstar"
         minSdk 23
@@ -50,7 +52,6 @@ dependencies {
 
     // Declare the dependencies for the Crashlytics and Analytics libraries
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
 
     // Declare the dependency for the Cloud Firestore library
     implementation 'com.google.firebase:firebase-firestore'
