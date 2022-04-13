@@ -9,10 +9,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -42,6 +46,11 @@ public class PhoneCertActivity extends AppCompatActivity {
 
     CountDownTimer cTimer;
 
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private PhoneAuthCredential authCredential = null;
+    private String verificationId = "";
+    private PhoneAuthProvider.ForceResendingToken token = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +71,16 @@ public class PhoneCertActivity extends AppCompatActivity {
     private void initUi() {
         binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
 
-        binding.selectCountryLayout.setOnClickListener(view -> DialogHelper.showCountrySelectPopup(PhoneCertActivity.this, country -> {
-            selectedCountry = country;
-            setCountrySelected();
-        }));
+        binding.selectCountryLayout.setOnClickListener(view ->
+            // TODO test
+
+                binding.ccp.performClick()
+
+//            DialogHelper.showCountrySelectPopup(PhoneCertActivity.this, country -> {
+//                selectedCountry = country;
+//                setCountrySelected();
+//            })
+        );
 
         binding.nextButton.setOnClickListener(view -> {
             if (certMode.equals(PHONE_CERT_MODE_JOIN)) {
@@ -128,20 +143,20 @@ public class PhoneCertActivity extends AppCompatActivity {
         startCertificationTimer();
 
         binding.resendLayout.setVisibility(View.GONE);
-        binding.resendLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendPhoneAuth();
-            }
-        });
+        binding.resendLayout.setOnClickListener(view -> sendPhoneAuth());
 
         binding.nextButton.setText(getString(R.string.cert_complete));
-        binding.nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 파베 인증 완료 API 처리 작업
-                cancelCertificationTimer();
+        binding.nextButton.setOnClickListener(view -> {
+            String certNum = binding.certNumEditText.getText().toString();
+            if (TextUtils.isEmpty(certNum) || TextUtils.isEmpty(verificationId)) {
+                return;
             }
+
+            if (authCredential == null) {
+                authCredential = PhoneAuthProvider.getCredential(verificationId, certNum);
+            }
+            cancelCertificationTimer();
+            startFirebaseUserAuth();
         });
     }
 
@@ -153,6 +168,12 @@ public class PhoneCertActivity extends AppCompatActivity {
         setModeUi();
     }
 
+    private void initAuthInfo() {
+        authCredential = null;
+        verificationId = "";
+        token = null;
+    }
+
     private void sendPhoneAuth() {
         String phoneNum = binding.phoneNumEditText.getText().toString();
         if (TextUtils.isEmpty(phoneNum)) {
@@ -160,44 +181,66 @@ public class PhoneCertActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        https://firebase.google.com/docs/auth/android/phone-auth?hl=ko&authuser=0
+        initAuthInfo();
         // TODO 사용자의 국가 설정
-//        auth.setLanguageCode("kr");
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
+//        mFirebaseAuth.setLanguageCode("kr");
+        // TODO 이걸로 on / off 해보자
+//        mFirebaseAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
+
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mFirebaseAuth)
                         .setPhoneNumber("+8201031240677")       // Phone number to verify
                         .setTimeout(SMS_AUTH_TIME, TimeUnit.MILLISECONDS) // Timeout and unit
                         .setActivity(this)                 // Activity (for callback binding)
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                // This callback will be invoked in two situations:
-                                // 1 - Instant verification. In some cases the phone number can be instantly
-                                //     verified without needing to send or enter a verification code.
-                                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-                                //     detect the incoming verification SMS and perform verification without
-                                //     user action.
-                                DebugLogger.i("PhoneAuth Complete : " + phoneAuthCredential);
-                                DialogHelper.showCertNumSendCompletePopup(PhoneCertActivity.this);
+                                DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks Complete : " + phoneAuthCredential);
+                                PhoneCertActivity.this.authCredential = phoneAuthCredential;
+                                // TODO 이미 코드 설정까지 된거라 이걸로 로그인?
                                 showCertNumInputLayout();
                             }
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
-                                // This callback is invoked in an invalid request for verification is made,
-                                // for instance if the the phone number format is not valid.
-                                DebugLogger.i("PhoneAuth fail : " + e.getMessage());
-
+                                DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks fail : " + e.getMessage());
+                                // TODO 에러 문구 노출 필요
                                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                                    // Invalid request
                                 } else if (e instanceof FirebaseTooManyRequestsException) {
-                                    // The SMS quota for the project has been exceeded
                                 }
+                            }
 
-                                // Show a message and update the UI
+                            @Override
+                            public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                                DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks onCodeSent");
+                                // TODO
+                                PhoneCertActivity.this.verificationId = verificationId;
+                                PhoneCertActivity.this.token = token;
+                                DialogHelper.showCertNumSendCompletePopup(PhoneCertActivity.this);
+                                showCertNumInputLayout();
                             }
                         })
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+
+    private void startFirebaseUserAuth() {
+        // TODO 파베 인증 완료 API 처리 작업
+        mFirebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                // Sign in success, update UI with the signed-in user's information
+                DebugLogger.i("PhoneAuth signInWithCredential:success");
+
+                FirebaseUser user = task.getResult().getUser();
+                // Update UI
+            } else {
+                // Sign in failed, display a message and update the UI
+                DebugLogger.i("PhoneAuth signInWithCredential:failure");
+                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                    // The verification code entered was invalid
+                }
+            }
+        });
     }
 
     private void startCertificationTimer() {

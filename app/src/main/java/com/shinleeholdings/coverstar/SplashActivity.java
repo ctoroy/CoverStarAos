@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                 SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.PUSH_ID, task.getResult());
             }
 
-            new Handler().postDelayed(() -> startLogin(), 1000);
+            new Handler().postDelayed(this::startLogin, 1000);
         });
     }
 

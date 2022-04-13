@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hbb20.CountryCodePicker;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CountryData;
 import com.shinleeholdings.coverstar.ui.CountryListAdapter;
@@ -53,6 +54,10 @@ public class DialogHelper {
 
     public interface ICountrySelectListener {
         public void onCountrySelected(CountryData country);
+    }
+
+    public static void test(Activity activity) {
+
     }
 
     public static void showCountrySelectPopup(Activity activity, ICountrySelectListener listener) {

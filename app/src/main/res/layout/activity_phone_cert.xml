@@ -65,6 +65,17 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ccpDialog_cornerRadius="8dp"
+            app:ccpDialog_keyboardAutoPopup="true"
+            app:ccpDialog_allowSearch="true"
+            app:ccp_autoDetectCountry="true"
+            app:ccp_countryPreference="in,us,nz,gb"
+            android:visibility="gone"
+            app:ccp_hintExampleNumber="true" />
         <EditText
             android:id="@+id/phoneNumEditText"
             android:layout_width="match_parent"
