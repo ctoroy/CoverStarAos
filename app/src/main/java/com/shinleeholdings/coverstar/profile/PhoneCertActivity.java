@@ -1,5 +1,9 @@
 package com.shinleeholdings.coverstar.profile;
 
+import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_JOIN;
+import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_LOGIN;
+import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_RECERT;
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -29,10 +33,6 @@ import com.shinleeholdings.coverstar.util.Util;
 import java.util.concurrent.TimeUnit;
 
 public class PhoneCertActivity extends AppCompatActivity {
-
-    public static final String PHONE_CERT_MODE_JOIN = "JOIN";
-    public static final String PHONE_CERT_MODE_LOGIN = "LOGIN";
-    public static final String PHONE_CERT_MODE_RECERT = "RECERT";
 
     private static final long SMS_AUTH_TIME_SEC = 2 * 60;
 
@@ -67,7 +67,7 @@ public class PhoneCertActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
+        binding.titleLayout.titleBackLayout.setOnClickListener(view -> onBackPressed());
 
         binding.selectCountryLayout.setOnClickListener(view ->
             // TODO test
@@ -237,9 +237,10 @@ public class PhoneCertActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
                 DebugLogger.i("PhoneAuth signInWithCredential:success");
-
                 FirebaseUser user = task.getResult().getUser();
+
                 // Update UI
+                userAuthComplete();
             } else {
                 // Sign in failed, display a message and update the UI
                 DebugLogger.i("PhoneAuth signInWithCredential:failure");
@@ -248,6 +249,17 @@ public class PhoneCertActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void userAuthComplete() {
+        if (certMode == PHONE_CERT_MODE_LOGIN) {
+
+        } else if (certMode == PHONE_CERT_MODE_RECERT) {
+
+        } else {
+            // 프로필 이미지와 닉네임 설정
+        }
+
     }
 
     private void startCertificationTimer() {

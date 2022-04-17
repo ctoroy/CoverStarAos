@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 public class RulesAgreeActivity extends AppCompatActivity {
@@ -25,7 +26,7 @@ public class RulesAgreeActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
+        binding.titleLayout.titleBackLayout.setOnClickListener(view -> onBackPressed());
 
         binding.titleLayout.titleTextView.setText(R.string.rule_agree);
         binding.useRuleAgreeNeed.setText(Util.getSectionOfTextBold(getString(R.string.use_rule_agree_need), getString(R.string.use_rule)));
@@ -81,7 +82,7 @@ public class RulesAgreeActivity extends AppCompatActivity {
             return;
         }
         Intent phoneCertIntent = new Intent(this, PhoneCertActivity.class);
-        phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, PhoneCertActivity.PHONE_CERT_MODE_JOIN);
+        phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_JOIN);
         startActivity(phoneCertIntent);
     }
 }

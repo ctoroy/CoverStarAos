@@ -10,6 +10,7 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityOpeningBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -25,9 +26,9 @@ public class LaunchActivity extends AppCompatActivity {
             boolean hasLoginInfo = false; // TODO 로그인 정보 보유 유무 체크
             Intent phoneCertIntent = new Intent(this, PhoneCertActivity.class);
             if (hasLoginInfo) {
-                phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, PhoneCertActivity.PHONE_CERT_MODE_LOGIN);
+                phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_LOGIN);
             } else {
-                phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, PhoneCertActivity.PHONE_CERT_MODE_RECERT);
+                phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_RECERT);
             }
             startActivity(phoneCertIntent);
         });

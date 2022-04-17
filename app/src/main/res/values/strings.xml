@@ -32,6 +32,14 @@
     <string name="cert_complete">인증완료</string>
     <string name="remain_time_format" formatted="false">%02d:%02d 남음</string>
 
+    <string name="profile_image_nickname_setting">프로필 이미지와 닉네임을 설정해 주세요.</string>
+    <string name="nickname_hint">닉네임을 입력해주세요.</string>
+    <string name="nickname_guide">한글/영문/숫자를 사용하여 2~10자 이내</string>
+    <string name="nickname_input">닉네임을 입력해주세요.</string>
+
+    <string name="starchain_start">스타체인 지갑을 생성합니다.</string>
+    <string name="starchain_info">스타체인은\n커버스타의 모든 서비스에 사용되는\n블록체인 기반의 코인입니다.\n향후 서비스 예정인\n펫스타, 스타뮤직, 스타마켓 등\n스타월드와 관련된 모든 서비스 역시\n스타페인을 기반으로\n운영될 예정입니다.</string>
+
     <string name="registered_num">가입하신 번호</string>
     <string name="insert_registered_num">가입하신 번호를 입력해주세요.</string>
 

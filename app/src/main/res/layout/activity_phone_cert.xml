@@ -106,10 +106,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:text="@string/login_hint"
-            android:textColor="@color/subTextColor_6a6a6a"
+            android:textColor="@color/hint_text_color"
             android:textSize="14sp" />
     </LinearLayout>
 

@@ -10,6 +10,10 @@ import network.retrofit.RetroClient;
 
 public class LoginHelper {
 
+	public static final String PHONE_CERT_MODE_JOIN = "JOIN";
+	public static final String PHONE_CERT_MODE_LOGIN = "LOGIN";
+	public static final String PHONE_CERT_MODE_RECERT = "RECERT";
+
 	public interface ILoginResultListener {
 		public void onComplete(boolean success);
 	}
