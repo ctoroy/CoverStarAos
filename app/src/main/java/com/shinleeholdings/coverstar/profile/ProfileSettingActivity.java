@@ -54,7 +54,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     private void startPasswordActivity() {
         Intent phoneCertIntent = new Intent(this, UserPasswordActivity.class);
-        phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_JOIN);
+        phoneCertIntent.putExtra(AppConstants.EXTRA.PW_MODE, UserPasswordActivity.PW_MODE_JOIN);
         startActivity(phoneCertIntent);
     }
 }
