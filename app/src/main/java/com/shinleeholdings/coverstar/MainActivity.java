@@ -2,11 +2,11 @@ package com.shinleeholdings.coverstar;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shinleeholdings.coverstar.databinding.ActivityMainBinding;
+import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
 
@@ -15,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+    }
 
+    @Override
+    public void onBackPressed() {
+        BackClickEventHandler.onBackPressed(this);
     }
 }

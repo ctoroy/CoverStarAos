@@ -1,6 +1,7 @@
 package com.shinleeholdings.coverstar.util;
 
 import android.app.Activity;
+import android.os.Process;
 import android.widget.Toast;
 
 import com.shinleeholdings.coverstar.R;
@@ -17,10 +18,10 @@ public class BackClickEventHandler {
 			return;
 		}
 		if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-
 			try {
-				activity.finish();
 				toast.cancel();
+				activity.finishAffinity();
+				Process.killProcess(Process.myPid());
 			} catch (Exception e) {
 			}
 		}

@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityInputInviteCodeBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.Util;
 
-public class InputInviteCodeActivity extends AppCompatActivity {
+public class InputInviteCodeActivity extends BaseActivity {
     private ActivityInputInviteCodeBinding binding;
 
     @Override

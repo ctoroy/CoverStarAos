@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityProfileSettingBinding;
-import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 
-public class ProfileSettingActivity extends AppCompatActivity {
+public class ProfileSettingActivity extends BaseActivity {
     private ActivityProfileSettingBinding binding;
 
     @Override
@@ -49,7 +47,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
     }
 
     private void selectProfileImage() {
-
+        // TODO
     }
 
     private void startPasswordActivity() {

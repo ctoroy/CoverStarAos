@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -25,6 +24,7 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CountryData;
 import com.shinleeholdings.coverstar.databinding.ActivityPhoneCertBinding;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.DialogHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
@@ -32,7 +32,7 @@ import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.concurrent.TimeUnit;
 
-public class PhoneCertActivity extends AppCompatActivity {
+public class PhoneCertActivity extends BaseActivity {
 
     private static final long SMS_AUTH_TIME_SEC = 2 * 60;
 
@@ -150,7 +150,7 @@ public class PhoneCertActivity extends AppCompatActivity {
     private void checkUserValid() {
         // TODO 사용자 유효성 API 체크
 
-        // 유효성 체크 실패시 가입모드로 전환
+        // 유효성 체크 실패시 가입모드로 전환(가입된 유저 정보가 없습니다. 회원가입 먼저 해주세요.
         certMode = PHONE_CERT_MODE_JOIN;
         setModeUi();
     }

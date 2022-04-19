@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.shinleeholdings.coverstar.databinding.ActivitySplashBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
         overridePendingTransition(R.anim.fadein_anim, R.anim.fadeout_anim);
     }

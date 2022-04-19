@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
-public class RulesAgreeActivity extends AppCompatActivity {
+public class RulesAgreeActivity extends BaseActivity {
 
     private ActivityRulesAgreeBinding binding;
 
@@ -52,20 +51,12 @@ public class RulesAgreeActivity extends AppCompatActivity {
         });
 
         binding.userRuleCheckBoxLayout.setOnClickListener(view -> {
-            if (binding.userRuleCheckBoxLayout.isSelected()) {
-                binding.userRuleCheckBoxLayout.setSelected(false);
-            } else {
-                binding.userRuleCheckBoxLayout.setSelected(true);
-            }
+            binding.userRuleCheckBoxLayout.setSelected(!binding.userRuleCheckBoxLayout.isSelected());
             updateAllRuleAgree();
         });
 
         binding.privateRuleCheckBoxLayout.setOnClickListener(view -> {
-            if (binding.privateRuleCheckBoxLayout.isSelected()) {
-                binding.privateRuleCheckBoxLayout.setSelected(false);
-            } else {
-                binding.privateRuleCheckBoxLayout.setSelected(true);
-            }
+            binding.privateRuleCheckBoxLayout.setSelected(!binding.privateRuleCheckBoxLayout.isSelected());
             updateAllRuleAgree();
         });
 

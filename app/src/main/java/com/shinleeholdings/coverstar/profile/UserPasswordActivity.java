@@ -8,15 +8,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityUserPasswordBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.Util;
 
-public class UserPasswordActivity extends AppCompatActivity {
+public class UserPasswordActivity extends BaseActivity {
 
     public static final String PW_MODE_JOIN = "PW_MODE_JOIN";
     public static final String PW_MODE_LOGIN = "PW_MODE_LOGIN";
@@ -46,16 +45,16 @@ public class UserPasswordActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        binding.titleLayout.titleBackLayout.setOnClickListener(view -> onBackPressed());
+        binding.titleLayout.titleBackLayout.setOnClickListener(view -> {
+            Util.hideKeyboard(UserPasswordActivity.this);
+            onBackPressed();
+        });
 
-        binding.passwordLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isPasswordModeFirst) {
-                    Util.showKeyboard(UserPasswordActivity.this, binding.pw1EditText);
-                } else {
-                    Util.showKeyboard(UserPasswordActivity.this, binding.pw2EditText);
-                }
+        binding.passwordLayout.setOnClickListener(view -> {
+            if (isPasswordModeFirst) {
+                Util.showKeyboard(UserPasswordActivity.this, binding.pw1EditText);
+            } else {
+                Util.showKeyboard(UserPasswordActivity.this, binding.pw2EditText);
             }
         });
 
@@ -162,7 +161,6 @@ public class UserPasswordActivity extends AppCompatActivity {
                         startActivity(new Intent(UserPasswordActivity.this, InputInviteCodeActivity.class));
                     }
                 }
-
             }
         });
 

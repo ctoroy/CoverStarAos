@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Process;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -147,5 +148,12 @@ public class Util {
         }
 
         return builder;
+    }
+
+    /**
+     * 프로세스를 죽인다.
+     */
+    public static void killMyProcess() {
+        Process.killProcess(Process.myPid());
     }
 }

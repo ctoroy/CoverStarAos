@@ -1,13 +1,14 @@
 package com.shinleeholdings.coverstar.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.databinding.ActivitySettingCompleteBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 
-public class SettingCompleteActivity extends AppCompatActivity {
+public class SettingCompleteActivity extends BaseActivity {
     private ActivitySettingCompleteBinding binding;
 
     @Override
@@ -21,7 +22,9 @@ public class SettingCompleteActivity extends AppCompatActivity {
 
     private void initUi() {
         binding.nextButton.setOnClickListener(view -> {
-            // TODO 다음처리 필요
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(mainIntent);
         });
     }
 

@@ -2,17 +2,14 @@ package com.shinleeholdings.coverstar.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.shinleeholdings.coverstar.AppConstants;
-import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityOpeningBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
+import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends BaseActivity {
 
     private ActivityOpeningBinding binding;
 

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="@color/white"
+    android:background="@drawable/bg"
     android:layout_height="match_parent">
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="0.45"/>
-
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:src="@drawable/splash_logo"/>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="165dp"
-        android:layout_weight="0.55"/>
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:layout_below="@id/logo"
+        android:text="@string/find_best_cover_star"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:textSize="32sp"/>
+</RelativeLayout>
