@@ -28,11 +28,8 @@ public class InputInviteCodeActivity extends BaseActivity {
         binding.inviteCodeRewardTextView.setText(Util.getSectionOfTextBold(getString(R.string.input_invite_code_reward), getString(R.string.input_invite_code_reward_3star)));
 
         binding.nextButton.setOnClickListener(view -> {
+            // 추천인 코드
             String inviteCode = binding.inviteCodeEditText.getText().toString();
-            if (TextUtils.isEmpty(inviteCode)) {
-                // TODO 추천인 코드 필수인지
-                return;
-            }
 
             // TODO 다음처리 필요
             startActivity(new Intent(InputInviteCodeActivity.this, SettingCompleteActivity.class));
