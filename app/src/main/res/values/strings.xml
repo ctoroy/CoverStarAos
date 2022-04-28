@@ -80,4 +80,9 @@
     <string name="coverstar">커버스타</string>
     <string name="try_now">지금 바로 도전하세요!</string>
 
+    <string name="no_search_result">검색 결과가 없습니다.</string>
+    <string name="search">검색</string>
+    <string name="search_input_hint">검색어를 입력하세요</string>
+
+    <string name="original_singer">원곡가수 :</string>
 </resources>

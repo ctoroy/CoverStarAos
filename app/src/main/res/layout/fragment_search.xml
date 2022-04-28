@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/titleLayout"
+        layout="@layout/layout_title" />
+
+    <LinearLayout
+        android:id="@+id/searchTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/titleLayout"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:textColor="@color/mainTextColor_0e0f0e"
+            android:textColorHint="#828382"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:imeOptions="actionSearch"
+            android:hint="@string/search_input_hint"
+            android:paddingRight="10dp"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/searchImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/search_icon"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignBottom="@id/searchTextLayout"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#ff7a9a" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResultRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchTextLayout"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/noSearchResultView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchTextLayout"
+        android:gravity="center_horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="200dp"
+        android:paddingRight="30dp"
+        android:text="@string/no_search_result"
+        android:textColor="@color/subTextColor_6a6a6a"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
