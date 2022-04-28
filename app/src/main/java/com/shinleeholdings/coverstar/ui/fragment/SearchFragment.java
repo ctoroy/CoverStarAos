@@ -16,10 +16,13 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
 import com.shinleeholdings.coverstar.util.ContestManager;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class SearchFragment extends BaseFragment {
 
     private FragmentSearchBinding binding;
+    private ContestListAdapter mAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -58,17 +61,18 @@ public class SearchFragment extends BaseFragment {
 
         binding.searchResultRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ContestListAdapter adapter = new ContestListAdapter(getContext(), new ContestManager.IContestItemClickListener() {
+        mAdapter = new ContestListAdapter(getContext(), new ContestManager.IContestItemClickListener() {
             @Override
             public void onContestClicked(ContestData contestData) {
                 // TODO 콘테스트 클릭 이벤트 처리하기
             }
         });
 
-        binding.searchResultRecyclerView.setAdapter(adapter);
+        binding.searchResultRecyclerView.setAdapter(mAdapter);
     }
 
     private void requestSearch() {
+        ProgressDialogHelper.show(getActivity());
         String inputText = binding.searchEditText.getText().toString();
         if (TextUtils.isEmpty(inputText)) {
             binding.searchResultRecyclerView.setVisibility(View.GONE);
@@ -76,6 +80,8 @@ public class SearchFragment extends BaseFragment {
             return;
         }
         // TODO 검색 호출하기, 결과 유무로 세팅
+//        ProgressDialogHelper.dismiss();
+//        mAdapter.setData();
 //        binding.searchResultRecyclerView.setVisibility(View.VISIBLE);
 //        binding.noSearchResultView.setVisibility(View.VISIBLE);
 

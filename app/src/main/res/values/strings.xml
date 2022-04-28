@@ -85,4 +85,6 @@
     <string name="search_input_hint">검색어를 입력하세요</string>
 
     <string name="original_singer">원곡가수 :</string>
+
+    <string name="alarm">알림</string>
 </resources>
