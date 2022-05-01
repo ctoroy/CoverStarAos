@@ -1,54 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/alarmTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
+
         <TextView
-            android:id="@+id/typeTextView"
+            android:id="@+id/alarmTypeTextView"
             android:layout_width="wrap_content"
             android:layout_height="18sp"
-            android:textSize="12sp"
+            android:background="@drawable/rounded_corner_box_bg_white_border_303045"
+            android:gravity="center_vertical"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:gravity="center_vertical"
+            android:textColor="#303045"
+            android:textSize="12sp"
             android:textStyle="bold"
-            tools:text="공지"
-            android:background="@drawable/rounded_corner_box_bg_white_border_303045"
-            android:textColor="#303045"/>
+            tools:text="공지" />
+
         <TextView
-            android:id="@+id/noticeTitleTextView"
+            android:id="@+id/alarmTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="11dp"
             android:layout_marginBottom="11dp"
-            android:textSize="16sp"
-            tools:text="대한민국의 커버스타를 찾아라!"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="3"
             android:paddingLeft="10dp"
             android:paddingRight="5dp"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="대한민국의 커버스타를 찾아라!" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrowImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_outlined_directions_chevron_down"/>
+            android:src="@drawable/updown_arrow_bg" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#cdcdcd"/>
+        android:background="#cdcdcd" />
+
+    <LinearLayout
+        android:id="@+id/contentsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/alarmImageView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginBottom="20dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/alarmContentsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#6a6a6a"
+            android:textSize="14sp"
+            tools:text="대한민국의 커버스타를 찾아라!" />
+    </LinearLayout>
 
 </LinearLayout>
