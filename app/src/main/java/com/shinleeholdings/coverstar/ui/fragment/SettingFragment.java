@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
 
-public class SampleFragment extends BaseFragment {
+public class SettingFragment extends BaseFragment {
 
     private FragmentSearchBinding binding;
     @Nullable

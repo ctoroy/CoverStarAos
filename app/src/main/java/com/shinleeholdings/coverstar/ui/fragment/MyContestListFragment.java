@@ -7,15 +7,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.shinleeholdings.coverstar.databinding.FragmentMyContestBinding;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
 
-public class SampleFragment extends BaseFragment {
+public class MyContestListFragment extends BaseFragment {
 
-    private FragmentSearchBinding binding;
+    private FragmentMyContestBinding binding;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        binding = FragmentMyContestBinding.inflate(inflater, container, false);
         initView();
         return binding.getRoot();
     }
