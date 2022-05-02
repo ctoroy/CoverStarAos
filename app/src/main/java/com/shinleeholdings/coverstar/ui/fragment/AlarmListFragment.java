@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
@@ -39,7 +40,15 @@ public class AlarmListFragment extends BaseFragment {
         binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO finish()
+                finish();
+            }
+        });
+
+        binding.alarmListSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.alarmListSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestData();
             }
         });
 

@@ -43,7 +43,7 @@ public class SearchFragment extends BaseFragment {
         binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO finish()
+                finish();
             }
         });
 
