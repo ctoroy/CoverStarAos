@@ -87,4 +87,12 @@
     <string name="original_singer">원곡가수 :</string>
 
     <string name="alarm">알림</string>
+    <string name="setting">설정</string>
+    <string name="logout">로그아웃</string>
+    <string name="edit_profile">회원정보 수정</string>
+
+    <string name="tab_name_home">홈</string>
+    <string name="tab_name_prev_media">지난영상</string>
+    <string name="tab_name_participate">참가신청</string>
+    <string name="tab_name_mypage">마이페이지</string>
 </resources>

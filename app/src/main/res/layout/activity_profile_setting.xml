@@ -44,7 +44,8 @@
             <com.shinleeholdings.coverstar.ui.CircleImageView
                 android:id="@+id/userImageView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:src="@drawable/avator_woman"/>
 
         </FrameLayout>
         <EditText

@@ -8,19 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.shinleeholdings.coverstar.FragmentInteractionCallback;
 import com.shinleeholdings.coverstar.MainActivity;
+import com.shinleeholdings.coverstar.OnFragmentBackPressed;
+import com.shinleeholdings.coverstar.util.FragmentUtils;
 
-import util.FragmentUtils;
-
-public abstract class BaseFragment extends Fragment implements BaseFragment.OnFragmentBackPressed {
-
-    interface OnFragmentBackPressed {
-        void onBackPressed();
-    }
-
-    interface FragmentInteractionCallback {
-        void onFragmentInteractionCallback(BaseFragment fragment, Bundle bundle);
-    }
+public abstract class BaseFragment extends Fragment implements OnFragmentBackPressed {
 
     private FragmentInteractionCallback fragmentInteractionCallback;
 
@@ -59,7 +52,7 @@ public abstract class BaseFragment extends Fragment implements BaseFragment.OnFr
     }
 
     public void addFragment(BaseFragment targetFragment) {
-        FragmentUtils.startFragment(targetFragment, fragmentInteractionCallback);
+        FragmentUtils.startFragment(targetFragment, MainActivity.mCurrentTab, true, fragmentInteractionCallback);
     }
 
     public boolean isFragmentRemoved() {
