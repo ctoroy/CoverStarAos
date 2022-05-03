@@ -45,7 +45,7 @@ public class PhoneCertActivity extends BaseActivity {
 
     CountDownTimer cTimer;
 
-    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private PhoneAuthCredential authCredential = null;
     private String verificationId = "";
     private PhoneAuthProvider.ForceResendingToken token = null;
@@ -230,6 +230,7 @@ public class PhoneCertActivity extends BaseActivity {
 
                     DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks onCodeSent");
                     PhoneCertActivity.this.verificationId = verificationId;
+                    // TODO 이건 어디다 쓰는거지?
                     PhoneCertActivity.this.token = token;
                     DialogHelper.showCertNumSendCompletePopup(PhoneCertActivity.this);
                     showCertNumInputLayout();

@@ -2,6 +2,8 @@ package com.shinleeholdings.coverstar.util;
 
 import android.app.Activity;
 
+import com.shinleeholdings.coverstar.data.LoginUserData;
+
 import java.util.HashMap;
 
 import network.model.BaseResponse;
@@ -31,6 +33,14 @@ public class LoginHelper {
 		}
 
 		return instance;
+	}
+
+	public LoginUserData getSavedLoginUserData() {
+		return SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
+	}
+
+	public void saveLoginUserData(LoginUserData data) {
+		SharedPreferenceHelper.getInstance().putObject(SharedPreferenceHelper.LOGIN_USER_DATA, data);
 	}
 
 	public void login(Activity activity, String id, String pw, ILoginResultListener listener) {

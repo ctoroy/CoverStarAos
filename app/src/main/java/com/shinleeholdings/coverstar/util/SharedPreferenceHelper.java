@@ -13,6 +13,7 @@ public class SharedPreferenceHelper {
     public static final String LOGIN_ID = "LOGIN_ID";
     public static final String LOGIN_PW = "LOGIN_PW";
     public static final String PUSH_ID = "PUSH_ID";
+    public static final String LOGIN_USER_DATA = "LOGIN_USER_DATA";
 
     private static volatile SharedPreferenceHelper instance;
     private SharedPreferences mShared;
