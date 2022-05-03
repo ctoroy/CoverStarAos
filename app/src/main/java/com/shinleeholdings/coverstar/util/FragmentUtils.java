@@ -1,16 +1,15 @@
 package com.shinleeholdings.coverstar.util;
 
-import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.shinleeholdings.coverstar.FragmentInteractionCallback;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
@@ -20,6 +19,33 @@ public class FragmentUtils {
 
     public static final String TABNAME = ".TABNAME";
     public static final String SHOULD_ADD = ".SHOULD_ADD";
+
+    public static void updateStackIndex(ArrayList<String> list, String tabId) {
+        while (list.indexOf(tabId) != 0) {
+            int i = list.indexOf(tabId);
+            Collections.swap(list, i, i - 1);
+        }
+    }
+
+    public static void updateStackToIndexFirst(ArrayList<String> stackList, String tabId) {
+        int stackListSize = stackList.size();
+        int moveUp = 1;
+        while (stackList.indexOf(tabId) != stackListSize - 1) {
+            int i = stackList.indexOf(tabId);
+            Collections.swap(stackList, moveUp++, i);
+        }
+    }
+
+    public static void updateTabStackIndex(ArrayList<String> tabList, String tabId) {
+        if (!tabList.contains(tabId)) {
+            tabList.add(tabId);
+        }
+
+        while (tabList.indexOf(tabId) != 0) {
+            int i = tabList.indexOf(tabId);
+            Collections.swap(tabList, i, i - 1);
+        }
+    }
 
     public static boolean isTabLayoutGoneFragment(BaseFragment fragment) {
         try {
@@ -125,19 +151,6 @@ public class FragmentUtils {
     public static void removeTargetFragment(FragmentManager fragmentManager, Fragment removeFragment) {
         FragmentTransaction fragmentTransition = fragmentManager.beginTransaction();
         fragmentTransition.remove(removeFragment).commitAllowingStateLoss();
-    }
-
-    public static void startFragment(
-            BaseFragment targetFragment,
-            String stackTabName,
-            boolean shouldAdd,
-            FragmentInteractionCallback fragmentInteractionCallback) {
-        if (fragmentInteractionCallback != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(TABNAME, stackTabName);
-            bundle.putBoolean(SHOULD_ADD, shouldAdd);
-            fragmentInteractionCallback.onFragmentInteractionCallback(targetFragment, bundle);
-        }
     }
 
 //        fun getFragmentInstance(fragmentName: String): MainBaseFragment? = when (fragmentName) {

@@ -189,10 +189,13 @@ public class PhoneCertActivity extends BaseActivity {
 //        https://firebase.google.com/docs/auth/android/phone-auth?hl=ko&authuser=0
         initAuthInfo();
 
-        mFirebaseAuth.setLanguageCode(binding.ccp.getSelectedCountryNameCode());
+        String languageCode = binding.ccp.getSelectedCountryNameCode();
+        String countryCodeWithPlus = binding.ccp.getSelectedCountryCodeWithPlus();
+
+        mFirebaseAuth.setLanguageCode(languageCode);
         ProgressDialogHelper.show(this);
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mFirebaseAuth)
-            .setPhoneNumber("+8201031240677")       // Phone number to verify
+            .setPhoneNumber(countryCodeWithPlus + phoneNum)       // Phone number to verify
             .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
             // disable "auto-retrieval" by setting the timeout of verifyPhoneNumber to 0
             // (Reference: https://firebase.google.com/docs/reference/android/com/google/firebase/auth/PhoneAuthProvider.html)

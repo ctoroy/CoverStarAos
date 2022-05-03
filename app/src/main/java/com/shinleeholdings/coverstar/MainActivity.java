@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -22,6 +22,7 @@ import com.shinleeholdings.coverstar.ui.fragment.HomeFragment;
 import com.shinleeholdings.coverstar.ui.fragment.MyPageFragment;
 import com.shinleeholdings.coverstar.ui.fragment.ParticipateFragment;
 import com.shinleeholdings.coverstar.ui.fragment.PrevMediaFragment;
+import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.FragmentUtils;
 
@@ -30,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements FragmentInteractionCallback {
 
     private ActivityMainBinding binding;
 
@@ -61,10 +62,10 @@ public class MainActivity extends BaseActivity {
     protected ArrayList<String> stackList = new ArrayList<>();
     protected ArrayList<String> menuStacks = new ArrayList<>();
 
-    private HomeFragment homeFragment = new HomeFragment();
-    private PrevMediaFragment prevMediaFragment = new PrevMediaFragment();
-    private ParticipateFragment participateFragment = new ParticipateFragment();
-    private MyPageFragment myPageFragment = new MyPageFragment();
+    private final HomeFragment homeFragment = new HomeFragment();
+    private final PrevMediaFragment prevMediaFragment = new PrevMediaFragment();
+    private final ParticipateFragment participateFragment = new ParticipateFragment();
+    private final MyPageFragment myPageFragment = new MyPageFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,25 +73,19 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 바텀시트 메뉴 작업
-
-        // 탭 구조로 메인 액티비티 만들기 , 프래그먼트도
-            // 홈 / 지난 영상 / 참가 신청 / 마이페이지
-
         initFragmentTabStackInfo();
         initUi();
 
         mCurrentTab = "";
 
-        setTabImage(binding.tabLayout.getTabAt(0), true);
         selectedTab(TabMenuType.HOME.toString());
     }
 
     private void initFragmentTabStackInfo() {
-        tagStacks.put(TabMenuType.HOME.toString(), new Stack<String>());
-        tagStacks.put(TabMenuType.PREV_MEDIA.toString(), new Stack<String>());
-        tagStacks.put(TabMenuType.PARTICIPATE.toString(), new Stack<String>());
-        tagStacks.put(TabMenuType.MY_PAGE.toString(), new Stack<String>());
+        tagStacks.put(TabMenuType.HOME.toString(), new Stack<>());
+        tagStacks.put(TabMenuType.PREV_MEDIA.toString(), new Stack<>());
+        tagStacks.put(TabMenuType.PARTICIPATE.toString(), new Stack<>());
+        tagStacks.put(TabMenuType.MY_PAGE.toString(), new Stack<>());
 
         stackList.add(TabMenuType.HOME.toString());
         stackList.add(TabMenuType.PREV_MEDIA.toString());
@@ -102,10 +97,15 @@ public class MainActivity extends BaseActivity {
 
     private void initUi() {
         for (int i=0; i <TabMenuType.values().length; i++) {
-            RelativeLayout tabMenuLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.tab_menu_item, null);
+            LinearLayout tabMenuLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.tab_menu_item, null);
+
+            TabMenuType tabInfo = TabMenuType.values()[i];
 
             AppCompatImageView iconImageView = tabMenuLayout.findViewById(R.id.tab_menu_image);
+            iconImageView.setImageResource(tabInfo.iconResId);
+
             TextView tabTitleTextView = tabMenuLayout.findViewById(R.id.tab_menu_title);
+            tabTitleTextView.setText(getString(tabInfo.textResId));
 
             tabMenuLayout.setLayoutParams(new TableLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -124,18 +124,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 String selectedTabId = getTabKey((int)tab.getTag());
-                setTabImage(tab, true);
                 selectedTab(selectedTabId);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                setTabImage(tab, false);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                setTabImage(tab, true);
                 popStackExceptFirst();
             }
         });
@@ -168,14 +165,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void setTabImage(TabLayout.Tab tab, Boolean isSelected) {
-        String selectedTabId = getTabKey((int)tab.getTag());
-
-        if (selectedTabId.equals(TabMenuType.HOME.toString())) {
-            // TODO ??
-        }
-    }
-
     private void selectedTab(String tabId) {
         if (mCurrentTab.equals(tabId)) {
             return;
@@ -203,9 +192,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void resolveStackLists(String tabId) {
-        // TODO StackListManager
-//        updateStackIndex(stackList, tabId);
-//        updateTabStackIndex(menuStacks, tabId);
+        FragmentUtils.updateStackIndex(stackList, tabId);
+        FragmentUtils.updateTabStackIndex(menuStacks, tabId);
     }
 
     private void initTab(String tabId, BaseFragment fragment, Boolean isInitialFragment) {
@@ -290,7 +278,7 @@ public class MainActivity extends BaseActivity {
                     navigateToPreviousMenu();
                 } else {
                     if (menuStacks.get(0).equals(TabMenuType.HOME.toString())) {
-                        super.onBackPressed();
+                        BackClickEventHandler.onBackPressed(this);
                     } else {
                         menuStacks.remove(0);
                         selectedTab(TabMenuType.HOME.toString());
@@ -302,8 +290,6 @@ public class MainActivity extends BaseActivity {
             BaseFragment targetFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tagStacks.get(mCurrentTab).lastElement());
             targetFragment.onBackPressed();
         }
-        // TODO 언제 호출하지?
-//        BackClickEventHandler.onBackPressed(this);
     }
 
     private void popAndNavigateToPreviousMenu() {
@@ -312,8 +298,7 @@ public class MainActivity extends BaseActivity {
 
         showPreviousMenu();
 
-        // TODO StackListManager
-//        updateStackToIndexFirst(stackList, tempCurrent);
+        FragmentUtils.updateStackToIndexFirst(stackList, tempCurrent);
         menuStacks.remove(0);
     }
 
@@ -343,7 +328,11 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onFragmentInteractionCallback(BaseFragment fragment, Bundle bundle) {
-        showFragment(bundle, fragment);
+        String tab = bundle.getString(TABNAME);
+        boolean shouldAdd = bundle.getBoolean(SHOULD_ADD);
+        FragmentUtils.addShowHideFragment(getSupportFragmentManager(), tagStacks, tab, fragment,
+                getCurrentFragmentFromShownStack(), R.id.mainContainer, shouldAdd);
+        assignCurrentFragment(fragment);
     }
 
     public void popFragment() {
@@ -384,14 +373,6 @@ public class MainActivity extends BaseActivity {
         );
 
         assignCurrentFragment((BaseFragment) fragment);
-    }
-
-    public void showFragment(Bundle bundle, BaseFragment fragmentToAdd) {
-        String tab = bundle.getString(TABNAME);
-        boolean shouldAdd = bundle.getBoolean(SHOULD_ADD);
-        FragmentUtils.addShowHideFragment(getSupportFragmentManager(), tagStacks, tab, fragmentToAdd,
-                getCurrentFragmentFromShownStack(), R.id.mainContainer, shouldAdd);
-        assignCurrentFragment(fragmentToAdd);
     }
 
     private Fragment getCurrentFragmentFromShownStack() {
