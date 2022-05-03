@@ -91,6 +91,16 @@
     <string name="logout">로그아웃</string>
     <string name="edit_profile">회원정보 수정</string>
 
+    <string name="menu">메뉴</string>
+
+    <string name="order_popular">인기순</string>
+    <string name="order_search">조회순</string>
+    <string name="order_recently">최신순</string>
+
+    <string name="fix">고정</string>
+    <string name="delete">삭제</string>
+    <string name="report">신고</string>
+
     <string name="tab_name_home">홈</string>
     <string name="tab_name_prev_media">지난영상</string>
     <string name="tab_name_participate">참가신청</string>

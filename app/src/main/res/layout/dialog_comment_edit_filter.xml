@@ -8,38 +8,22 @@
     android:paddingBottom="26dp"
     android:background="@drawable/rounded_corner_box_top_white_bg">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/closeLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="27dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="15dp"
-            android:text="@string/menu"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
-
-        <FrameLayout
-            android:id="@+id/closeLayout"
+        android:paddingLeft="20dp"
+        android:layout_gravity="right"
+        android:paddingRight="20dp"
+        android:paddingBottom="37dp"
+        android:paddingTop="20dp">
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="20dp">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_close"/>
-        </FrameLayout>
-    </LinearLayout>
+            android:src="@drawable/icon_close"/>
+    </FrameLayout>
     <LinearLayout
-        android:id="@+id/orderPopularLayout"
+        android:id="@+id/fixLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -53,17 +37,17 @@
             android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_popular_bg"/>
+            android:src="@drawable/ico_fix_bg"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:text="@string/order_popular"
+            android:text="@string/fix"
             android:textSize="16sp"
             android:textColor="@color/filter_text_color" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/orderSearchLayout"
+        android:id="@+id/deleteLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -78,17 +62,17 @@
             android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_inquiry_bg"/>
+            android:src="@drawable/ico_delete_bg"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:text="@string/order_search"
+            android:text="@string/delete"
             android:textSize="16sp"
             android:textColor="@color/filter_text_color" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/orderRecentlyLayout"
+        android:id="@+id/reportLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -103,12 +87,12 @@
             android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_recently_bg"/>
+            android:src="@drawable/ico_report_bg"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
-            android:text="@string/order_recently"
+            android:text="@string/report"
             android:textSize="16sp"
             android:textColor="@color/filter_text_color" />
     </LinearLayout>

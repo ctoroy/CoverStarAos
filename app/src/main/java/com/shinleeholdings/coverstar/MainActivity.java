@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
             TabMenuType tabInfo = TabMenuType.values()[i];
 
             AppCompatImageView iconImageView = tabMenuLayout.findViewById(R.id.tab_menu_image);
+            // TODO 각 탭별 아이콘 다 채워졌는지 확인
             iconImageView.setImageResource(tabInfo.iconResId);
 
             TextView tabTitleTextView = tabMenuLayout.findViewById(R.id.tab_menu_title);
