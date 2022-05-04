@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,48 +14,85 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.data.ContestNotice;
 import com.shinleeholdings.coverstar.util.ContestManager;
 
 import java.util.ArrayList;
 
-public class ContestListAdapter extends RecyclerView.Adapter {
+public class HomeListAdapter extends RecyclerView.Adapter {
 
+    private Context mContext;
+    ContestNotice mContestNotice;
+    private final ArrayList<ContestData> mItemList = new ArrayList<>();
     private MainActivity mMainActivity;
 
-    private final ArrayList<ContestData> itemList = new ArrayList<>();
+    private final int ITEM_TYPE_NOTICE = 1;
+    private final int ITEM_TYPE_CONTEST = 2;
 
-    public ContestListAdapter(MainActivity activity) {
+    public HomeListAdapter(MainActivity activity) {
         mMainActivity = activity;
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (mContestNotice != null && position == 0) {
+            return ITEM_TYPE_NOTICE;
+        }
+
+        return ITEM_TYPE_CONTEST;
+    }
+
+    @Override
+    public int getItemCount() {
+        int itemListSize = mItemList.size();
+        if (itemListSize > 0) {
+            if (mContestNotice != null) {
+                itemListSize = itemListSize + 1;
+            }
+        }
+        return itemListSize;
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.contest_list_item, parent, false);
-        return new ItemViewHolder(view);
+        if (viewType == ITEM_TYPE_NOTICE) {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_notice_item, parent, false);
+            return new NoticeItemViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.contest_list_item, parent, false);
+            return new ItemViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        final ContestData item = itemList.get(position);
-        if (item == null) {
-            return;
-        }
+        if (holder instanceof NoticeItemViewHolder) {
+            // TODO 공지 세팅
+        } else {
+            final ContestData item = mItemList.get(position);
+            if (item == null) {
+                return;
+            }
 
-        ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        // TODO 콘테스트 데이터 세팅
+            ItemViewHolder viewHolder = (ItemViewHolder) holder;
+            // TODO 콘테스트 데이터 세팅
+        }
     }
 
-    public void setData(ArrayList<ContestData> dataList) {
-        itemList.clear();
+    public void setData(ContestNotice contestNotice, ArrayList<ContestData> dataList) {
+        mItemList.clear();
+        mContestNotice = null;
+
         if (dataList != null && dataList.size() > 0) {
-            itemList.addAll(dataList);
+            mContestNotice = contestNotice;
+            mItemList.addAll(dataList);
         }
 
         notifyDataSetChanged();
     }
 
     public void clear() {
-        setData(null);
+        setData(null, null);
     }
 
     @Override
@@ -62,9 +100,12 @@ public class ContestListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    @Override
-    public int getItemCount() {
-        return itemList.size();
+    private class NoticeItemViewHolder extends RecyclerView.ViewHolder {
+        // TODO 공지뷰 세팅
+
+        public NoticeItemViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
@@ -90,7 +131,7 @@ public class ContestListAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            ContestData info = itemList.get(position);
+            ContestData info = mItemList.get(position);
             if (info == null) {
                 return;
             }

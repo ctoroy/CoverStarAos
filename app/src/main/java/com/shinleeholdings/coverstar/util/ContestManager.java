@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.util;
 
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.data.ContestData;
 
 public class ContestManager {
@@ -21,5 +22,9 @@ public class ContestManager {
 		}
 
 		return instance;
+	}
+
+	public void showContestDetailFragment(MainActivity activity, ContestData info) {
+		// TODO 콘테스트 상세로 이동
 	}
 }

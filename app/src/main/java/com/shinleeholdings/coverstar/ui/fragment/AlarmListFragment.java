@@ -37,20 +37,10 @@ public class AlarmListFragment extends BaseFragment {
 
     private void initView() {
         binding.titleLayout.titleTextView.setText(getString(R.string.alarm));
-        binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
 
         binding.alarmListSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        binding.alarmListSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestData();
-            }
-        });
+        binding.alarmListSwipeRefreshLayout.setOnRefreshListener(this::requestData);
 
         binding.alarmListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new AlarmListAdapter(getContext());

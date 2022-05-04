@@ -30,8 +30,20 @@ public class SortFilterDialog extends BottomSheetDialogView {
         return binding.getRoot();
     }
 
-    public void init(ISortTypeSelectListener listener) {
+    public void init(SortType selectedSortType, ISortTypeSelectListener listener) {
         binding.closeLayout.setOnClickListener(view -> dismiss());
+
+         switch (selectedSortType) {
+             case SEARCH:
+                 binding.orderSearchLayout.setSelected(true);
+                 break;
+             case LATEST:
+                 binding.orderRecentlyLayout.setSelected(true);
+                 break;
+             default:
+                 binding.orderPopularLayout.setSelected(true);
+                 break;
+         }
 
         // TODO 아이콘들 Pressed 이미지 확인
         binding.orderPopularLayout.setOnClickListener(view -> {

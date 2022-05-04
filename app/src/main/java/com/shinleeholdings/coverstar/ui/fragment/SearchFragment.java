@@ -12,10 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
-import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class SearchFragment extends BaseFragment {
@@ -61,12 +60,7 @@ public class SearchFragment extends BaseFragment {
 
         binding.searchResultRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new ContestListAdapter(getContext(), new ContestManager.IContestItemClickListener() {
-            @Override
-            public void onContestClicked(ContestData contestData) {
-                // TODO 콘테스트 클릭 이벤트 처리하기
-            }
-        });
+        mAdapter = new ContestListAdapter((MainActivity) getActivity());
 
         binding.searchResultRecyclerView.setAdapter(mAdapter);
     }

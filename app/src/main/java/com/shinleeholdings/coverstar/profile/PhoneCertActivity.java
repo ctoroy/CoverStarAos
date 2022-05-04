@@ -274,9 +274,9 @@ public class PhoneCertActivity extends BaseActivity {
     }
 
     private void userAuthComplete() {
-        if (certMode == PHONE_CERT_MODE_LOGIN) {
+        if (certMode.equals(PHONE_CERT_MODE_LOGIN)) {
 
-        } else if (certMode == PHONE_CERT_MODE_RECERT) {
+        } else if (certMode.equals(PHONE_CERT_MODE_RECERT)) {
 
         } else {
             // 프로필 이미지와 닉네임 설정
