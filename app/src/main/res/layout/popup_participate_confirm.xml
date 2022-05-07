@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="345dp"
+    android:layout_width="330dp"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
@@ -26,7 +26,7 @@
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
-        android:text="@string/cert_num_send"/>
+        android:text="@string/regist_confirm"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/checkBoxImageview"
@@ -34,26 +34,41 @@
         android:layout_below="@id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/regist_confirm"/>
 
     <TextView
-        android:id="@+id/certNumSendCompleteTextView"
+        android:id="@+id/participateConfirmTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="33dp"
         android:layout_below="@id/checkBoxImageview"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:gravity="center_horizontal"
         android:textColor="@color/subTextColor_6a6a6a"
         android:layout_centerHorizontal="true"/>
 
-    <Button
-        android:id="@+id/okButton"
-        style="@style/RoundCornerButtonStyle"
-        android:layout_below="@id/certNumSendCompleteTextView"
-        android:layout_marginLeft="30dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginRight="30dp"
         android:layout_marginBottom="48dp"
-        android:text="@string/ok" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_below="@id/participateConfirmTextView"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            style="@style/RoundCornerWhiteStrokeButtonStyle"
+            android:text="@string/cancel"/>
+        <Button
+            android:id="@+id/okButton"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            style="@style/RoundCornerButtonStyle"
+            android:text="@string/ok"/>
+
+    </LinearLayout>
 </RelativeLayout>

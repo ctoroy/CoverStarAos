@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">CoverStar</string>
     <string name="scheme">coverstar</string>
+    <string name="channel_name">알림</string>
 
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
+    <string name="close">닫기</string>
     <string name="information">안내</string>
     <string name="network_not_connected">네트워크 연결 상태를 확인해주세요.</string>
     <string name="find_best_cover_star">최고의 커버스타를\n찾아라</string>
@@ -100,6 +102,29 @@
     <string name="fix">고정</string>
     <string name="delete">삭제</string>
     <string name="report">신고</string>
+
+    <string name="regist">신청하기</string>
+    <string name="song_title">노래 제목(타이틀)</string>
+    <string name="song_title_hint">제목을 입력해 주세요.</string>
+    <string name="singer_name">가수이름(서브타이틀)</string>
+    <string name="singer_name_hint">이름을 입력해 주세요.</string>
+    <string name="media_link">영상링크</string>
+    <string name="media_link_hint">https://www.youtube.com/watch?v=aM9cPsVjOxQ</string>
+    <string name="mention">한마디</string>
+    <string name="mention_hint">감사합니다.</string>
+    <string name="participate_count">※ 참가 신청을 위해 %s가 사용됩니다.</string>
+    <string name="coin_count_format">%s Star</string>
+
+    <string name="select_season_round">참가신청할 시즌 라운드를 선택해 주세요</string>
+    <string name="input_song_title">노래 제목을 입력해 주세요</string>
+    <string name="input_singer_name">가수이름을 입력해 주세요</string>
+    <string name="input_media_link">영상링크를 입력해 주세요</string>
+    <string name="input_mention">한마디 입력해 주세요</string>
+
+    <string name="regist_confirm">신청하기 확인</string>
+    <string name="participate_count_confirm">%s를 사용해서 참여 하시겠습니까?</string>
+    <string name="point_check_message">포인트가 없습니다. 포인트 충전 후 신청해주세요</string>
+    <string name="point_check">포인트 확인</string>
 
     <string name="tab_name_home">홈</string>
     <string name="tab_name_prev_media">지난영상</string>

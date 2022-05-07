@@ -1,17 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/homeSwipeRefreshLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="50dp">
 
-        <include
-            android:id="@+id/titleLayout"
-            layout="@layout/layout_title" />
-    </LinearLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/tab_name_participate"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/myCoinCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="15dp"
+            android:textColor="#6a6a6a"
+            android:textSize="14sp" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/coverstarSeasonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:id="@+id/selectedSeasonTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="#ff7a9a"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/polygon_1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#ff7a9a" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/song_title"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/songTitleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/rounded_corner_box_bg_white_border_dddddd"
+                android:gravity="center_vertical"
+                android:hint="@string/song_title_hint"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/subTextColor_6a6a6a"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/singer_name"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/singerNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/rounded_corner_box_bg_white_border_dddddd"
+                android:gravity="center_vertical"
+                android:hint="@string/singer_name_hint"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/subTextColor_6a6a6a"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/media_link"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/mediaLinkEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/rounded_corner_box_bg_white_border_dddddd"
+                android:gravity="center_vertical"
+                android:hint="@string/media_link_hint"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/subTextColor_6a6a6a"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/mention"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/mentionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/rounded_corner_box_bg_white_border_dddddd"
+                android:gravity="top"
+                android:hint="@string/mention_hint"
+                android:maxLength="1000"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/subTextColor_6a6a6a"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/paticipateCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/mention"
+                android:textColor="@color/subTextColor_6a6a6a"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/registTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_corner_box_ff7a9a"
+        android:gravity="center"
+        android:text="@string/regist"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

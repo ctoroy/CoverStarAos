@@ -35,6 +35,11 @@ public class LoginHelper {
 		return instance;
 	}
 
+	public int getMyCoinCount() {
+		// TODO 내 코인개수 할당 및 업데이트 로직 정리
+		return 10;
+	}
+
 	public LoginUserData getSavedLoginUserData() {
 		return SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
 	}

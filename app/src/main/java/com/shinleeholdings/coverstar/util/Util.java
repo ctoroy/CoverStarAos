@@ -20,10 +20,33 @@ import android.widget.EditText;
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
 
+import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 
 public class Util {
+    public static String getCoinDisplayCountString(int value) {
+        String displayFormat = value + "";
+        return String.format(MyApplication.getContext().getString(R.string.coin_count_format), displayFormat);
+    }
 
+    public static String getDisplayCountString(int value) {
+//		999 -> 999
+//		1000 -> 1K
+//		1,000K -> 1M
+        String unit = "";
+
+        if (value >= 1000000) {
+            value = value / 1000000;
+            unit = "M";
+        } else {
+            if (value >= 1000) {
+                value = value / 1000;
+                unit = "K";
+            }
+        }
+
+        return value + unit;
+    }
     public static void hideKeyboard(Activity activity) {
 
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

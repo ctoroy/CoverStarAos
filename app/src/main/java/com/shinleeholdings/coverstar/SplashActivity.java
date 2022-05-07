@@ -41,7 +41,9 @@ public class SplashActivity extends BaseActivity {
         String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
         String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
         if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
-            startOpeningActivity();
+            // TODO test
+            startMainActivity();
+//            startOpeningActivity();
             return;
         }
 

@@ -3,10 +3,7 @@ package com.shinleeholdings.coverstar.ui.fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +12,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.data.ContestNotice;
-import com.shinleeholdings.coverstar.util.ContestManager;
+import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 
 import java.util.ArrayList;
 
@@ -75,7 +72,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             }
 
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            // TODO 콘테스트 데이터 세팅
+            viewHolder.contestItemLayout.setData(mMainActivity, item);
         }
     }
 
@@ -108,34 +105,13 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+    private class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView contestImageView;
-
-        TextView likeCountTextView;
-        TextView songTitleTextView;
-        TextView singerNameTextView;
-        TextView originalSingerNameTextView;
+        ContestItemLayout contestItemLayout;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            contestImageView = itemView.findViewById(R.id.contestImageView);
-            likeCountTextView = itemView.findViewById(R.id.likeCountTextView);
-            songTitleTextView = itemView.findViewById(R.id.songTitleTextView);
-            singerNameTextView = itemView.findViewById(R.id.singerNameTextView);
-            originalSingerNameTextView = itemView.findViewById(R.id.originalSingerNameTextView);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            ContestData info = mItemList.get(position);
-            if (info == null) {
-                return;
-            }
-            ContestManager.getSingleInstance().showContestDetailFragment(mMainActivity, info);
+            contestItemLayout = itemView.findViewById(R.id.contestItemLayout);
         }
     }
 }

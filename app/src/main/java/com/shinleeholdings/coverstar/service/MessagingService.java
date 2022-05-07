@@ -20,6 +20,7 @@ import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 public class MessagingService extends FirebaseMessagingService {
 
     public static final int PUSH_GROUP_ID = 1983;
+    public static String channelId = "CoverStar";
 
     @Override
     public void onNewToken(String s) {
@@ -40,21 +41,22 @@ public class MessagingService extends FirebaseMessagingService {
 
     private void showNotification(RemoteMessage remoteMessage) {
         Context context = MyApplication.getContext();
-        int time =  (int) (System.currentTimeMillis() / 1000);
         String pushLink = "";
-        NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, time, pushLink).
+
+        NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushLink).
                 setSmallIcon(R.drawable.ic_launcher_background) // TODO 푸시 아이콘 필요
                 .setContentTitle("test") // TODO
                 .setContentText("message") // TODO
                 .setStyle(new NotificationCompat.BigTextStyle().bigText("message")); // TODO
-        ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID + "", time, notiBuilder.build());
+        ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID, notiBuilder.build());
     }
 
-    private NotificationCompat.Builder getNotificationBuilder(Context context, int time, String pushLink) {
-        PendingIntent pi = PendingIntent.getActivity(context, time, getNotificationIntent(context, pushLink), PendingIntent.FLAG_UPDATE_CURRENT);
-        return new NotificationCompat.Builder(context).setColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .setContentIntent(pi)
-                .setLocalOnly(true).setAutoCancel(true)
+    private NotificationCompat.Builder getNotificationBuilder(Context context, String pushLink) {
+        return new NotificationCompat.Builder(context, channelId)
+                .setColor(ContextCompat.getColor(context, R.color.colorAccent))
+                .setContentIntent(PendingIntent.getActivity(context, 0, getNotificationIntent(context, pushLink), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setLocalOnly(true)
+                .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE);
     }

@@ -8,6 +8,7 @@ package com.shinleeholdings.coverstar;
 public class AppConstants {
 
     public static final String APP_NAME = "CoverStar";
+    public static final int PARTICIPATE_COIN_COUNT = 35;
 
     public static final class EXTRA {
         public static final String PHONE_CERT_MODE = "PHONE_CERT_MODE";
