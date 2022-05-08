@@ -70,7 +70,7 @@ public class MyPageFragment extends BaseFragment {
         binding.depositeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 입금
+                addFragment(new DepositeFragment());
             }
         });
         binding.withdrawLayout.setOnClickListener(new View.OnClickListener() {

@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
-import com.shinleeholdings.coverstar.util.ImageLoader;
-import com.shinleeholdings.coverstar.util.LoginHelper;
 
 public class SettingFragment extends BaseFragment {
 
@@ -38,13 +36,31 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-        ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
-        binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
-
         binding.editProfileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 회원정보 수정
+                // TODO 개인정보
+            }
+        });
+
+        binding.noticeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 공지사항
+            }
+        });
+
+        binding.alarmLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 알림
+            }
+        });
+
+        binding.versionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 버전
             }
         });
 

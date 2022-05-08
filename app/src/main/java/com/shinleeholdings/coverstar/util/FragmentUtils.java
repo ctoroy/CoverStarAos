@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.DepositeFragment;
 import com.shinleeholdings.coverstar.ui.fragment.SettingFragment;
 
 import java.util.ArrayList;
@@ -54,6 +55,9 @@ public class FragmentUtils {
                 return true;
             }
             if (fragment instanceof SettingFragment) {
+                return true;
+            }
+            if (fragment instanceof DepositeFragment) {
                 return true;
             }
         } catch (Exception e) {

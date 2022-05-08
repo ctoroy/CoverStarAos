@@ -1,7 +1,5 @@
 package com.shinleeholdings.coverstar.profile;
 
-import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;

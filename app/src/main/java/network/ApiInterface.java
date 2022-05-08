@@ -13,9 +13,13 @@ import retrofit2.http.Url;
 
 public interface ApiInterface {
 
-    @POST("/HubTalk_API/user/deleteContact")
+    @POST("/coverstarAPI/common/login")
     @FormUrlEncoded
     Call<BaseResponse> login(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("/coverstarAPI/common/uploadImage")
+    @FormUrlEncoded
+    Call<BaseResponse> uploadUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @GET
     Call<ResponseBody> getInputStreamFromUrl(@Url String url);

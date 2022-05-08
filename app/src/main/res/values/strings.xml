@@ -91,7 +91,9 @@
     <string name="alarm">알림</string>
     <string name="setting">설정</string>
     <string name="logout">로그아웃</string>
-    <string name="edit_profile">회원정보 수정</string>
+    <string name="edit_profile">개인 정보</string>
+    <string name="notice">공지 사항</string>
+    <string name="version">버전</string>
 
     <string name="menu">메뉴</string>
 
