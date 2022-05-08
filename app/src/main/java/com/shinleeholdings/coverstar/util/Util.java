@@ -13,6 +13,7 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -27,6 +28,12 @@ public class Util {
     public static String getCoinDisplayCountString(int value) {
         String displayFormat = value + "";
         return String.format(MyApplication.getContext().getString(R.string.coin_count_format), displayFormat);
+    }
+
+    public static int dpToPixel(Context context, float dp) {
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dp, context.getResources().getDisplayMetrics());
+        return px;
     }
 
     public static String getDisplayCountString(int value) {

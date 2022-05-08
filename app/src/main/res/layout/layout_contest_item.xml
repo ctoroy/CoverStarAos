@@ -4,12 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="#ffffff"
-    card_view:cardCornerRadius="4dp"
+    android:layout_height="@dimen/contest_item_height"
+    card_view:cardBackgroundColor="@color/subTextColor_6a6a6a"
+    card_view:cardCornerRadius="7dp"
     card_view:cardPreventCornerOverlap="false"
     card_view:cardElevation="0dp"
-    android:outlineProvider="none"
     card_view:cardUseCompatPadding="false">
 
     <RelativeLayout
@@ -136,6 +135,12 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/white"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_below="@id/contestImageView"
+            android:background="@color/white"/>
 
         <LinearLayout
             android:layout_width="match_parent"

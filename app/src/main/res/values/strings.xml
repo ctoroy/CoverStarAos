@@ -126,6 +126,9 @@
     <string name="point_check_message">포인트가 없습니다. 포인트 충전 후 신청해주세요</string>
     <string name="point_check">포인트 확인</string>
 
+    <string name="epilogue">에필로그</string>
+    <string name="contest_media">경연 영상</string>
+
     <string name="tab_name_home">홈</string>
     <string name="tab_name_prev_media">지난영상</string>
     <string name="tab_name_participate">참가신청</string>

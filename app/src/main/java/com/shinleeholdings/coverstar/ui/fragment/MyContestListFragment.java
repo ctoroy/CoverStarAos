@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentMyContestBinding;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class MyContestListFragment extends BaseFragment {
 
@@ -52,6 +53,9 @@ public class MyContestListFragment extends BaseFragment {
     }
 
     private void requestData() {
+        ProgressDialogHelper.show(getActivity());
         // TODO
+        binding.myContestSwipeRefreshLayout.setRefreshing(false);
+        ProgressDialogHelper.dismiss();
     }
 }

@@ -52,7 +52,8 @@ public class ParticipateFragment extends BaseFragment {
         binding.coverstarSeasonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                binding.selectedSeasonTextView.setText("");
+                // TODO 시즌 선택 팝업 제공 및 선택시 API 다시 호출
             }
         });
         binding.paticipateCountTextView.setText(String.format(getString(R.string.participate_count), Util.getCoinDisplayCountString(AppConstants.PARTICIPATE_COIN_COUNT)));
@@ -105,6 +106,7 @@ public class ParticipateFragment extends BaseFragment {
     private void requestSeasonList() {
         ProgressDialogHelper.show(getActivity());
         // TODO 참가신청 가능한 시즌 목록 가져와서 세팅
+        binding.selectedSeasonTextView.setText("");
 
         ProgressDialogHelper.dismiss();
     }

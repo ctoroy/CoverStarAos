@@ -51,6 +51,7 @@ public class AlarmListFragment extends BaseFragment {
         // TODO 알람 리스트 요청
         ProgressDialogHelper.show(getActivity());
 //        mAdapter.setData();
+        binding.alarmListSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.dismiss();
     }
 }

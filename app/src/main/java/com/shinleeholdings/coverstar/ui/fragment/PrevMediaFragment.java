@@ -6,18 +6,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentPrevMediaBinding;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+
+import java.util.ArrayList;
 
 public class PrevMediaFragment extends BaseFragment {
 
     private FragmentPrevMediaBinding binding;
+    private PrevMediaListAdapter mListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPrevMediaBinding.inflate(inflater, container, false);
         initView();
+        // TODO 시즌 목록 + 리스트 데이터 받아오기
+        requestData();
         return binding.getRoot();
     }
 
@@ -28,12 +39,59 @@ public class PrevMediaFragment extends BaseFragment {
     }
 
     private void initView() {
-        binding.titleLayout.titleTextView.setText(getString(R.string.tab_name_prev_media));
-        binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
+        binding.prevMediaSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.prevMediaSwipeRefreshLayout.setOnRefreshListener(this::requestData);
+
+        binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
+        binding.alarmImageView.setOnClickListener(view -> addFragment(new AlarmListFragment()));
+
+        binding.coverstarSeasonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                // TODO 시즌 선택 팝업 제공 및 선택시 API 다시 호출
+                binding.selectedSeasonTextView.setText("");
             }
         });
+
+        mListAdapter = new PrevMediaListAdapter((MainActivity) getActivity());
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (mListAdapter.getItemViewType(position)) {
+                    case PrevMediaListAdapter.ITEM_TYPE_EPILOGUE:
+                    case PrevMediaListAdapter.ITEM_TYPE_MEDIA_HEADER:
+                        return 2;
+                }
+
+                return 1;
+            }
+        });
+        binding.prevMediaRecyclerView.setItemViewCacheSize(200);
+        binding.prevMediaRecyclerView.setLayoutManager(mLayoutManager);
+        binding.prevMediaRecyclerView.setAdapter(mListAdapter);
+
+    }
+
+    private void requestData() {
+        ProgressDialogHelper.show(getActivity());
+
+        // TODO
+
+//        ArrayList<ContestData> epilogue = new ArrayList<>();
+//        ArrayList<ContestData> itemList = new ArrayList<>();
+//        for(int i = 0; i < 10; i++) {
+//            ContestData item = new ContestData();
+//            epilogue.add(item);
+//
+//            itemList.add(item);
+//            itemList.add(item);
+//            itemList.add(item);
+//            itemList.add(item);
+//        }
+//        mListAdapter.setData(epilogue, itemList);
+
+        binding.prevMediaSwipeRefreshLayout.setRefreshing(false);
+        ProgressDialogHelper.dismiss();
     }
 }

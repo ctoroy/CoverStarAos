@@ -86,6 +86,7 @@ public class HomeFragment extends BaseFragment {
         // TODO
         ProgressDialogHelper.show(getActivity());
 //        mHomeListAdapter.setData();
+        binding.homeSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.dismiss();
     }
 }
