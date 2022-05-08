@@ -11,15 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
-import com.shinleeholdings.coverstar.databinding.FragmentPrevMediaBinding;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
-
-import java.util.ArrayList;
 
 public class MyPageFragment extends BaseFragment {
 

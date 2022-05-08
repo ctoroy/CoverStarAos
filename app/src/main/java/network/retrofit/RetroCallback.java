@@ -1,6 +1,7 @@
 package network.retrofit;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -46,8 +47,12 @@ public abstract class RetroCallback<T> implements Callback<T> {
                 String resultMessage = requestResult.getMessage();
                 if (requestResult.isSuccess() == false && TextUtils.isEmpty(resultMessage) == false && needPopupPassRequestMethod(call) == false) {
                     if (Util.isActivityAvailable(getCurrentActivity())) {
-                        // TODO
-//                        DialogHelper.showDialog(getCurrentActivity(), requestResult.getMessage(), v -> sendResult(requestResult));
+                        DialogHelper.showMessagePopup(getCurrentActivity(), resultMessage, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sendResult(requestResult);
+                            }
+                        });
                         return;
                     }
                 }
@@ -79,10 +84,10 @@ public abstract class RetroCallback<T> implements Callback<T> {
 
     private boolean needPopupPassRequestMethod(Call<T> method) {
         // 서버 결과 팝업이 필요 없는 Method의 경우 여기에 추가
-        String url = method.request().url().toString();
-        if (url.contains("/popUp/getPopUp")) {
-            return true;
-        }
+//        String url = method.request().url().toString();
+//        if (url.contains("/popUp/getPopUp")) {
+//            return true;
+//        }
         return false;
     }
 

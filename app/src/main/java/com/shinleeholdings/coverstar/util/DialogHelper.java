@@ -3,6 +3,7 @@ package com.shinleeholdings.coverstar.util;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
@@ -26,6 +29,21 @@ public class DialogHelper {
         }
 
         toast.show();
+    }
+
+    public static void showMessagePopup(Activity activity, String message, DialogInterface.OnClickListener listener) {
+        AlertDialog dialog = new AlertDialog.Builder(activity).create();
+        dialog.setMessage(message);
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+                listener.onClick(dialogInterface, i);
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     public static void showCertNumSendCompletePopup(Activity activity) {
