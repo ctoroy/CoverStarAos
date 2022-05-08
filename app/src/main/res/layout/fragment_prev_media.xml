@@ -35,6 +35,10 @@
                 android:layout_toLeftOf="@id/alarmImageView"
                 android:src="@drawable/search_icon"/>
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#66ffffff"/>
 
         <RelativeLayout
             android:id="@+id/coverstarSeasonLayout"

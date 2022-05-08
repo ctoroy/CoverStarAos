@@ -133,4 +133,12 @@
     <string name="tab_name_prev_media">지난영상</string>
     <string name="tab_name_participate">참가신청</string>
     <string name="tab_name_mypage">마이페이지</string>
+
+    <string name="my_wallet">My Wallet</string>
+    <string name="star">star</string>
+    <string name="buy">구매</string>
+    <string name="deposite">입금</string>
+    <string name="withdraw">출금</string>
+    <string name="playlist">재생목록</string>
+    <string name="participate_media">참가영상</string>
 </resources>

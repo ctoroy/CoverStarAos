@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Process;
@@ -17,6 +18,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
@@ -25,9 +27,13 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 
 public class Util {
-    public static String getCoinDisplayCountString(int value) {
+    public static String getFormattedCountString(int value) {
+        // TODO Format 적용(12,000)
         String displayFormat = value + "";
-        return String.format(MyApplication.getContext().getString(R.string.coin_count_format), displayFormat);
+        return displayFormat;
+    }
+    public static String getCoinDisplayCountString(int value) {
+        return String.format(MyApplication.getContext().getString(R.string.coin_count_format), getFormattedCountString(value));
     }
 
     public static int dpToPixel(Context context, float dp) {
@@ -54,6 +60,17 @@ public class Util {
 
         return value + unit;
     }
+
+    public static void setTextViewBold(TextView textview, boolean bold) {
+        if (textview != null) {
+            if (bold) {
+                textview.setPaintFlags(textview.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+            } else {
+                textview.setPaintFlags(textview.getPaintFlags() & ~Paint.FAKE_BOLD_TEXT_FLAG);
+            }
+        }
+    }
+
     public static void hideKeyboard(Activity activity) {
 
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

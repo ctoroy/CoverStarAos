@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
 import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 
 public class SettingFragment extends BaseFragment {
 
@@ -37,11 +38,8 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-        // TODO 사용자 이미지 설정
-        ImageLoader.loadImage(binding.userImageView, "");
-
-        // TODO 사용자 닉네임 설정
-        binding.userNicknameTextView.setText("닉네임");
+        ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+        binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
 
         binding.editProfileLayout.setOnClickListener(new View.OnClickListener() {
             @Override

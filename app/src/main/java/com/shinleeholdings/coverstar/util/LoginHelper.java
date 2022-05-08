@@ -40,6 +40,16 @@ public class LoginHelper {
 		return 10;
 	}
 
+	public String getLoginUserImagePath() {
+		// TODO 사용자 이미지 설정
+		return "";
+	}
+
+	public String getLoginUserNickName() {
+		// TODO 사용자 닉네임 설정
+		return "테스트입니다.";
+	}
+
 	public LoginUserData getSavedLoginUserData() {
 		return SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
 	}

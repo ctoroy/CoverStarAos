@@ -88,16 +88,16 @@ public class ParticipateFragment extends BaseFragment {
             return;
         }
 
+        int myCoin = LoginHelper.getSingleInstance().getMyCoinCount();
+        int participateCoin = AppConstants.PARTICIPATE_COIN_COUNT;
+        if (myCoin < participateCoin) {
+            DialogHelper.showPointCheckPopup(getActivity());
+            return;
+        }
+
         DialogHelper.showRegistConfirmPopup(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int myCoin = LoginHelper.getSingleInstance().getMyCoinCount();
-                int participateCoin = AppConstants.PARTICIPATE_COIN_COUNT;
-                if (myCoin < participateCoin) {
-                    DialogHelper.showPointCheckPopup(getActivity());
-                    return;
-                }
-
                 // TODO 참가 신청 API 호출하고 코인 차감? 화면 초기화 하기
             }
         });

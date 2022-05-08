@@ -53,9 +53,9 @@ public class MyContestListFragment extends BaseFragment {
     }
 
     private void requestData() {
+        binding.myContestSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
         // TODO
-        binding.myContestSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.dismiss();
     }
 }

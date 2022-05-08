@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.SettingFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,9 @@ public class FragmentUtils {
     public static boolean isTabLayoutGoneFragment(BaseFragment fragment) {
         try {
             if (fragment instanceof AlarmListFragment) {
+                return true;
+            }
+            if (fragment instanceof SettingFragment) {
                 return true;
             }
         } catch (Exception e) {

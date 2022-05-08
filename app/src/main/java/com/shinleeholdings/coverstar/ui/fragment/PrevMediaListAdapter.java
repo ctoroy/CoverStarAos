@@ -16,6 +16,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
+    public SortFilterDialog.SortType mSelectedSortType = SortFilterDialog.SortType.POPULAR;
+    private SortFilterDialog.ISortTypeSelectListener mSortTypeSelectListener;
+
     private final ArrayList<ContestData> mEpilogueList = new ArrayList<>();
     private final ArrayList<ContestData> mContestMediaList = new ArrayList<>();
     private MainActivity mMainActivity;
@@ -36,9 +40,14 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
         mMainActivity = activity;
     }
 
+    public void setSortType(SortFilterDialog.ISortTypeSelectListener listener) {
+        mSortTypeSelectListener = listener;
+    }
+
     public void setData(ArrayList<ContestData> epliogList, ArrayList<ContestData> contestList) {
         mEpilogueList.clear();
         mContestMediaList.clear();
+
 
         if (epliogList != null && epliogList.size() > 0) {
             mEpilogueList.addAll(epliogList);
@@ -169,7 +178,27 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            // TODO 경연영상 필터 클릭 이벤트
+            SortFilterDialog dialog = new SortFilterDialog(mMainActivity);
+            dialog.init(mSelectedSortType, new SortFilterDialog.ISortTypeSelectListener() {
+                @Override
+                public void onSortTypeSelected(SortFilterDialog.SortType type) {
+                    if (mSelectedSortType == type) {
+                        return;
+                    }
+                    switch (mSelectedSortType) {
+                        case POPULAR:
+                            selectedFilterTextView.setText(mMainActivity.getString(R.string.order_popular));
+                            break;
+                        case SEARCH:
+                            selectedFilterTextView.setText(mMainActivity.getString(R.string.order_search));
+                            break;
+                        case LATEST:
+                            selectedFilterTextView.setText(mMainActivity.getString(R.string.order_recently));
+                            break;
+                    }
+                    mSortTypeSelectListener.onSortTypeSelected(type);
+                }
+            });
         }
     }
 

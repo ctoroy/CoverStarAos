@@ -7,15 +7,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentPrevMediaBinding;
+import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
-
-import java.util.ArrayList;
 
 public class PrevMediaFragment extends BaseFragment {
 
@@ -27,7 +24,6 @@ public class PrevMediaFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPrevMediaBinding.inflate(inflater, container, false);
         initView();
-        // TODO 시즌 목록 + 리스트 데이터 받아오기
         requestData();
         return binding.getRoot();
     }
@@ -54,6 +50,12 @@ public class PrevMediaFragment extends BaseFragment {
         });
 
         mListAdapter = new PrevMediaListAdapter((MainActivity) getActivity());
+        mListAdapter.setSortType(new SortFilterDialog.ISortTypeSelectListener() {
+            @Override
+            public void onSortTypeSelected(SortFilterDialog.SortType type) {
+                requestData();
+            }
+        });
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -74,9 +76,12 @@ public class PrevMediaFragment extends BaseFragment {
     }
 
     private void requestData() {
+        binding.prevMediaSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
 
-        // TODO
+        // TODO 시즌 라운드 및 정렬 값으로 데이터 받아오기
+//        mListAdapter.mSelectedSortType;
+
 
 //        ArrayList<ContestData> epilogue = new ArrayList<>();
 //        ArrayList<ContestData> itemList = new ArrayList<>();
@@ -91,7 +96,6 @@ public class PrevMediaFragment extends BaseFragment {
 //        }
 //        mListAdapter.setData(epilogue, itemList);
 
-        binding.prevMediaSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.dismiss();
     }
 }
