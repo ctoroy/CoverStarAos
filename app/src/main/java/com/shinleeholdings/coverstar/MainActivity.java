@@ -1,8 +1,5 @@
 package com.shinleeholdings.coverstar;
 
-import static com.shinleeholdings.coverstar.util.FragmentUtils.SHOULD_ADD;
-import static com.shinleeholdings.coverstar.util.FragmentUtils.TABNAME;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -328,11 +325,9 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         }
     }
 
-    public void onFragmentInteractionCallback(BaseFragment fragment, Bundle bundle) {
-        String tab = bundle.getString(TABNAME);
-        boolean shouldAdd = bundle.getBoolean(SHOULD_ADD);
-        FragmentUtils.addShowHideFragment(getSupportFragmentManager(), tagStacks, tab, fragment,
-                getCurrentFragmentFromShownStack(), R.id.mainContainer, shouldAdd);
+    public void onFragmentInteractionCallback(BaseFragment fragment) {
+        FragmentUtils.addShowHideFragment(getSupportFragmentManager(), tagStacks, MainActivity.mCurrentTab, fragment,
+                getCurrentFragmentFromShownStack(), R.id.mainContainer, true);
         assignCurrentFragment(fragment);
     }
 

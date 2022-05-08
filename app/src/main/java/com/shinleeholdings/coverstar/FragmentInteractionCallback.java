@@ -5,5 +5,5 @@ import android.os.Bundle;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 
 public interface FragmentInteractionCallback {
-    void onFragmentInteractionCallback(BaseFragment fragment, Bundle bundle);
+    void onFragmentInteractionCallback(BaseFragment fragment);
 }

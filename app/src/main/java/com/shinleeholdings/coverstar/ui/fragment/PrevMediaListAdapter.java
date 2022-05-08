@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    public SortFilterDialog.SortType mSelectedSortType = SortFilterDialog.SortType.POPULAR;
+    public SortFilterDialog.SortType mSelectedSortType = SortFilterDialog.SortType.LATEST;
     private SortFilterDialog.ISortTypeSelectListener mSortTypeSelectListener;
 
     private final ArrayList<ContestData> mEpilogueList = new ArrayList<>();

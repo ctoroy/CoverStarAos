@@ -1,8 +1,5 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
-import static com.shinleeholdings.coverstar.util.FragmentUtils.SHOULD_ADD;
-import static com.shinleeholdings.coverstar.util.FragmentUtils.TABNAME;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -57,9 +54,7 @@ public abstract class BaseFragment extends Fragment implements OnFragmentBackPre
     public void addFragment(BaseFragment targetFragment) {
         if (fragmentInteractionCallback != null) {
             Bundle bundle = new Bundle();
-            bundle.putString(TABNAME, MainActivity.mCurrentTab);
-            bundle.putBoolean(SHOULD_ADD, true);
-            fragmentInteractionCallback.onFragmentInteractionCallback(targetFragment, bundle);
+            fragmentInteractionCallback.onFragmentInteractionCallback(targetFragment);
         }
     }
 

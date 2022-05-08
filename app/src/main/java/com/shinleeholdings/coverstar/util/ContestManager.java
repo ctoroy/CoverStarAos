@@ -2,6 +2,8 @@ package com.shinleeholdings.coverstar.util;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
 
 public class ContestManager {
 
@@ -26,5 +28,7 @@ public class ContestManager {
 
 	public void showContestDetailFragment(MainActivity activity, ContestData info) {
 		// TODO 콘테스트 상세로 이동
+		BaseFragment contestDetailFragment = new ContestDetailFragment();
+		activity.onFragmentInteractionCallback(contestDetailFragment);
 	}
 }

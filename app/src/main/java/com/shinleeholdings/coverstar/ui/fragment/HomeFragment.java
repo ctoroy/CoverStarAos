@@ -17,7 +17,7 @@ import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
-    private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.POPULAR;
+    private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.LATEST;
 
     private HomeListAdapter mHomeListAdapter;
 

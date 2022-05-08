@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
 import com.shinleeholdings.coverstar.ui.fragment.DepositeFragment;
 import com.shinleeholdings.coverstar.ui.fragment.SettingFragment;
 
@@ -18,9 +19,6 @@ import java.util.Stack;
 public class FragmentUtils {
 
     private static final String TAG_SEPARATOR = ":";
-
-    public static final String TABNAME = ".TABNAME";
-    public static final String SHOULD_ADD = ".SHOULD_ADD";
 
     public static void updateStackIndex(ArrayList<String> list, String tabId) {
         while (list.indexOf(tabId) != 0) {
@@ -58,6 +56,9 @@ public class FragmentUtils {
                 return true;
             }
             if (fragment instanceof DepositeFragment) {
+                return true;
+            }
+            if (fragment instanceof ContestDetailFragment) {
                 return true;
             }
         } catch (Exception e) {
