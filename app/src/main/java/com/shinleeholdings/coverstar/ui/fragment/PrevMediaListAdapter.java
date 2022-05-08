@@ -32,8 +32,6 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
     public static final int ITEM_TYPE_MEDIA_HEADER = 2;
     public final int ITEM_TYPE_CONTEST_MEDIA = 3;
 
-    private static final int HEADER_COUNT = 2;
-
     public PrevMediaListAdapter(MainActivity activity) {
         mMainActivity = activity;
     }
@@ -59,12 +57,18 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return ITEM_TYPE_EPILOGUE;
-        }
-
-        if (position == 1) {
-            return ITEM_TYPE_MEDIA_HEADER;
+        if (mEpilogueList.size() > 0) {
+            if (position == 0) {
+                return ITEM_TYPE_EPILOGUE;
+            } else {
+                if (mContestMediaList.size() > 0 && position == 1) {
+                    return ITEM_TYPE_MEDIA_HEADER;
+                }
+            }
+        } else {
+            if (mContestMediaList.size() > 0 && position == 0) {
+                return ITEM_TYPE_MEDIA_HEADER;
+            }
         }
 
         return ITEM_TYPE_CONTEST_MEDIA;
@@ -72,7 +76,15 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mContestMediaList.size() + HEADER_COUNT;
+        int itemCount = mContestMediaList.size();
+        if (mEpilogueList.size() > 0) {
+            itemCount = itemCount + 1;
+        }
+        if (mContestMediaList.size() > 0) {
+            itemCount = itemCount + 1;
+        }
+
+        return itemCount;
     }
 
     @Override
@@ -110,7 +122,12 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
             // TODO 선택된 필터 텍스트 입력
             viewHolder.selectedFilterTextView.setText("");
         } else {
-            final ContestData item = mContestMediaList.get(position - HEADER_COUNT);
+            int headerCount = 1;
+            if (mEpilogueList.size() > 0) {
+                headerCount = 2;
+            }
+
+            final ContestData item = mContestMediaList.get(position - headerCount);
             if (item == null) {
                 return;
             }
