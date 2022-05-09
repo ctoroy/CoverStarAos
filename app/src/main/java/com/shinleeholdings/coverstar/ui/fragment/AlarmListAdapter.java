@@ -112,7 +112,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             AlarmItem item = itemList.get(position);
             if (item == null) {
                 return;

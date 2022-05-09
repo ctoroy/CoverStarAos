@@ -4,22 +4,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 
 public class ContestDetailFragment extends BaseFragment {
 
     private FragmentContestDetailBinding binding;
+
+    private CommentListAdapter mCommentListAdapter;
+    private ReplyListAdapter mReplyListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +105,24 @@ public class ContestDetailFragment extends BaseFragment {
             ContestItemLayout layout = new ContestItemLayout(getActivity());
             layout.setData((MainActivity) getActivity(), itemList.get(i));
             binding.relatedMediaListLayout.addView(layout);
+
+            if (i < itemList.size() - 1) {
+                View divider = new View(getActivity());
+                divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(getActivity(), 20f), 1));
+                binding.relatedMediaListLayout.addView(divider);
+            }
         }
+
+        ArrayList<CommentItem> commentItemList = new ArrayList<>();
+        for(int i = 0; i < 70; i++) {
+            CommentItem item = new CommentItem();
+            commentItemList.add(item);
+        }
+        // TODO 코멘트 카운트추가
+        binding.commentCountTextView.setText("(" + commentItemList.size()  +")");
+
+        showCommentList();
+        mCommentListAdapter.setData(commentItemList);
 
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.VISIBLE);
     }
@@ -152,10 +178,36 @@ public class ContestDetailFragment extends BaseFragment {
             }
         });
 
+        binding.slidingDrawer.setOnDrawerCloseListener(() -> showCommentList());
+        binding.closeReplyImageView.setOnClickListener(view -> showCommentList());
+
         binding.content.setOnClickListener(view -> {
             // nothing
         });
 
+        binding.commentListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity());
+        binding.commentListRecyclerView.setAdapter(mCommentListAdapter);
+
+        binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity());
+        binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
+    }
+
+    private void showCommentList() {
+        binding.commentListTitleLayout.setVisibility(View.VISIBLE);
+        binding.commentListRecyclerView.setVisibility(View.VISIBLE);
+
+        binding.replyListTitleLayout.setVisibility(View.INVISIBLE);
+        binding.replyListRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void showReplyList() {
+        binding.commentListTitleLayout.setVisibility(View.INVISIBLE);
+        binding.commentListRecyclerView.setVisibility(View.GONE);
+
+        binding.replyListTitleLayout.setVisibility(View.VISIBLE);
+        binding.replyListRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void setMyStarVote(int myStarVote) {

@@ -153,7 +153,8 @@
     <string name="vote_help2">※ 투표수는 심사 결과에 반영됩니다.</string>
     <string name="share">공유하기</string>
     <string name="add_to_playlist">재생목록에 추가</string>
-    <string name="reply">댓글</string>
+    <string name="comment">댓글</string>
+    <string name="reply">답글</string>
     <string name="follow">팔로우</string>
     <string name="unfollow">언팔로우</string>
     <string name="show_more">&#62; 더보기</string>
