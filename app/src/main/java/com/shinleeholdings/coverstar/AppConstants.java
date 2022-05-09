@@ -13,6 +13,7 @@ public class AppConstants {
     public static final class EXTRA {
         public static final String PHONE_CERT_MODE = "PHONE_CERT_MODE";
         public static final String PW_MODE = "PW_MODE";
+        public static final String CONTEST_URL = "CONTEST_URL";
     }
 
     public static final class REQUEST_CODE {

@@ -88,5 +88,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     implementation 'io.github.ParkSangGwon:tedimagepicker:1.2.8'
+    implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
     api project(':cropper')
 }
