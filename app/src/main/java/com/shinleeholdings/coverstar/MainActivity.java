@@ -75,6 +75,10 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
         mCurrentTab = "";
 
+        // 14일 => 회원가입 및 로그인 & UI 작업 & 디자인 누락 및 기능 누락된거 확인
+        // 28일 => 메인화면 API 적용 & UI 작업
+        // 이후 테스트
+
         selectedTab(TabMenuType.HOME.toString());
     }
 
