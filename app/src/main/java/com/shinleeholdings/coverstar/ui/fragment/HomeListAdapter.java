@@ -23,7 +23,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     private final ArrayList<ContestData> mItemList = new ArrayList<>();
     private MainActivity mMainActivity;
 
-    private final int ITEM_TYPE_NOTICE = 1;
+    private final int ITEM_TYPE_CONTEST_NOTI = 1;
     private final int ITEM_TYPE_CONTEST = 2;
 
     public HomeListAdapter(MainActivity activity) {
@@ -33,7 +33,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if (mContestNotice != null && position == 0) {
-            return ITEM_TYPE_NOTICE;
+            return ITEM_TYPE_CONTEST_NOTI;
         }
 
         return ITEM_TYPE_CONTEST;
@@ -52,9 +52,9 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_TYPE_NOTICE) {
+        if (viewType == ITEM_TYPE_CONTEST_NOTI) {
             View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_notice_item, parent, false);
-            return new NoticeItemViewHolder(view);
+            return new ContestNoticeItemViewHolder(view);
         } else {
             View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.contest_list_item, parent, false);
             return new ItemViewHolder(view);
@@ -63,7 +63,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof NoticeItemViewHolder) {
+        if (holder instanceof ContestNoticeItemViewHolder) {
             // TODO 공지 세팅
         } else {
             final ContestData item = mItemList.get(position);
@@ -97,10 +97,10 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    private class NoticeItemViewHolder extends RecyclerView.ViewHolder {
+    private class ContestNoticeItemViewHolder extends RecyclerView.ViewHolder {
         // TODO 공지뷰 세팅
 
-        public NoticeItemViewHolder(View itemView) {
+        public ContestNoticeItemViewHolder(View itemView) {
             super(itemView);
         }
     }
