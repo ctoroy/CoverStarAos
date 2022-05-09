@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contestDetailSwipeRefreshLayout"
     android:layout_width="match_parent"
@@ -8,458 +8,510 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/titleBackLayout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/icons_24_px_back" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="나란놈이란" />
+
+        <TextView
+            android:id="@+id/reportTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:text="@string/report_do"
+            android:textColor="@color/subTextColor_6a6a6a"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/titleLayout"
+        android:background="#dddddd" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_below="@id/titleLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/titleBackLayout"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
+                android:id="@+id/mediaLayout"
+                android:layout_width="match_parent"
+                android:layout_height="216dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/songImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/subTextColor_6a6a6a" />
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/icons_24_px_back"/>
+                    android:src="@drawable/ico_play" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:singleLine="true"
-                tools:text="나란놈이란"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <TextView
-                android:id="@+id/reportTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/subTextColor_6a6a6a"
-                android:text="@string/report_do"
-                android:gravity="center_vertical"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#dddddd"/>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <FrameLayout
-                    android:id="@+id/mediaLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="216dp">
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/songImageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/subTextColor_6a6a6a"/>
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ico_play"/>
-                </FrameLayout>
+                android:background="#cdcdcd"
+                android:orientation="vertical"
+                android:paddingTop="13dp"
+                android:paddingBottom="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="15dp"
-                    android:background="#cdcdcd"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vote"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"/>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"/>
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/icon_star"/>
-
-                        <TextView
-                            android:id="@+id/starCountTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="7dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            tools:text="100" />
-                    </LinearLayout>
+                        android:text="@string/vote"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <View
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:background="#bababa"/>
+                        android:layout_weight="1" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_marginTop="9dp"
-                        android:textSize="12sp"
-                        android:text="@string/pick_my_star"
-                        android:textColor="@color/black"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/voteStar1ImageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/icon_star_bg"/>
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/voteStar2ImageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="7.5dp"
-                            android:src="@drawable/icon_star_bg"/>
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/voteStar3ImageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="7.5dp"
-                            android:src="@drawable/icon_star_bg"/>
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/voteStar4ImageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="7.5dp"
-                            android:src="@drawable/icon_star_bg"/>
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/voteStar5ImageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="7.5dp"
-                            android:src="@drawable/icon_star_bg"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/voteTextView"
-                            android:layout_width="65dp"
-                            android:layout_height="28dp"
-                            style="@style/RoundCornerWhiteStrokeButtonStyle"
-                            android:textSize="12sp"
-                            android:text="@string/vote"/>
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:background="#bababa"/>
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_star" />
 
                     <TextView
+                        android:id="@+id/starCountTextView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_marginTop="9dp"
-                        android:textSize="12sp"
-                        android:text="@string/vote_help1"
-                        android:textColor="#0e0f0e"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:textSize="12sp"
-                        android:text="@string/vote_help2"
-                        android:textColor="#0e0f0e"/>
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="100" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#cdcdcd"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp">
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#bababa" />
 
-                    <com.shinleeholdings.coverstar.ui.CircleImageView
-                        android:id="@+id/singerImageView"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginRight="11dp"
-                        android:src="@drawable/avator_woman" />
-
-                    <LinearLayout
-                        android:id="@+id/singerNameLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/singerImageView"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/singerNameTextview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:layout_gravity="center_vertical"
-                            android:textSize="18sp"
-                            tools:text="연규성"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/followTextView"
-                            android:layout_width="53dp"
-                            android:layout_height="20dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/rounded_corner_box_ff7a9a"
-                            android:gravity="center"
-                            android:text="@string/follow"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:includeFontPadding="false"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/singerNameLayout"
-                        android:layout_marginTop="5dp"
-                        android:layout_toRightOf="@id/singerImageView"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/songTitleTextview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            tools:text="나란놈이란"
-                            android:textColor="@color/subTextColor_6a6a6a"
-                            android:textSize="14sp" />
-                        <TextView
-                            android:id="@+id/songEtcTextview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="5dp"
-                            android:textColor="#828382"
-                            tools:text="(원곡가수 : 임창정)"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </RelativeLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginTop="9dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#000000"/>
+                    android:layout_marginRight="30dp"
+                    android:text="@string/pick_my_star"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/voteStar1ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_star_bg" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/voteStar2ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7.5dp"
+                        android:src="@drawable/icon_star_bg" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/voteStar3ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7.5dp"
+                        android:src="@drawable/icon_star_bg" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/voteStar4ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7.5dp"
+                        android:src="@drawable/icon_star_bg" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/voteStar5ImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7.5dp"
+                        android:src="@drawable/icon_star_bg" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/voteTextView"
+                        style="@style/RoundCornerWhiteStrokeButtonStyle"
+                        android:layout_width="65dp"
+                        android:layout_height="28dp"
+                        android:text="@string/vote"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginRight="30dp"
+                    android:background="#bababa" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/vote_help1"
+                    android:textColor="#0e0f0e"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/vote_help2"
+                    android:textColor="#0e0f0e"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cdcdcd" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp">
+
+                <com.shinleeholdings.coverstar.ui.CircleImageView
+                    android:id="@+id/singerImageView"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="11dp"
+                    android:src="@drawable/avator_woman" />
+
+                <LinearLayout
+                    android:id="@+id/singerNameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/singerImageView"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/singerNameTextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="연규성" />
+
+                    <TextView
+                        android:id="@+id/followTextView"
+                        android:layout_width="53dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/rounded_corner_box_ff7a9a"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/follow"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/singerNameLayout"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/singerImageView"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/songTitleTextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/subTextColor_6a6a6a"
+                        android:textSize="14sp"
+                        tools:text="나란놈이란" />
+
+                    <TextView
+                        android:id="@+id/songEtcTextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#828382"
+                        android:textSize="12sp"
+                        tools:text="(원곡가수 : 임창정)" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ico_playcount" />
+
+                <TextView
+                    android:id="@+id/songPlayCountTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="6dp"
+                    android:textColor="#303045"
+                    android:textSize="14sp"
+                    tools:text="30,000" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/dateTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#828382"
+                    android:textSize="14sp"
+                    tools:text="2022.4.23" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contestDescriptionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_corner_box_f2f2f2"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="9dp">
+
+                <TextView
+                    android:id="@+id/contestDescriptionTextview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#6a6a6a"
+                    android:textSize="12sp"
+                    tools:text="테스트 입니다." />
+
+                <TextView
+                    android:id="@+id/contestDescriptionMoreTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="@string/show_more"
+                    android:textColor="#6a6a6a"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="20dp"
+                android:background="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/shareLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ico_playcount"/>
-                    <TextView
-                        android:id="@+id/songPlayCountTextview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="6dp"
-                        android:textColor="#303045"
-                        tools:text="30,000"
-                        android:textSize="14sp" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:id="@+id/dateTextview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="#828382"
-                        tools:text="2022.4.23"
-                        android:textSize="14sp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/contestDescriptionLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="9dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@drawable/rounded_corner_box_f2f2f2"
-                    android:orientation="vertical">
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ico_share" />
 
                     <TextView
-                        android:id="@+id/contestDescriptionTextview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#6a6a6a"
-                        tools:text="테스트 입니다."
-                        android:textSize="12sp" />
-                    <TextView
-                        android:id="@+id/contestDescriptionMoreTextview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:textColor="#6a6a6a"
-                        android:visibility="gone"
-                        android:text="@string/show_more"
-                        android:textSize="12sp" />
+                        android:text="@string/share"
+                        android:textColor="#303045"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <View
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#000000"/>
+                    android:layout_weight="1" />
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/addToPlayListLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:id="@+id/shareLayout"
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/ico_share"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#303045"
-                            android:text="@string/share"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"/>
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ico_playlist" />
 
-                    <LinearLayout
-                        android:id="@+id/addToPlayListLayout"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/ico_playlist"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#303045"
-                            android:text="@string/add_to_playlist"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                        android:text="@string/add_to_playlist"
+                        android:textColor="#303045"
+                        android:textSize="14sp" />
                 </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#cdcdcd"/>
-
-                <LinearLayout
-                    android:id="@+id/relatedMediaListLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="vertical"/>
-
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="20dp"
+                android:background="#cdcdcd" />
+
+            <LinearLayout
+                android:id="@+id/relatedMediaListLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer
+        android:id="@+id/slidingDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:allowSingleTap="true"
+        app:content="@+id/content"
+        app:handle="@+id/handle"
+        app:topOffset="150dp">
+
+        <LinearLayout
+            android:id="@+id/handle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer>
+
+</RelativeLayout>

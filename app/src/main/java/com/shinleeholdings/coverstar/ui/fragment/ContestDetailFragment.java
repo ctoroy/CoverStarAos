@@ -27,7 +27,7 @@ public class ContestDetailFragment extends BaseFragment {
         initView();
 
         if (getArguments() != null) {
-
+            // TODO 콘테스트 아이디 가져오기
         }
 
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.GONE);
@@ -36,7 +36,6 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void requestData() {
-        binding.contestDetailSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
 
         // TODO 데이터 받아오기
@@ -85,6 +84,14 @@ public class ContestDetailFragment extends BaseFragment {
         // TODO 관련 영상 추가하기
         binding.relatedMediaListLayout.removeAllViews();
         ArrayList<ContestData> itemList = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            ContestData item = new ContestData();
+            itemList.add(item);
+            itemList.add(item);
+            itemList.add(item);
+            itemList.add(item);
+        }
+
         for (int i = 0; i < itemList.size(); i++) {
             ContestItemLayout layout = new ContestItemLayout(getActivity());
             layout.setData((MainActivity) getActivity(), itemList.get(i));
@@ -101,9 +108,6 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void initView() {
-        binding.contestDetailSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        binding.contestDetailSwipeRefreshLayout.setOnRefreshListener(this::requestData);
-
         binding.titleBackLayout.setOnClickListener(view -> finish());
 
         binding.reportTextView.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +151,11 @@ public class ContestDetailFragment extends BaseFragment {
                 // TODO 재생목록에 추가
             }
         });
+
+        binding.content.setOnClickListener(view -> {
+            // nothing
+        });
+
     }
 
     private void setMyStarVote(int myStarVote) {
@@ -165,5 +174,15 @@ public class ContestDetailFragment extends BaseFragment {
         if (myStarVote >= 3) { binding.voteStar3ImageView.setSelected(true); }
         if (myStarVote >= 4) {  binding.voteStar4ImageView.setSelected(true); }
         if (myStarVote >= 5) { binding.voteStar5ImageView.setSelected(true); }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.slidingDrawer.isOpened()) {
+            binding.slidingDrawer.animateClose();
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

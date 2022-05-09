@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentHomeBinding;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends BaseFragment {
 
@@ -87,15 +90,15 @@ public class HomeFragment extends BaseFragment {
         ProgressDialogHelper.show(getActivity());
 
         // TODO
-//        ArrayList<ContestData> itemList = new ArrayList<>();
-//        for(int i = 0; i < 10; i++) {
-//            ContestData item = new ContestData();
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//        }
-//        mHomeListAdapter.setData(null, itemList);
+        ArrayList<ContestData> itemList = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            ContestData item = new ContestData();
+            itemList.add(item);
+            itemList.add(item);
+            itemList.add(item);
+            itemList.add(item);
+        }
+        mHomeListAdapter.setData(null, itemList);
 
         ProgressDialogHelper.dismiss();
     }
