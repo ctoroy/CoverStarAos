@@ -14,6 +14,9 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityProfileSettingBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
+import com.shinleeholdings.coverstar.util.DebugLogger;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.Util;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -23,9 +26,14 @@ import java.io.IOException;
 import gun0912.tedimagepicker.builder.TedImagePicker;
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener;
 import gun0912.tedimagepicker.builder.type.MediaType;
+import network.model.BaseResponse;
+import network.model.PhotoUploadResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class ProfileSettingActivity extends BaseActivity {
     private ActivityProfileSettingBinding binding;
+    private File selectedImageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +52,6 @@ public class ProfileSettingActivity extends BaseActivity {
            );
 
         binding.nextButton.setOnClickListener(view -> {
-            // TODO 프로필 이미지 세팅 체크
-
             String nickName = binding.nickNameEditText.getText().toString();
 
             if (TextUtils.isEmpty(nickName)) {
@@ -56,7 +62,32 @@ public class ProfileSettingActivity extends BaseActivity {
 
             // TODO 서버에 닉네임 체크
 
-            startPasswordActivity();
+            if (selectedImageFile != null) {
+                uploadImageFile();
+            } else {
+                updateUserProfileInfo();
+            }
+        });
+    }
+
+    private void updateUserProfileInfo() {
+        startPasswordActivity();
+    }
+
+    private void uploadImageFile() {
+        ProgressDialogHelper.show(this);
+        RetroClient.getApiInterface().uploadUserProfile(Util.getImageBody("imgFile", selectedImageFile)).enqueue(new RetroCallback<PhotoUploadResult>() {
+            @Override
+            public void onSuccess(BaseResponse receivedData) {
+                ProgressDialogHelper.dismiss();
+                PhotoUploadResult result = (PhotoUploadResult)receivedData;
+                updateUserProfileInfo();
+            }
+
+            @Override
+            public void onFailure(BaseResponse response) {
+                ProgressDialogHelper.dismiss();
+            }
         });
     }
 
@@ -94,12 +125,10 @@ public class ProfileSettingActivity extends BaseActivity {
         }
     }
 
-    private File imageFile;
-
     private void handleCroppedImageResult(Intent data) {
         CropImage.ActivityResult result = CropImage.getActivityResult(data);
         Uri croppedImageUri = result.getUri();
-        imageFile = new File(croppedImageUri.getPath());
+        selectedImageFile = new File(croppedImageUri.getPath());
         Bitmap bm = null;
         try {
             bm = MediaStore.Images.Media.getBitmap(getContentResolver(), croppedImageUri);

@@ -26,14 +26,35 @@ import androidx.core.content.ContextCompat;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Multipart;
+
 public class Util {
-    public static String getFormattedCountString(int value) {
-        // TODO Format 적용(12,000)
-        String displayFormat = value + "";
-        return displayFormat;
+    private static final DecimalFormatSymbols decimalFormatSimbol = new DecimalFormatSymbols(Locale.KOREA);
+
+    public static MultipartBody.Part getImageBody(String key, File file)  {
+        // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        return MultipartBody.Part.createFormData(key, file.getName(), fileBody);
     }
+
+    public static String numberToDisplayFormat(Object value) {
+        try {
+            return new DecimalFormat("###,###,###,###", decimalFormatSimbol).format(value);
+        } catch (Exception e) {
+        }
+        return value + "";
+    }
+
     public static String getCoinDisplayCountString(int value) {
-        return String.format(MyApplication.getContext().getString(R.string.coin_count_format), getFormattedCountString(value));
+        return String.format(MyApplication.getContext().getString(R.string.coin_count_format), numberToDisplayFormat(value));
     }
 
     public static int dpToPixel(Context context, float dp) {

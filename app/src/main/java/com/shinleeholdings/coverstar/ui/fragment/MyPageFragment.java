@@ -60,7 +60,7 @@ public class MyPageFragment extends BaseFragment {
             }
         });
 
-        binding.myCoinCountTextView.setText(Util.getFormattedCountString(LoginHelper.getSingleInstance().getMyCoinCount()));
+        binding.myCoinCountTextView.setText(Util.numberToDisplayFormat(LoginHelper.getSingleInstance().getMyCoinCount()));
         binding.buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

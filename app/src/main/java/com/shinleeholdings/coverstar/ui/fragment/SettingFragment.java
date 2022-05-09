@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
+import com.shinleeholdings.coverstar.profile.ProfileSettingActivity;
 
 public class SettingFragment extends BaseFragment {
 
@@ -40,6 +42,7 @@ public class SettingFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 // TODO 개인정보
+                startActivity(new Intent(getActivity(), ProfileSettingActivity.class));
             }
         });
 
