@@ -63,16 +63,6 @@ public class LoginHelper {
 		SharedPreferenceHelper.getInstance().putObject(SharedPreferenceHelper.LOGIN_USER_DATA, data);
 	}
 
-	public boolean hasLoginInfo() {
-		String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
-		String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
-
-		if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
-			return false;
-		}
-		return true;
-	}
-
 	public void startAutoLogin(Activity activity, ILoginResultListener listener) {
 		String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
 		String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);

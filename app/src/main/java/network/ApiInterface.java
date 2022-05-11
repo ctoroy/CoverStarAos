@@ -3,6 +3,7 @@ package network;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
+import network.model.HomeContentsDataList;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
 import network.model.defaultResult;
@@ -18,6 +19,10 @@ public interface ApiInterface {
     @Multipart
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
+
+    @POST("getList")
+    @FormUrlEncoded
+    Call<BaseResponse<HomeContentsDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("join")
     @FormUrlEncoded
