@@ -17,7 +17,7 @@ public class LoginHelper {
 	public static final String PHONE_CERT_MODE_RECERT = "RECERT";
 
 	public interface ILoginResultListener {
-		public void onComplete(boolean success);
+		void onComplete(boolean success);
 	}
 
 	private static volatile LoginHelper instance;
@@ -38,18 +38,24 @@ public class LoginHelper {
 	}
 
 	public int getMyCoinCount() {
-		// TODO 내 코인개수 할당 및 업데이트 로직 정리
-		return 10;
+		if (getSavedLoginUserData() == null) {
+			return 0;
+		}
+		return getSavedLoginUserData().curCoin;
 	}
 
 	public String getLoginUserImagePath() {
-		// TODO 사용자 이미지 설정
-		return "";
+		if (getSavedLoginUserData() == null) {
+			return "";
+		}
+		return getSavedLoginUserData().userProfileImage;
 	}
 
 	public String getLoginUserNickName() {
-		// TODO 사용자 닉네임 설정
-		return "테스트입니다.";
+		if (getSavedLoginUserData() == null) {
+			return "";
+		}
+		return getSavedLoginUserData().nickName;
 	}
 
 	public LoginUserData getSavedLoginUserData() {

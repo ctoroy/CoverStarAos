@@ -27,7 +27,7 @@ public class LoginUserData implements Parcelable {
 	@SerializedName("nickName") public String nickName;
 	@SerializedName("phoneNumber") public String phoneNumber;
 	@SerializedName("userEmail") public String userEmail;
-	@SerializedName("curCoin") public long curCoin;
+	@SerializedName("curCoin") public int curCoin;
 	@SerializedName("userProfileImage") public String userProfileImage;
 	@SerializedName("userDialCode") public String userDialCode;
 	@SerializedName("userNation") public String userNation;
@@ -63,7 +63,7 @@ public class LoginUserData implements Parcelable {
 		dest.writeString(nickName);
 		dest.writeString(phoneNumber);
 		dest.writeString(userEmail);
-		dest.writeLong(curCoin);
+		dest.writeInt(curCoin);
 		dest.writeString(userProfileImage);
 		dest.writeString(userDialCode);
 		dest.writeString(userNation);
@@ -77,7 +77,7 @@ public class LoginUserData implements Parcelable {
 		nickName = in.readString();
 		phoneNumber = in.readString();
 		userEmail = in.readString();
-		curCoin = in.readLong();
+		curCoin = in.readInt();
 		userProfileImage = in.readString();
 		userDialCode = in.readString();
 		userNation = in.readString();

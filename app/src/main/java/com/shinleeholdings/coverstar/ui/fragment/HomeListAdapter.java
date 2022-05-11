@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
-import com.shinleeholdings.coverstar.data.ContestNotice;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class HomeListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    ContestNotice mContestNotice;
+    private final ArrayList<ContestData> mContestNoticeList = new ArrayList<>();
     private final ArrayList<ContestData> mItemList = new ArrayList<>();
     private MainActivity mMainActivity;
 
@@ -32,7 +32,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mContestNotice != null && position == 0) {
+        if (mContestNoticeList.size() > 0 && position == 0) {
             return ITEM_TYPE_CONTEST_NOTI;
         }
 
@@ -43,7 +43,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         int itemListSize = mItemList.size();
         if (itemListSize > 0) {
-            if (mContestNotice != null) {
+            if (mContestNoticeList.size() > 0) {
                 itemListSize = itemListSize + 1;
             }
         }
@@ -76,12 +76,12 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setData(ContestNotice contestNotice, ArrayList<ContestData> dataList) {
+    public void setData(ArrayList<ContestData> contestList, ArrayList<ContestData> dataList) {
         mItemList.clear();
-        mContestNotice = null;
+        mContestNoticeList.clear();
 
         if (dataList != null && dataList.size() > 0) {
-            mContestNotice = contestNotice;
+            mContestNoticeList.addAll(contestList);
             mItemList.addAll(dataList);
         }
 
@@ -99,9 +99,11 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     private class ContestNoticeItemViewHolder extends RecyclerView.ViewHolder {
         // TODO 공지뷰 세팅
+        ViewPager2 viewPager;
 
         public ContestNoticeItemViewHolder(View itemView) {
             super(itemView);
+            viewPager = (ViewPager2) itemView;
         }
     }
 
