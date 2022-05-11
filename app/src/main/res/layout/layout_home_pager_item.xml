@@ -96,5 +96,20 @@
         android:layout_height="@dimen/home_event_contents_height"
         android:layout_below="@id/tabLayout"
         android:orientation="vertical">
+
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/left_bottom_triangle"
+        android:id="@+id/homeLeftTriangleView"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:id="@+id/homeRightTriangleView"/>
 </RelativeLayout>

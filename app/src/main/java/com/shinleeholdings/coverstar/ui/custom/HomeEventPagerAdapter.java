@@ -55,32 +55,45 @@ public class HomeEventPagerAdapter extends PagerAdapter {
         TextView homeRightTitleSelectedTextView = itemView.findViewById(R.id.homeRightTitleSelectedTextView);
         LinearLayout homeLeftTitleUnSelectedLayout = itemView.findViewById(R.id.homeLeftTitleUnSelectedLayout);
 
-        final ContestData item = itemList.get(position);
+        View homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
+        View homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);
+
         if (position == 0) {
             homeNoticeBgImageView.setImageResource(R.drawable.visual_bg1);
             homeLeftTitleSelectedTextView.setVisibility(View.VISIBLE);
-            homeRightTitleUnSelectedLayout.setVisibility(View.VISIBLE);
-            homeRightTitleUnSelectedLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    moveEventListener.onMove(1);
-                }
-            });
+            homeLeftTriangleView.setVisibility(View.VISIBLE);
             homeRightTitleSelectedTextView.setVisibility(View.GONE);
             homeLeftTitleUnSelectedLayout.setVisibility(View.GONE);
+            homeRightTriangleView.setVisibility(View.GONE);
+            if (itemList.size() > 1) {
+                homeRightTitleUnSelectedLayout.setVisibility(View.VISIBLE);
+                homeRightTitleUnSelectedLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        moveEventListener.onMove(1);
+                    }
+                });
+            } else {
+                homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
+            }
         } else {
             homeNoticeBgImageView.setImageResource(R.drawable.visual_bg2);
             homeRightTitleSelectedTextView.setVisibility(View.VISIBLE);
             homeLeftTitleUnSelectedLayout.setVisibility(View.VISIBLE);
+            homeRightTriangleView.setVisibility(View.VISIBLE);
             homeLeftTitleUnSelectedLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     moveEventListener.onMove(0);
                 }
             });
+            homeLeftTriangleView.setVisibility(View.GONE);
             homeLeftTitleSelectedTextView.setVisibility(View.GONE);
             homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
         }
+
+        final ContestData item = itemList.get(position);
+        // TODO 데이터 세팅
         container.addView(itemView);
         return itemView;
     }

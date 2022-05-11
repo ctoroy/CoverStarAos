@@ -107,7 +107,14 @@ public class HomeFragment extends BaseFragment {
 
                 // TODO 경연과 이벤트 쪼개기
                 HomeContentsDataList result = receivedData.data;
-                mHomeListAdapter.setData(result, result);
+                ArrayList<ContestData> dataList = new ArrayList<>();
+                dataList.add(result.get(0));
+                dataList.add(result.get(1));
+
+                result.addAll(result);
+                result.addAll(result);
+                result.addAll(result);
+                mHomeListAdapter.setData(dataList, result);
             }
 
             @Override
