@@ -60,6 +60,8 @@
             android:hint="@string/nickname_hint"
             android:maxLength="10"
             android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:textColor="@color/mainTextColor_0e0f0e"
             android:textColorHint="#828382"
             android:textSize="16sp" />

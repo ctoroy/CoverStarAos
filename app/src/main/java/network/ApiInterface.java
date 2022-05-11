@@ -3,7 +3,7 @@ package network;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.LoginResult;
+import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
 import network.model.defaultResult;
 import okhttp3.MultipartBody;
@@ -16,14 +16,22 @@ import retrofit2.http.Part;
 
 public interface ApiInterface {
     @Multipart
-    @POST("/coverstarAPI/common/uploadImage")
+    @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
-    @POST("/coverstarAPI/common/login")
+    @POST("join")
     @FormUrlEncoded
-    Call<BaseResponse<LoginResult>> loginCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<defaultResult>> joinCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
 
-    @POST("/coverstarAPI/checkDupId")
+    @POST("login")
+    @FormUrlEncoded
+    Call<BaseResponse<LoginUserData>> loginCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("checkDupId")
     @FormUrlEncoded
     Call<BaseResponse<defaultResult>> checkExistUser(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("checkRecommend")
+    @FormUrlEncoded
+    Call<BaseResponse<defaultResult>> checkRecommend(@FieldMap(encoded = true) HashMap<String, String> body);
 }

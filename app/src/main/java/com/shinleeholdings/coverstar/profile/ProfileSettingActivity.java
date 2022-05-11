@@ -26,6 +26,7 @@ import gun0912.tedimagepicker.builder.TedImagePicker;
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener;
 import gun0912.tedimagepicker.builder.type.MediaType;
 import network.model.BaseResponse;
+import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -34,9 +35,7 @@ public class ProfileSettingActivity extends BaseActivity {
     private ActivityProfileSettingBinding binding;
     private File selectedImageFile;
 
-    public static final String MODE_JOIN = "MODE_JOIN";
-
-    private String userId = "";
+    private LoginUserData loginUserData = null;
     private boolean isJoin = false;
 
     @Override
@@ -45,11 +44,8 @@ public class ProfileSettingActivity extends BaseActivity {
         binding = ActivityProfileSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        userId = getIntent().getStringExtra(AppConstants.EXTRA.USER_ID);
-        String mode = getIntent().getStringExtra(AppConstants.EXTRA.MODE);
-        if (MODE_JOIN.equals(mode)) {
-            isJoin = true;
-        }
+        loginUserData = getIntent().getParcelableExtra(AppConstants.EXTRA.USER_DATA);
+        isJoin = getIntent().getBooleanExtra(AppConstants.EXTRA.IS_JOIN, false);
 
         initUi();
     }
@@ -87,14 +83,13 @@ public class ProfileSettingActivity extends BaseActivity {
     private void updateUserProfileInfo(String imagePath, String nickName) {
 
         if (isJoin) {
-            Intent intent = new Intent(this, UserPasswordActivity.class);
-            // TODO 추천코드 입력화면으로 이동시킨다.
-            intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
-            intent.putExtra(AppConstants.EXTRA.IMAGE_PATH, imagePath);
-            intent.putExtra(AppConstants.EXTRA.NICKNAME, nickName);
-            intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_JOIN);
+            Intent intent = new Intent(this, InputInviteCodeActivity.class);
+            loginUserData.userProfileImage = imagePath;
+            loginUserData.nickName = nickName;
+            intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
             startActivity(intent);
         } else {
+//            loginUserData.userId;
             // TODO 서버에 사진 및 닉네임 업데이트 API 호출, 프로필 정보 변경 및 업데이트 브로드캐스트 날리기, 받는쪽에서는 업데이트 처리
             finish();
         }

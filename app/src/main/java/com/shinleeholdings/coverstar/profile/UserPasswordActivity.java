@@ -15,7 +15,17 @@ import com.shinleeholdings.coverstar.databinding.ActivityUserPasswordBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 import com.shinleeholdings.coverstar.util.Util;
+
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.LoginUserData;
+import network.model.defaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class UserPasswordActivity extends BaseActivity {
 
@@ -30,9 +40,8 @@ public class UserPasswordActivity extends BaseActivity {
     private boolean isPasswordModeFirst = true;
 
     private String pwMode = "";
-    private String loginUserId = "";
-    private String imagePath = "";
-    private String nickName = "";
+
+    private LoginUserData loginUserData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +50,12 @@ public class UserPasswordActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         String mode = getIntent().getStringExtra(AppConstants.EXTRA.MODE);
-        if (TextUtils.isEmpty(pwMode)) {
+        if (TextUtils.isEmpty(mode)) {
             pwMode = MODE_JOIN;
         } else {
             pwMode = mode;
         }
-        loginUserId = getIntent().getStringExtra(AppConstants.EXTRA.USER_ID);
-        imagePath = getIntent().getStringExtra(AppConstants.EXTRA.IMAGE_PATH);
-        nickName = getIntent().getStringExtra(AppConstants.EXTRA.NICKNAME);
+        loginUserData = getIntent().getParcelableExtra(AppConstants.EXTRA.USER_DATA);
 
         initUi();
     }
@@ -160,9 +167,7 @@ public class UserPasswordActivity extends BaseActivity {
                             return;
                         }
 
-                        // TODO 비번 유효성체크 및 회원가입 시작
-
-                        startActivity(new Intent(UserPasswordActivity.this, InputInviteCodeActivity.class));
+                        startJoin();
                     }
                 }
             }
@@ -171,13 +176,52 @@ public class UserPasswordActivity extends BaseActivity {
         binding.agreeLayout.setOnClickListener(view -> view.setSelected(!view.isSelected()));
     }
 
+    private void startJoin() {
+        loginUserData.userPwd = firstPassword;
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", loginUserData.userId);
+        param.put("nickName", loginUserData.nickName);
+        param.put("userPwd", loginUserData.userPwd);
+        param.put("userProfileImage", loginUserData.userProfileImage);
+        param.put("pushId", SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.PUSH_ID));
+        param.put("device", "1");
+        param.put("userDialCode", loginUserData.userDialCode);
+        param.put("userNation", loginUserData.userNation);
+
+        //가입시 추천해서 성공한 사람은 3으로 보냄 아니면 0으로 보냄
+        if (TextUtils.isEmpty(loginUserData.recommend)) {
+            param.put("curCoin", "0");
+        } else {
+            param.put("curCoin", "3");
+        }
+
+        param.put("recommendKey", loginUserData.recommend);
+
+        ProgressDialogHelper.show(this);
+        RetroClient.getApiInterface().joinCoverStar(param).enqueue(new RetroCallback<defaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
+                Intent intent = new Intent(UserPasswordActivity.this, SettingCompleteActivity.class);
+                intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(BaseResponse<defaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
+    }
+
     private void startLogin() {
         if (TextUtils.isEmpty(firstPassword) || firstPassword.trim().length() < 6) {
             Toast.makeText(UserPasswordActivity.this, getString(R.string.password_input), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        LoginHelper.getSingleInstance().login(this, loginUserId, firstPassword, false, new LoginHelper.ILoginResultListener() {
+        LoginHelper.getSingleInstance().login(this, loginUserData.userId, firstPassword, false, new LoginHelper.ILoginResultListener() {
             @Override
             public void onComplete(boolean success) {
                 if (success) {

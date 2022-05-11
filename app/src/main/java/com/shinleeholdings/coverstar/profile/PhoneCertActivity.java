@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import network.model.BaseResponse;
-import network.model.LoginResult;
+import network.model.LoginUserData;
 import network.model.defaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -135,14 +135,21 @@ public class PhoneCertActivity extends BaseActivity {
         RetroClient.getApiInterface().checkExistUser(param).enqueue(new RetroCallback<defaultResult>() {
             @Override
             public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
                 Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
-                intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
+
+                LoginUserData loginUserData = new LoginUserData();
+                loginUserData.userId = userId;
+
+                intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
                 intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_LOGIN);
                 startActivity(intent);
             }
 
             @Override
             public void onFailure(BaseResponse<defaultResult> response) {
+                ProgressDialogHelper.dismiss();
+
                 // 유효성 체크 실패시 가입모드로 전환(가입된 유저 정보가 없습니다. 회원가입 먼저 해주세요.
                 certMode = PHONE_CERT_MODE_JOIN;
                 setModeUi();
@@ -161,13 +168,13 @@ public class PhoneCertActivity extends BaseActivity {
             binding.nextButton.setText(getString(R.string.next));
         } else if (certMode.equals(PHONE_CERT_MODE_LOGIN)) {
             binding.titleLayout.titleTextView.setText(R.string.login);
-            LoginResult loginData = LoginHelper.getSingleInstance().getSavedLoginUserData();
+            LoginUserData loginData = LoginHelper.getSingleInstance().getSavedLoginUserData();
 
             String nickName = loginData.nickName;
             String phoneNum = loginData.getPhoneNumWithoutNationCode();
 
-            if (TextUtils.isEmpty(loginData.userNation) == false) {
-                binding.ccp.setCountryForPhoneCode(Integer.parseInt(loginData.userNation));
+            if (TextUtils.isEmpty(loginData.userDialCode) == false) {
+                binding.ccp.setCountryForPhoneCode(Integer.parseInt(loginData.userDialCode));
             }
 
             String message = String.format(getString(R.string.welcome_user), nickName);
@@ -320,11 +327,18 @@ public class PhoneCertActivity extends BaseActivity {
             Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
             return;
         }
-        String userId = binding.ccp.getSelectedCountryCode() + phoneNum;
+        String countryCode = binding.ccp.getSelectedCountryCode();
+        String userId = countryCode + phoneNum;
+
+        LoginUserData loginUserData = new LoginUserData();
+        loginUserData.userId = userId;
+        loginUserData.phoneNumber = userId;
+        loginUserData.userDialCode = countryCode;
+        loginUserData.userNation = binding.ccp.getSelectedCountryNameCode();
 
         Intent intent = new Intent(this, ProfileSettingActivity.class);
-        intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
-        intent.putExtra(AppConstants.EXTRA.MODE, ProfileSettingActivity.MODE_JOIN);
+        intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
+        intent.putExtra(AppConstants.EXTRA.IS_JOIN, true);
         startActivity(intent);
     }
 

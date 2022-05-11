@@ -1,10 +1,12 @@
 package network.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginResult {
+public class LoginUserData implements Parcelable {
 //	        "userId": "8201051391123",
 //					"userPwd": "*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9",
 //					"userType": 0, //NA
@@ -43,5 +45,55 @@ public class LoginResult {
 			return phoneNumber;
 		}
 	}
+
+	public LoginUserData() {
+
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(userId);
+		dest.writeString(userPwd);
+		dest.writeInt(userType);
+		dest.writeString(nickName);
+		dest.writeString(phoneNumber);
+		dest.writeString(userEmail);
+		dest.writeLong(curCoin);
+		dest.writeString(userProfileImage);
+		dest.writeString(userDialCode);
+		dest.writeString(userNation);
+		dest.writeString(recommend);
+	}
+
+	protected LoginUserData(Parcel in) {
+		userId = in.readString();
+		userPwd = in.readString();
+		userType = in.readInt();
+		nickName = in.readString();
+		phoneNumber = in.readString();
+		userEmail = in.readString();
+		curCoin = in.readLong();
+		userProfileImage = in.readString();
+		userDialCode = in.readString();
+		userNation = in.readString();
+		recommend = in.readString();
+	}
+
+	public static final Creator<LoginUserData> CREATOR = new Creator<LoginUserData>() {
+		@Override
+		public LoginUserData createFromParcel(Parcel in) {
+			return new LoginUserData(in);
+		}
+
+		@Override
+		public LoginUserData[] newArray(int size) {
+			return new LoginUserData[size];
+		}
+	};
 }
 

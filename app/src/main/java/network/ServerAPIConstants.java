@@ -1,7 +1,7 @@
 package network;
 
 public class ServerAPIConstants {
-    public static final String SERVER_DOMAIN = "https://api.coverstar.tv";
+    public static final String SERVER_DOMAIN = "https://api.coverstar.tv/coverstarAPI/";
 
     /**
      * 서버에서 리턴되는 에러코드

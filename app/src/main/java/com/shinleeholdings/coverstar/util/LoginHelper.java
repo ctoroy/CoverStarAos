@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.LoginResult;
+import network.model.LoginUserData;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -23,7 +23,7 @@ public class LoginHelper {
 	private static volatile LoginHelper instance;
 	private final static Object lockObject = new Object();
 
-	private LoginResult mLoginResult;
+	private LoginUserData mLoginUserData;
 
 	public static LoginHelper getSingleInstance() {
 		if (instance == null) {
@@ -52,14 +52,14 @@ public class LoginHelper {
 		return "테스트입니다.";
 	}
 
-	public LoginResult getSavedLoginUserData() {
-		if (mLoginResult != null) {
-			mLoginResult = SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginResult.class);
+	public LoginUserData getSavedLoginUserData() {
+		if (mLoginUserData == null) {
+			mLoginUserData = SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
 		}
-		return mLoginResult;
+		return mLoginUserData;
 	}
 
-	public void saveLoginUserData(LoginResult data) {
+	public void saveLoginUserData(LoginUserData data) {
 		SharedPreferenceHelper.getInstance().putObject(SharedPreferenceHelper.LOGIN_USER_DATA, data);
 	}
 
@@ -92,21 +92,21 @@ public class LoginHelper {
 		param.put("device", "1");
 		param.put("pushId", SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.PUSH_ID));
 
-		RetroClient.getApiInterface().loginCoverStar(param).enqueue(new RetroCallback<LoginResult>() {
+		RetroClient.getApiInterface().loginCoverStar(param).enqueue(new RetroCallback<LoginUserData>() {
 			@Override
-			public void onSuccess(BaseResponse<LoginResult> receivedData) {
+			public void onSuccess(BaseResponse<LoginUserData> receivedData) {
 				ProgressDialogHelper.dismiss();
-				mLoginResult = receivedData.data;
+				mLoginUserData = receivedData.data;
 				if (isAutoLogin == false) {
 					SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.LOGIN_ID, id);
 					SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.LOGIN_PW, pw);
 				}
-				saveLoginUserData(mLoginResult);
+				saveLoginUserData(mLoginUserData);
 				listener.onComplete(true);
 			}
 
 			@Override
-			public void onFailure(BaseResponse<LoginResult> response) {
+			public void onFailure(BaseResponse<LoginUserData> response) {
 				ProgressDialogHelper.dismiss();
 				listener.onComplete(false);
 			}

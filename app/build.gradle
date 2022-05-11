@@ -8,6 +8,7 @@ android {
     compileSdk 31
 
     // shinlee12#$
+    // coverstar12#$
 
     defaultConfig {
         applicationId "com.shinleeholdings.coverstar"
