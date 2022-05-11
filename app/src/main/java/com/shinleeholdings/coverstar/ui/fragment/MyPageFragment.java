@@ -49,7 +49,7 @@ public class MyPageFragment extends BaseFragment {
         binding.messageImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                // TODO 메세지 목록
             }
         });
 
@@ -64,7 +64,7 @@ public class MyPageFragment extends BaseFragment {
         binding.buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 구매
+                addFragment(new PurchaseFragment());
             }
         });
         binding.depositeLayout.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +76,7 @@ public class MyPageFragment extends BaseFragment {
         binding.withdrawLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 출금
+                addFragment(new WithDrawFragment());
             }
         });
 
