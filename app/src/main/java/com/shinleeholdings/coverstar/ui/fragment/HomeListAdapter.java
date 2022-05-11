@@ -32,7 +32,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mContestNoticeList.size() > 0 && position == 0) {
+        if (hasHeaderContest() && position == 0) {
             return ITEM_TYPE_CONTEST_NOTI;
         }
 
@@ -43,11 +43,15 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         int itemListSize = mItemList.size();
         if (itemListSize > 0) {
-            if (mContestNoticeList.size() > 0) {
+            if (hasHeaderContest()) {
                 itemListSize = itemListSize + 1;
             }
         }
         return itemListSize;
+    }
+
+    private boolean hasHeaderContest() {
+        return mContestNoticeList.size() > 0;
     }
 
     @Override
@@ -56,7 +60,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_notice_item, parent, false);
             return new ContestNoticeItemViewHolder(view);
         } else {
-            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.contest_list_item, parent, false);
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_contest_list_item, parent, false);
             return new ItemViewHolder(view);
         }
     }
@@ -66,7 +70,8 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         if (holder instanceof ContestNoticeItemViewHolder) {
             // TODO 공지 세팅
         } else {
-            final ContestData item = mItemList.get(position);
+            int headerCount = hasHeaderContest() ? 1: 0;
+            final ContestData item = mItemList.get(position - headerCount);
             if (item == null) {
                 return;
             }
@@ -103,7 +108,6 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
         public ContestNoticeItemViewHolder(View itemView) {
             super(itemView);
-            viewPager = (ViewPager2) itemView;
         }
     }
 
