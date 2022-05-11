@@ -3,7 +3,6 @@ package com.shinleeholdings.coverstar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.shinleeholdings.coverstar.databinding.ActivitySplashBinding;
@@ -33,43 +32,21 @@ public class SplashActivity extends BaseActivity {
                 SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.PUSH_ID, task.getResult());
             }
 
-            new Handler().postDelayed(this::startLogin, 1000);
+            new Handler().postDelayed(this::startAutoLogin, 1000);
         });
     }
 
-    private void startLogin() {
-        String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
-        String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
-        if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
-            // TODO test
-            startMainActivity();
-//            startOpeningActivity();
-            return;
-        }
-
-        LoginHelper.getSingleInstance().login(this, loginId, loginPw, new LoginHelper.ILoginResultListener() {
-            @Override
-            public void onComplete(boolean success) {
-                if (success) {
-                    startMainActivity();
-                } else {
-                    startOpeningActivity();
-                }
+    private void startAutoLogin() {
+        LoginHelper.getSingleInstance().startAutoLogin(this, success -> {
+            if (success) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                startActivity(new Intent(this, LaunchActivity.class));
             }
+            finish();
+            overridePendingTransition(R.anim.fadein_anim, R.anim.fadeout_anim);
         });
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-        overridePendingTransition(R.anim.fadein_anim, R.anim.fadeout_anim);
-    }
-
-    private void startOpeningActivity() {
-        startActivity(new Intent(this, LaunchActivity.class));
-        finish();
-        overridePendingTransition(R.anim.fadein_anim, R.anim.fadeout_anim);
     }
 }

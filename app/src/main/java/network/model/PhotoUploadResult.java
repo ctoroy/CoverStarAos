@@ -2,19 +2,9 @@ package network.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PhotoUploadResult extends BaseResponse {
+public class PhotoUploadResult {
 
-	@SerializedName("data")
-	private ImageUrlData imageUrlData;
-
-	private class ImageUrlData {
-
-		@SerializedName("imgUrl")
-		private String imageUrl;
-	}
-
-	public String getImageUrl() {
-		return imageUrlData.imageUrl;
-	}
+	@SerializedName("imgUrl")
+	public String imageUrl;
 }
 

@@ -9,24 +9,30 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.shinleeholdings.coverstar.AppConstants;
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityUserPasswordBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 public class UserPasswordActivity extends BaseActivity {
 
-    public static final String PW_MODE_JOIN = "PW_MODE_JOIN";
-    public static final String PW_MODE_LOGIN = "PW_MODE_LOGIN";
+    public static final String MODE_JOIN = "MODE_JOIN";
+    public static final String MODE_LOGIN = "MODE_LOGIN";
 
     private ActivityUserPasswordBinding binding;
-    private String pwMode = "";
 
     private String firstPassword = "";
     private String secondPassword = "";
 
     private boolean isPasswordModeFirst = true;
+
+    private String pwMode = "";
+    private String loginUserId = "";
+    private String imagePath = "";
+    private String nickName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +40,15 @@ public class UserPasswordActivity extends BaseActivity {
         binding = ActivityUserPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String mode = getIntent().getStringExtra(AppConstants.EXTRA.PW_MODE);
-        if (TextUtils.isEmpty(mode)) {
-            pwMode = PW_MODE_JOIN;
+        String mode = getIntent().getStringExtra(AppConstants.EXTRA.MODE);
+        if (TextUtils.isEmpty(pwMode)) {
+            pwMode = MODE_JOIN;
         } else {
             pwMode = mode;
         }
+        loginUserId = getIntent().getStringExtra(AppConstants.EXTRA.USER_ID);
+        imagePath = getIntent().getStringExtra(AppConstants.EXTRA.IMAGE_PATH);
+        nickName = getIntent().getStringExtra(AppConstants.EXTRA.NICKNAME);
 
         initUi();
     }
@@ -90,7 +99,7 @@ public class UserPasswordActivity extends BaseActivity {
             }
         });
 
-        if (pwMode.equals(PW_MODE_JOIN)) {
+        if (pwMode.equals(MODE_JOIN)) {
             binding.starChainIntroLayout.setVisibility(View.VISIBLE);
             binding.passwordInputLayout.setVisibility(View.GONE);
             binding.agreeLayout.setVisibility(View.VISIBLE);
@@ -116,13 +125,8 @@ public class UserPasswordActivity extends BaseActivity {
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (pwMode.equals(PW_MODE_LOGIN)) {
-                    if (TextUtils.isEmpty(firstPassword) || firstPassword.trim().length() < 6) {
-                        Toast.makeText(UserPasswordActivity.this, getString(R.string.password_input), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // TODO 로그인 시도
+                if (pwMode.equals(MODE_LOGIN)) {
+                    startLogin();
                     return;
                 }
 
@@ -165,6 +169,24 @@ public class UserPasswordActivity extends BaseActivity {
         });
 
         binding.agreeLayout.setOnClickListener(view -> view.setSelected(!view.isSelected()));
+    }
+
+    private void startLogin() {
+        if (TextUtils.isEmpty(firstPassword) || firstPassword.trim().length() < 6) {
+            Toast.makeText(UserPasswordActivity.this, getString(R.string.password_input), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        LoginHelper.getSingleInstance().login(this, loginUserId, firstPassword, false, new LoginHelper.ILoginResultListener() {
+            @Override
+            public void onComplete(boolean success) {
+                if (success) {
+                    Intent intent = new Intent(UserPasswordActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void updatePasswordLayout() {
@@ -236,7 +258,7 @@ public class UserPasswordActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (pwMode.equals(PW_MODE_JOIN)) {
+        if (pwMode.equals(MODE_JOIN)) {
             if (isPasswordModeFirst == false) {
                 secondPassword = "";
                 binding.pw2EditText.setText("");

@@ -1,12 +1,12 @@
 package com.shinleeholdings.coverstar.util;
 
 import android.app.Activity;
-
-import com.shinleeholdings.coverstar.data.LoginUserData;
+import android.text.TextUtils;
 
 import java.util.HashMap;
 
 import network.model.BaseResponse;
+import network.model.LoginResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -22,6 +22,8 @@ public class LoginHelper {
 
 	private static volatile LoginHelper instance;
 	private final static Object lockObject = new Object();
+
+	private LoginResult mLoginResult;
 
 	public static LoginHelper getSingleInstance() {
 		if (instance == null) {
@@ -50,30 +52,61 @@ public class LoginHelper {
 		return "테스트입니다.";
 	}
 
-	public LoginUserData getSavedLoginUserData() {
-		return SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
+	public LoginResult getSavedLoginUserData() {
+		if (mLoginResult != null) {
+			mLoginResult = SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginResult.class);
+		}
+		return mLoginResult;
 	}
 
-	public void saveLoginUserData(LoginUserData data) {
+	public void saveLoginUserData(LoginResult data) {
 		SharedPreferenceHelper.getInstance().putObject(SharedPreferenceHelper.LOGIN_USER_DATA, data);
 	}
 
-	public void login(Activity activity, String id, String pw, ILoginResultListener listener) {
+	public boolean hasLoginInfo() {
+		String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
+		String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
+
+		if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
+			return false;
+		}
+		return true;
+	}
+
+	public void startAutoLogin(Activity activity, ILoginResultListener listener) {
+		String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
+		String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
+
+		if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
+			listener.onComplete(false);
+			return;
+		}
+		login(activity, loginId, loginPw, true, listener);
+	}
+
+	public void login(Activity activity, String id, String pw, boolean isAutoLogin, ILoginResultListener listener) {
 		ProgressDialogHelper.show(activity);
-		HashMap param = new HashMap<String, String>();
+		HashMap<String, String> param = new HashMap<>();
 		param.put("userId", id);
 		param.put("userPwd", pw);
+		param.put("device", "1");
 		param.put("pushId", SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.PUSH_ID));
 
-		RetroClient.getApiInterface().login(param).enqueue(new RetroCallback<BaseResponse>() {
+		RetroClient.getApiInterface().loginCoverStar(param).enqueue(new RetroCallback<LoginResult>() {
 			@Override
-			public void onSuccess(BaseResponse receivedData) {
+			public void onSuccess(BaseResponse<LoginResult> receivedData) {
 				ProgressDialogHelper.dismiss();
+				mLoginResult = receivedData.data;
+				if (isAutoLogin == false) {
+					SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.LOGIN_ID, id);
+					SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.LOGIN_PW, pw);
+				}
+				saveLoginUserData(mLoginResult);
 				listener.onComplete(true);
 			}
 
 			@Override
-			public void onFailure(BaseResponse response) {
+			public void onFailure(BaseResponse<LoginResult> response) {
 				ProgressDialogHelper.dismiss();
 				listener.onComplete(false);
 			}

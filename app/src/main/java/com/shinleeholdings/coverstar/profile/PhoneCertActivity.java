@@ -6,6 +6,7 @@ import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_REC
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -30,10 +31,20 @@ import com.shinleeholdings.coverstar.databinding.ActivityPhoneCertBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.DialogHelper;
+import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import network.model.BaseResponse;
+import network.model.LoginResult;
+import network.model.defaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class PhoneCertActivity extends BaseActivity {
 
@@ -86,7 +97,7 @@ public class PhoneCertActivity extends BaseActivity {
             }
         });
 
-        binding.ccp.setOnCountryChangeListener(() -> setCountrySelected());
+        binding.ccp.setOnCountryChangeListener(this::setCountrySelected);
 
         binding.ccp.launchCountrySelectionDialog();
     }
@@ -105,6 +116,40 @@ public class PhoneCertActivity extends BaseActivity {
         });
     }
 
+    private void checkUserValid() {
+        if (NetworkHelper.isNetworkConnected() == false) {
+            Toast.makeText(this, getString(R.string.network_not_connected), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String phoneNum = binding.phoneNumEditText.getText().toString();
+        if (TextUtils.isEmpty(phoneNum)) {
+            Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String userId = binding.ccp.getSelectedCountryCode() + phoneNum;
+
+        ProgressDialogHelper.show(this);
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", userId);
+        RetroClient.getApiInterface().checkExistUser(param).enqueue(new RetroCallback<defaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
+                intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
+                intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_LOGIN);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(BaseResponse<defaultResult> response) {
+                // 유효성 체크 실패시 가입모드로 전환(가입된 유저 정보가 없습니다. 회원가입 먼저 해주세요.
+                certMode = PHONE_CERT_MODE_JOIN;
+                setModeUi();
+            }
+        });
+    }
+
     private void setModeUi() {
         binding.phoneNumInputLayout.setVisibility(View.VISIBLE);
         binding.certNumInputLayout.setVisibility(View.GONE);
@@ -116,16 +161,21 @@ public class PhoneCertActivity extends BaseActivity {
             binding.nextButton.setText(getString(R.string.next));
         } else if (certMode.equals(PHONE_CERT_MODE_LOGIN)) {
             binding.titleLayout.titleTextView.setText(R.string.login);
-            // TODO 저장된 사용자 정보 세팅(닉네임, 휴대폰, 사진경로, 국가번호)
-            String nickName = "테스트";
-            String phoneNum = "01031240677";
-            // TODO 저장된 국가정보 ccp에 세팅
+            LoginResult loginData = LoginHelper.getSingleInstance().getSavedLoginUserData();
+
+            String nickName = loginData.nickName;
+            String phoneNum = loginData.getPhoneNumWithoutNationCode();
+
+            if (TextUtils.isEmpty(loginData.userNation) == false) {
+                binding.ccp.setCountryForPhoneCode(Integer.parseInt(loginData.userNation));
+            }
 
             String message = String.format(getString(R.string.welcome_user), nickName);
             binding.phoneCertNeed.setText(Util.getSectionOfTextBold(message, nickName));
             binding.phoneNumEditText.setText(phoneNum);
             binding.loginHintTextView.setVisibility(View.VISIBLE);
             binding.userPhotoLayout.setVisibility(View.VISIBLE);
+            ImageLoader.loadImage(binding.userImageView, loginData.userProfileImage);
             binding.nextButton.setText(getString(R.string.next));
         } else {
             binding.titleLayout.titleTextView.setText(R.string.phone_cert);
@@ -163,14 +213,6 @@ public class PhoneCertActivity extends BaseActivity {
         binding.nextButton.setOnClickListener(view -> {
             startFirebaseUserAuth();
         });
-    }
-
-    private void checkUserValid() {
-        // TODO 사용자 유효성 API 체크
-
-        // 유효성 체크 실패시 가입모드로 전환(가입된 유저 정보가 없습니다. 회원가입 먼저 해주세요.
-        certMode = PHONE_CERT_MODE_JOIN;
-        setModeUi();
     }
 
     private void initAuthInfo() {
@@ -218,7 +260,6 @@ public class PhoneCertActivity extends BaseActivity {
                     ProgressDialogHelper.dismiss();
 
                     DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks fail : " + e.getMessage());
-                    // TODO 에러 문구 노출 필요
                     if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     } else if (e instanceof FirebaseTooManyRequestsException) {
                     }
@@ -230,7 +271,7 @@ public class PhoneCertActivity extends BaseActivity {
 
                     DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks onCodeSent");
                     PhoneCertActivity.this.verificationId = verificationId;
-                    // TODO 이건 어디다 쓰는거지?
+                    // force re-sending another verification SMS before the auto-retrieval timeout.
                     PhoneCertActivity.this.token = token;
                     DialogHelper.showCertNumSendCompletePopup(PhoneCertActivity.this);
                     showCertNumInputLayout();
@@ -274,14 +315,17 @@ public class PhoneCertActivity extends BaseActivity {
     }
 
     private void userAuthComplete() {
-        if (certMode.equals(PHONE_CERT_MODE_LOGIN)) {
-
-        } else if (certMode.equals(PHONE_CERT_MODE_RECERT)) {
-
-        } else {
-            // 프로필 이미지와 닉네임 설정
+        String phoneNum = binding.phoneNumEditText.getText().toString();
+        if (TextUtils.isEmpty(phoneNum)) {
+            Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
+            return;
         }
+        String userId = binding.ccp.getSelectedCountryCode() + phoneNum;
 
+        Intent intent = new Intent(this, ProfileSettingActivity.class);
+        intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
+        intent.putExtra(AppConstants.EXTRA.MODE, ProfileSettingActivity.MODE_JOIN);
+        startActivity(intent);
     }
 
     private void startCertificationTimer() {

@@ -14,7 +14,6 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityProfileSettingBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
-import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -35,11 +34,22 @@ public class ProfileSettingActivity extends BaseActivity {
     private ActivityProfileSettingBinding binding;
     private File selectedImageFile;
 
+    public static final String MODE_JOIN = "MODE_JOIN";
+
+    private String userId = "";
+    private boolean isJoin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        userId = getIntent().getStringExtra(AppConstants.EXTRA.USER_ID);
+        String mode = getIntent().getStringExtra(AppConstants.EXTRA.MODE);
+        if (MODE_JOIN.equals(mode)) {
+            isJoin = true;
+        }
 
         initUi();
     }
@@ -51,6 +61,12 @@ public class ProfileSettingActivity extends BaseActivity {
                 selectProfileImage()
            );
 
+        if (isJoin) {
+            binding.nextButton.setText(getString(R.string.next));
+        } else {
+            binding.nextButton.setText(getString(R.string.change));
+        }
+
         binding.nextButton.setOnClickListener(view -> {
             String nickName = binding.nickNameEditText.getText().toString();
 
@@ -60,32 +76,42 @@ public class ProfileSettingActivity extends BaseActivity {
                 return;
             }
 
-            // TODO 서버에 닉네임 체크
-
             if (selectedImageFile != null) {
                 uploadImageFile();
             } else {
-                updateUserProfileInfo();
+                updateUserProfileInfo("", nickName);
             }
         });
     }
 
-    private void updateUserProfileInfo() {
-        startPasswordActivity();
+    private void updateUserProfileInfo(String imagePath, String nickName) {
+
+        if (isJoin) {
+            Intent intent = new Intent(this, UserPasswordActivity.class);
+            // TODO 추천코드 입력화면으로 이동시킨다.
+            intent.putExtra(AppConstants.EXTRA.USER_ID, userId);
+            intent.putExtra(AppConstants.EXTRA.IMAGE_PATH, imagePath);
+            intent.putExtra(AppConstants.EXTRA.NICKNAME, nickName);
+            intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_JOIN);
+            startActivity(intent);
+        } else {
+            // TODO 서버에 사진 및 닉네임 업데이트 API 호출, 프로필 정보 변경 및 업데이트 브로드캐스트 날리기, 받는쪽에서는 업데이트 처리
+            finish();
+        }
     }
 
     private void uploadImageFile() {
         ProgressDialogHelper.show(this);
         RetroClient.getApiInterface().uploadUserProfile(Util.getImageBody("imgFile", selectedImageFile)).enqueue(new RetroCallback<PhotoUploadResult>() {
             @Override
-            public void onSuccess(BaseResponse receivedData) {
+            public void onSuccess(BaseResponse<PhotoUploadResult> receivedData) {
                 ProgressDialogHelper.dismiss();
-                PhotoUploadResult result = (PhotoUploadResult)receivedData;
-                updateUserProfileInfo();
+                PhotoUploadResult result = receivedData.data;
+                updateUserProfileInfo(result.imageUrl, binding.nickNameEditText.getText().toString());
             }
 
             @Override
-            public void onFailure(BaseResponse response) {
+            public void onFailure(BaseResponse<PhotoUploadResult> response) {
                 ProgressDialogHelper.dismiss();
             }
         });
@@ -107,12 +133,6 @@ public class ProfileSettingActivity extends BaseActivity {
                 .setAspectRatio(1, 1)
                 .setRequestedSize(1024, 1024)
                 .start(this);
-    }
-
-    private void startPasswordActivity() {
-        Intent phoneCertIntent = new Intent(this, UserPasswordActivity.class);
-        phoneCertIntent.putExtra(AppConstants.EXTRA.PW_MODE, UserPasswordActivity.PW_MODE_JOIN);
-        startActivity(phoneCertIntent);
     }
 
     @Override

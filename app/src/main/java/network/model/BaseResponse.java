@@ -6,12 +6,15 @@ import com.google.gson.annotations.SerializedName;
 
 import network.ServerAPIConstants;
 
-public class BaseResponse {
+public class BaseResponse<T> {
     @SerializedName("message")
     private String message;
 
     @SerializedName("result")
     private String result;
+
+    @SerializedName("data")
+    public T data;
 
     public String getMessage() {
         return message;

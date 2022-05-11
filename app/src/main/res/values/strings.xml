@@ -7,6 +7,7 @@
     <string name="cancel">취소</string>
     <string name="close">닫기</string>
     <string name="information">안내</string>
+    <string name="change">변경</string>
     <string name="network_not_connected">네트워크 연결 상태를 확인해주세요.</string>
     <string name="find_best_cover_star">최고의 커버스타를\n찾아라</string>
 

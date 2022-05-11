@@ -15,17 +15,7 @@ public class ImageLoader {
             return;
         }
 
-        String url = getFullImageUrl(path);
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-
-        RequestBuilder<Drawable> builder = Glide.with(MyApplication.getContext()).load(url);
+        RequestBuilder<Drawable> builder = Glide.with(MyApplication.getContext()).load(path);
         builder.into(target);
-    }
-
-    public static String getFullImageUrl(String path) {
-        // TODO 경로 설정
-        return path;
     }
 }

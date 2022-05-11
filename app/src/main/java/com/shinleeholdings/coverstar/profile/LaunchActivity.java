@@ -11,18 +11,15 @@ import com.shinleeholdings.coverstar.util.LoginHelper;
 
 public class LaunchActivity extends BaseActivity {
 
-    private ActivityOpeningBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityOpeningBinding.inflate(getLayoutInflater());
+        com.shinleeholdings.coverstar.databinding.ActivityOpeningBinding binding = ActivityOpeningBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.loginButton.setOnClickListener(view -> {
-            boolean hasLoginInfo = false; // TODO 로그인 정보 보유 유무 체크
             Intent phoneCertIntent = new Intent(this, PhoneCertActivity.class);
-            if (hasLoginInfo) {
+            if (LoginHelper.getSingleInstance().getSavedLoginUserData() != null) {
                 phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_LOGIN);
             } else {
                 phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_RECERT);
