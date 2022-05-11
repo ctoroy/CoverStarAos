@@ -160,4 +160,6 @@
     <string name="unfollow">언팔로우</string>
     <string name="show_more">&#62; 더보기</string>
 
+    <string name="home_coverstar">Cover Star</string>
+    <string name="home_event">Event</string>
 </resources>

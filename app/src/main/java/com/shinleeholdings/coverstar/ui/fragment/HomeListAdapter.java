@@ -6,13 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager.widget.ViewPager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.ui.custom.HomeEventPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ContestNoticeItemViewHolder) {
-            // TODO 공지 세팅
+            setEventLayout((ContestNoticeItemViewHolder) holder);
         } else {
             int headerCount = hasHeaderContest() ? 1: 0;
             final ContestData item = mItemList.get(position - headerCount);
@@ -79,6 +80,19 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
             viewHolder.contestItemLayout.setData(mMainActivity, item);
         }
+    }
+
+    private void setEventLayout(ContestNoticeItemViewHolder viewHolder) {
+        // TODO 아답터 및 데이터 설정
+
+        HomeEventPagerAdapter adapter = new HomeEventPagerAdapter();
+        viewHolder.viewPager.setAdapter(adapter);
+        adapter.setData(mContestNoticeList, new HomeEventPagerAdapter.IPageMoveEventListener() {
+            @Override
+            public void onMove(int position) {
+                viewHolder.viewPager.setCurrentItem(position, true);
+            }
+        });
     }
 
     public void setData(ArrayList<ContestData> contestList, ArrayList<ContestData> dataList) {
@@ -103,11 +117,11 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     }
 
     private class ContestNoticeItemViewHolder extends RecyclerView.ViewHolder {
-        // TODO 공지뷰 세팅
-        ViewPager2 viewPager;
+        ViewPager viewPager;
 
         public ContestNoticeItemViewHolder(View itemView) {
             super(itemView);
+            viewPager = (ViewPager) itemView;
         }
     }
 

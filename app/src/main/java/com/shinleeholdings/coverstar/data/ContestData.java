@@ -49,8 +49,4 @@ public class ContestData {
     @SerializedName("product") public String product; //*이벤트 이미지
     @SerializedName("likes") public String likes;
     @SerializedName("accumWatchCnt") public String accumWatchCnt;
-
-
-
-
 }
