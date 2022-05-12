@@ -105,11 +105,12 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/left_bottom_triangle"
         android:id="@+id/homeLeftTriangleView"/>
-    <View
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:visibility="gone"
+        android:src="@drawable/right_bottom_triangle"
         android:id="@+id/homeRightTriangleView"/>
 </RelativeLayout>
