@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentPrevMediaBinding;
-import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class PrevMediaFragment extends BaseFragment {
@@ -50,13 +49,6 @@ public class PrevMediaFragment extends BaseFragment {
         });
 
         mListAdapter = new PrevMediaListAdapter((MainActivity) getActivity());
-        mListAdapter.setSortType(new SortFilterDialog.ISortTypeSelectListener() {
-            @Override
-            public void onSortTypeSelected(SortFilterDialog.SortType type) {
-                // TODO 로컬 정렬
-//                requestData();
-            }
-        });
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override

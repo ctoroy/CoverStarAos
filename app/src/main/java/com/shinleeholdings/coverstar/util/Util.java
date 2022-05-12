@@ -25,19 +25,65 @@ import androidx.core.content.ContextCompat;
 
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.Multipart;
 
 public class Util {
+    private static final SimpleDateFormat castTimeFormat = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);
     private static final DecimalFormatSymbols decimalFormatSimbol = new DecimalFormatSymbols(Locale.KOREA);
+
+    public static void sortList(SortFilterDialog.SortType selectedSortType, ArrayList<ContestData> targetList) {
+        if (targetList != null && targetList.size() > 0) {
+            Collections.sort(targetList, new Comparator<ContestData>() {
+                @Override
+                public int compare(ContestData contestData, ContestData t1) {
+                    if (selectedSortType == SortFilterDialog.SortType.LATEST) {
+                        try {
+                            Date originalValue = castTimeFormat.parse(contestData.castStartDate);
+                            Date targetValue = castTimeFormat.parse(t1.castStartDate);
+                            if (originalValue.before(targetValue)) {
+                                return 1;
+                            } else if (originalValue.after(targetValue)) {
+                                return -1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        int originalValue = 0;
+                        int targetValue = 0;
+                        if (selectedSortType == SortFilterDialog.SortType.SEARCH) {
+                            originalValue = contestData.watchCnt;
+                            targetValue = t1.watchCnt;
+                        } else if (selectedSortType == SortFilterDialog.SortType.POPULAR) {
+                            originalValue = contestData.episode;
+                            targetValue = t1.episode;
+                        }
+                        if (originalValue < targetValue) {
+                            return 1;
+                        } else if (originalValue > targetValue) {
+                            return -1;
+                        }
+                    }
+                    return 0;
+                }
+            });
+        }
+    }
 
     public static MultipartBody.Part getImageBody(String key, File file)  {
         // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성

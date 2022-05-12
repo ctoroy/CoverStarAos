@@ -14,9 +14,15 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
+import com.shinleeholdings.coverstar.util.Util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 
 import network.model.HomeContentsDataList;
 
@@ -38,14 +44,7 @@ public class HomePagerAdapter extends PagerAdapter {
     public void updateSort(SortFilterDialog.SortType selectedSortType) {
         for (int i=0; i< itemList.size(); i++) {
             Pair<ContestData, ArrayList<ContestData>> data = itemList.get(i);
-            if (data.second != null && data.second.size() > 0) {
-                Collections.sort();
-                // TODO 로컬 정렬
-                // selectedSortType
-                // 최신순 : castStartDate
-                // 조회순 : watchCnt
-                // 인기순 : episode
-            }
+            Util.sortList(selectedSortType, data.second);
         }
     }
 

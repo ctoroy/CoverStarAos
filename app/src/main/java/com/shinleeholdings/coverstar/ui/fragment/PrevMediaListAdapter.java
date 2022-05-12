@@ -26,7 +26,6 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     public SortFilterDialog.SortType mSelectedSortType = SortFilterDialog.SortType.LATEST;
-    private SortFilterDialog.ISortTypeSelectListener mSortTypeSelectListener;
 
     private final ArrayList<ContestData> mEpilogueList = new ArrayList<>();
     private final ArrayList<ContestData> mContestMediaList = new ArrayList<>();
@@ -38,10 +37,6 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
 
     public PrevMediaListAdapter(MainActivity activity) {
         mMainActivity = activity;
-    }
-
-    public void setSortType(SortFilterDialog.ISortTypeSelectListener listener) {
-        mSortTypeSelectListener = listener;
     }
 
     public void setData(ArrayList<ContestData> epliogList, ArrayList<ContestData> contestList) {
@@ -196,7 +191,8 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
                             selectedFilterTextView.setText(mMainActivity.getString(R.string.order_recently));
                             break;
                     }
-                    mSortTypeSelectListener.onSortTypeSelected(type);
+                    Util.sortList(type, mContestMediaList);
+                    notifyDataSetChanged();
                 }
             });
         }
