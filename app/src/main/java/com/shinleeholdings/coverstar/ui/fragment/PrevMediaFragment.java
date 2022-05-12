@@ -53,7 +53,8 @@ public class PrevMediaFragment extends BaseFragment {
         mListAdapter.setSortType(new SortFilterDialog.ISortTypeSelectListener() {
             @Override
             public void onSortTypeSelected(SortFilterDialog.SortType type) {
-                requestData();
+                // TODO 로컬 정렬
+//                requestData();
             }
         });
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);

@@ -30,7 +30,7 @@ public class ContestData {
     @SerializedName("watchCnt") public int watchCnt; //플레이수
     @SerializedName("castTitle") public String castTitle; //+*타이틀
 
-    @SerializedName("category") public String category;
+    @SerializedName("category") public int category;
     @SerializedName("castPath") public String castPath;
 
     @SerializedName("nickName") public String nickName; //+*참가자명

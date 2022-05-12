@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         }
     }
 
-    private void setTabSelect(int tabIndex) {
+    public void setTabSelect(int tabIndex) {
         binding.tabLayout.getTabAt(tabIndex).select();
     }
 

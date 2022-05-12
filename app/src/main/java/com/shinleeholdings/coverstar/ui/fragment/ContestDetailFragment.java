@@ -90,7 +90,7 @@ public class ContestDetailFragment extends BaseFragment {
         binding.dateTextview.setText("");
         binding.contestDescriptionTextview.setText("");
 
-        // TODO 관련 영상 추가하기
+        // TODO 관련 영상 추가하기 (API 새로 만들기)
         binding.relatedMediaListLayout.removeAllViews();
         ArrayList<ContestData> itemList = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
@@ -167,14 +167,14 @@ public class ContestDetailFragment extends BaseFragment {
         binding.shareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 공유하기 , 뭘 공유? 링크를???
+                // TODO 공유하기 : 영상 링크 공유
             }
         });
 
         binding.addToPlayListLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 재생목록에 추가
+                // 재생목록에 추가
             }
         });
 

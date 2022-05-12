@@ -6,16 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentHomeBinding;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
@@ -28,7 +25,7 @@ public class HomeFragment extends BaseFragment {
     private FragmentHomeBinding binding;
     private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.LATEST;
 
-    private HomeListAdapter mHomeListAdapter;
+    private HomePagerAdapter mHomePagerAdapter;
 
     @Nullable
     @Override
@@ -66,16 +63,16 @@ public class HomeFragment extends BaseFragment {
 
                         selectedSortType = type;
                         setFilterInfo();
-                        requestData();
+                        mHomePagerAdapter.updateSort(selectedSortType);
+                        mHomePagerAdapter.notifyDataSetChanged();
                     }
                 });
                 dialog.show();
             }
         });
 
-        binding.homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mHomeListAdapter = new HomeListAdapter((MainActivity) getActivity());
-        binding.homeRecyclerView.setAdapter(mHomeListAdapter);
+        mHomePagerAdapter = new HomePagerAdapter((MainActivity) getActivity(), position -> binding.homeViewPager.setCurrentItem(position, true));
+        binding.homeViewPager.setAdapter(mHomePagerAdapter);
     }
 
     private void setFilterInfo() {
@@ -95,26 +92,18 @@ public class HomeFragment extends BaseFragment {
     private void requestData() {
         binding.homeSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
-
-        // TODO 정렬 들어가는지 체크
         HashMap<String, String> param = new HashMap<>();
-        param.put("order", selectedSortType.toString());
+        param.put("temp", "1");
 
         RetroClient.getApiInterface().getHomeList(param).enqueue(new RetroCallback<HomeContentsDataList>() {
             @Override
             public void onSuccess(BaseResponse<HomeContentsDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
 
-                // TODO 경연과 이벤트 쪼개기
                 HomeContentsDataList result = receivedData.data;
-                ArrayList<ContestData> dataList = new ArrayList<>();
-                dataList.add(result.get(0));
-                dataList.add(result.get(1));
-
-                result.addAll(result);
-                result.addAll(result);
-                result.addAll(result);
-                mHomeListAdapter.setData(dataList, result);
+                mHomePagerAdapter.setData(result);
+                mHomePagerAdapter.updateSort(selectedSortType);
+                mHomePagerAdapter.notifyDataSetChanged();
             }
 
             @Override

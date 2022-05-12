@@ -65,12 +65,10 @@
                 android:background="#ff7a9a" />
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeRecyclerView"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/homeViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingTop="20dp"
-            android:clipToPadding="false"
             android:layout_weight="1"/>
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

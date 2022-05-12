@@ -4,36 +4,44 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
-import com.shinleeholdings.coverstar.ui.custom.HomeEventPagerAdapter;
 
 import java.util.ArrayList;
 
 public class HomeListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private final ArrayList<ContestData> mContestNoticeList = new ArrayList<>();
-    private final ArrayList<ContestData> mItemList = new ArrayList<>();
     private MainActivity mMainActivity;
+
+    private boolean mHasEventTab;
+    private boolean mIsCoverStarTab;
+
+    private ContestData contestRegistItem = null;
+    private final ArrayList<ContestData> mItemList = new ArrayList<>();
 
     private final int ITEM_TYPE_CONTEST_NOTI = 1;
     private final int ITEM_TYPE_CONTEST = 2;
 
-    public HomeListAdapter(MainActivity activity) {
+    private HomePagerAdapter.IPageMoveEventListener moveEventListener;
+
+    public HomeListAdapter(MainActivity activity, HomePagerAdapter.IPageMoveEventListener listener) {
         mMainActivity = activity;
+        moveEventListener = listener;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (hasHeaderContest() && position == 0) {
+        if (hasRegistItem() && position == 0) {
             return ITEM_TYPE_CONTEST_NOTI;
         }
 
@@ -43,23 +51,23 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         int itemListSize = mItemList.size();
-        if (itemListSize > 0) {
-            if (hasHeaderContest()) {
-                itemListSize = itemListSize + 1;
-            }
+
+        if (hasRegistItem()) {
+            itemListSize = itemListSize + 1;
         }
+
         return itemListSize;
     }
 
-    private boolean hasHeaderContest() {
-        return mContestNoticeList.size() > 0;
+    private boolean hasRegistItem() {
+        return contestRegistItem != null;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_CONTEST_NOTI) {
             View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_notice_item, parent, false);
-            return new ContestNoticeItemViewHolder(view);
+            return new ContestRegistItemViewHolder(view);
         } else {
             View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.home_contest_list_item, parent, false);
             return new ItemViewHolder(view);
@@ -68,10 +76,10 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof ContestNoticeItemViewHolder) {
-            setEventLayout((ContestNoticeItemViewHolder) holder);
+        if (holder instanceof ContestRegistItemViewHolder) {
+            setEventLayout((ContestRegistItemViewHolder) holder);
         } else {
-            int headerCount = hasHeaderContest() ? 1: 0;
+            int headerCount = hasRegistItem() ? 1: 0;
             final ContestData item = mItemList.get(position - headerCount);
             if (item == null) {
                 return;
@@ -82,33 +90,49 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setEventLayout(ContestNoticeItemViewHolder viewHolder) {
-        // TODO 아답터 및 데이터 설정
-
-        HomeEventPagerAdapter adapter = new HomeEventPagerAdapter();
-        viewHolder.viewPager.setAdapter(adapter);
-        adapter.setData(mContestNoticeList, new HomeEventPagerAdapter.IPageMoveEventListener() {
-            @Override
-            public void onMove(int position) {
-                viewHolder.viewPager.setCurrentItem(position, true);
+    private void setEventLayout(ContestRegistItemViewHolder viewHolder) {
+        if (mIsCoverStarTab) {
+            viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg1);
+            viewHolder.homeLeftTitleSelectedTextView.setVisibility(View.VISIBLE);
+            viewHolder.homeLeftTriangleView.setVisibility(View.VISIBLE);
+            viewHolder.homeRightTitleSelectedTextView.setVisibility(View.GONE);
+            viewHolder.homeLeftTitleUnSelectedLayout.setVisibility(View.GONE);
+            viewHolder.homeRightTriangleView.setVisibility(View.GONE);
+            if (mHasEventTab) {
+                viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.VISIBLE);
+                viewHolder.homeRightTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(1));
+            } else {
+                viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
             }
-        });
+        } else {
+            viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg2);
+            viewHolder.homeRightTitleSelectedTextView.setVisibility(View.VISIBLE);
+            viewHolder.homeLeftTitleUnSelectedLayout.setVisibility(View.VISIBLE);
+            viewHolder.homeRightTriangleView.setVisibility(View.VISIBLE);
+            viewHolder.homeLeftTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(0));
+            viewHolder.homeLeftTriangleView.setVisibility(View.GONE);
+            viewHolder.homeLeftTitleSelectedTextView.setVisibility(View.GONE);
+            viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
+        }
+
+        final ContestData item = mItemList.get(0);
+        // TODO 데이터 세팅
+
+        // TODO 참가신청 누르면 참가신청 탭으로 이동, 시즌 선택해주기
     }
 
-    public void setData(ArrayList<ContestData> contestList, ArrayList<ContestData> dataList) {
+    public void setData(ContestData registItem, ArrayList<ContestData> contestList, boolean isCoverStarTab, boolean hasEventTab) {
         mItemList.clear();
-        mContestNoticeList.clear();
+        mIsCoverStarTab = isCoverStarTab;
+        mHasEventTab = hasEventTab;
 
-        if (dataList != null && dataList.size() > 0) {
-            mContestNoticeList.addAll(contestList);
-            mItemList.addAll(dataList);
+        contestRegistItem = registItem;
+
+        if (contestList != null && contestList.size() > 0) {
+            mItemList.addAll(contestList);
         }
 
         notifyDataSetChanged();
-    }
-
-    public void clear() {
-        setData(null, null);
     }
 
     @Override
@@ -116,12 +140,26 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    private class ContestNoticeItemViewHolder extends RecyclerView.ViewHolder {
-        ViewPager viewPager;
+    private class ContestRegistItemViewHolder extends RecyclerView.ViewHolder {
+        ImageView homeNoticeBgImageView;
+        TextView homeLeftTitleSelectedTextView;
+        LinearLayout homeRightTitleUnSelectedLayout;
+        TextView homeRightTitleSelectedTextView;
+        LinearLayout homeLeftTitleUnSelectedLayout;
 
-        public ContestNoticeItemViewHolder(View itemView) {
+        View homeLeftTriangleView;
+        View homeRightTriangleView;
+
+        public ContestRegistItemViewHolder(View itemView) {
             super(itemView);
-            viewPager = (ViewPager) itemView;
+            homeNoticeBgImageView = itemView.findViewById(R.id.homeNoticeBgImageView);
+            homeLeftTitleSelectedTextView = itemView.findViewById(R.id.homeLeftTitleSelectedTextView);
+            homeRightTitleUnSelectedLayout = itemView.findViewById(R.id.homeRightTitleUnSelectedLayout);
+            homeRightTitleSelectedTextView = itemView.findViewById(R.id.homeRightTitleSelectedTextView);
+            homeLeftTitleUnSelectedLayout = itemView.findViewById(R.id.homeLeftTitleUnSelectedLayout);
+
+            homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
+            homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);
         }
     }
 
