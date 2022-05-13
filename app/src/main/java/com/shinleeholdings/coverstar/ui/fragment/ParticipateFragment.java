@@ -76,39 +76,13 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
         });
         binding.registTextView.setOnClickListener(view -> startRegist());
         binding.paticipateCountTextView.setText("");
-
-        //create a list of items for the spinner.
-        String[] items = new String[]{"1", "2", "three"};
-
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.drop_down_list_item, R.id.selectedItemTextView, items);
-        adapter.setDropDownViewResource(R.layout.drop_down_list_item);
-
-        //set the spinners adapter to the previously created one.
-        binding.contestInfoItemSpinner.setAdapter(adapter);
-        binding.contestInfoItemSpinner.setDropDownVerticalOffset(Util.convertDimenResIdToPixel(getActivity(), R.dimen.spinner_height));
-        binding.contestInfoItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO
-//                setContestItem();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     private void setContestInfoItem(ContestInfoItem item) {
         selectedContestInfoItem = item;
         if (item != null) {
-//            binding.selectedSeasonTextView.setText(item.contestTitle);
             binding.paticipateCountTextView.setText(String.format(getString(R.string.participate_count), Util.getCoinDisplayCountString(item.contestPayAmt)));
         } else {
-//            binding.selectedSeasonTextView.setText("");
             binding.paticipateCountTextView.setText("");
         }
     }
@@ -159,11 +133,10 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
             return;
         }
 
-        // TODO test
-//        if (LoginHelper.getSingleInstance().getMyCoinCount() < selectedContestInfoItem.contestPayAmt) {
-//            DialogHelper.showPointCheckPopup(getActivity());
-//            return;
-//        }
+        if (LoginHelper.getSingleInstance().getMyCoinCount() < selectedContestInfoItem.contestPayAmt) {
+            DialogHelper.showPointCheckPopup(getActivity());
+            return;
+        }
 
         DialogHelper.showRegistConfirmPopup(getActivity(), selectedContestInfoItem.contestPayAmt, new View.OnClickListener() {
             @Override
@@ -205,6 +178,7 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
                     @Override
                     public void onSuccess(BaseResponse<defaultResult> receivedData) {
                         ProgressDialogHelper.dismiss();
+                        Toast.makeText(getActivity(), String.format(getString(R.string.regist_complete), selectedContestInfoItem.contestTitle), Toast.LENGTH_LONG).show();
                         LoginHelper.getSingleInstance().updateMyCoin(-selectedContestInfoItem.contestPayAmt);
                         initInputInfo();
                     }
@@ -236,6 +210,7 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
                 ProgressDialogHelper.dismiss();
 
                 mContestInfoDataList = receivedData.data;
+                initSpinner();
                 if (contestId != -1) {
                     setContestInfoSelect(contestId);
                 } else {
@@ -253,6 +228,31 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
                 setContestInfoItem(null);
             }
         });
+    }
+
+    private void initSpinner() {
+        String[] items = new String[mContestInfoDataList.size()];
+        for(int i=0; i <mContestInfoDataList.size(); i++) {
+            ContestInfoItem item = mContestInfoDataList.get(i);
+            items[i] = item.contestTitle;
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.drop_down_list_item, R.id.selectedItemTextView, items);
+        adapter.setDropDownViewResource(R.layout.drop_down_list_select_item);
+
+        binding.contestInfoItemSpinner.setDropDownVerticalOffset(Util.convertDimenResIdToPixel(getActivity(), R.dimen.spinner_height));
+        binding.contestInfoItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setContestInfoItem(mContestInfoDataList.get(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        binding.contestInfoItemSpinner.setAdapter(adapter);
     }
 
     @Override
