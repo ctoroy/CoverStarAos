@@ -114,6 +114,11 @@ public class Util {
         return px;
     }
 
+    public static int convertDimenResIdToPixel(Context context, int dimenResId) {
+        int px = (int) (context.getResources().getDimension(dimenResId) / context.getResources().getDisplayMetrics().density);
+        return dpToPixel(context, px);
+    }
+
     public static String getDisplayCountString(int value) {
 //		999 -> 999
 //		1000 -> 1K

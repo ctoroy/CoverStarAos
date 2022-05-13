@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -72,24 +74,41 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
                 requestSeasonList(-1);
             }
         });
-        binding.coverstarSeasonLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 시즌 선택 팝업 제공
-//                setContestItem();
-            }
-        });
         binding.registTextView.setOnClickListener(view -> startRegist());
         binding.paticipateCountTextView.setText("");
+
+        //create a list of items for the spinner.
+        String[] items = new String[]{"1", "2", "three"};
+
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.drop_down_list_item, R.id.selectedItemTextView, items);
+        adapter.setDropDownViewResource(R.layout.drop_down_list_item);
+
+        //set the spinners adapter to the previously created one.
+        binding.contestInfoItemSpinner.setAdapter(adapter);
+        binding.contestInfoItemSpinner.setDropDownVerticalOffset(Util.convertDimenResIdToPixel(getActivity(), R.dimen.spinner_height));
+        binding.contestInfoItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // TODO
+//                setContestItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void setContestInfoItem(ContestInfoItem item) {
         selectedContestInfoItem = item;
         if (item != null) {
-            binding.selectedSeasonTextView.setText(item.contestTitle);
+//            binding.selectedSeasonTextView.setText(item.contestTitle);
             binding.paticipateCountTextView.setText(String.format(getString(R.string.participate_count), Util.getCoinDisplayCountString(item.contestPayAmt)));
         } else {
-            binding.selectedSeasonTextView.setText("");
+//            binding.selectedSeasonTextView.setText("");
             binding.paticipateCountTextView.setText("");
         }
     }
