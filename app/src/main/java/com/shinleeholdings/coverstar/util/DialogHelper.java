@@ -62,7 +62,12 @@ public class DialogHelper {
         dialog.show();
     }
 
-    public static void showRegistConfirmPopup(Activity activity, View.OnClickListener confirmClickListener) {
+    public static void showRegistConfirmPopup(Activity activity, int participateCount, View.OnClickListener confirmClickListener) {
+        if (participateCount == 0) {
+            confirmClickListener.onClick(null);
+            return;
+        }
+
         final Dialog dialog = new Dialog(activity, R.style.Theme_TransparentBackground);
         ViewGroup view = (ViewGroup) LayoutInflater.from(activity).inflate(R.layout.popup_participate_confirm, null);
         dialog.setContentView(view);
@@ -71,7 +76,7 @@ public class DialogHelper {
         closeLayout.setOnClickListener(view1 -> dialog.dismiss());
 
         TextView participateConfirmTextView = view.findViewById(R.id.participateConfirmTextView);
-        participateConfirmTextView.setText(String.format(activity.getString(R.string.participate_count_confirm), Util.getCoinDisplayCountString(AppConstants.PARTICIPATE_COIN_COUNT)));
+        participateConfirmTextView.setText(String.format(activity.getString(R.string.participate_count_confirm), Util.getCoinDisplayCountString(participateCount)));
 
         Button cancelButton = view.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(view13 -> dialog.dismiss());

@@ -115,8 +115,8 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
         }
 
-        // TODO 데이터 세팅
-        // TODO 참가신청 누르면 참가신청 탭으로 이동, 시즌 선택해주기
+        // TODO 데이터 세팅 : contestRegistItem
+        viewHolder.registTextView.setOnClickListener(view -> mMainActivity.registContest(contestRegistItem));
     }
 
     public void setData(ContestData registItem, ArrayList<ContestData> contestList, boolean isCoverStarTab, boolean hasEventTab) {
@@ -145,6 +145,8 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         TextView homeRightTitleSelectedTextView;
         LinearLayout homeLeftTitleUnSelectedLayout;
 
+        TextView registTextView;
+
         View homeLeftTriangleView;
         View homeRightTriangleView;
 
@@ -158,6 +160,8 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
             homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
             homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);
+
+            registTextView = itemView.findViewById(R.id.registTextView);
         }
     }
 

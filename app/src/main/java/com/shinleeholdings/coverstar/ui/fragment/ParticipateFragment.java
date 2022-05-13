@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -8,16 +9,31 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentParticipateBinding;
+import com.shinleeholdings.coverstar.profile.LaunchActivity;
 import com.shinleeholdings.coverstar.util.DialogHelper;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
-public class ParticipateFragment extends BaseFragment {
+import java.util.Date;
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.ContestGroupDataList;
+import network.model.ContestInfoItem;
+import network.model.LoginUserData;
+import network.model.defaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
+
+public class ParticipateFragment extends BaseFragment implements LoginHelper.IMyCoinCountChangeListener {
+    private ContestGroupDataList mContestInfoDataList;
+    private ContestInfoItem selectedContestInfoItem;
 
     private FragmentParticipateBinding binding;
     @Nullable
@@ -26,22 +42,21 @@ public class ParticipateFragment extends BaseFragment {
         binding = FragmentParticipateBinding.inflate(inflater, container, false);
         initView();
         updateMyCoinCount();
-        requestSeasonList();
+
+        int contestInfoId = -1;
+        if (getArguments() != null) {
+            contestInfoId = getArguments().getInt(AppConstants.EXTRA.CONTEST_INFO_ID, -1);
+        }
+        requestSeasonList(contestInfoId);
+        LoginHelper.getSingleInstance().addCoinCountChangeListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        LoginHelper.getSingleInstance().removeCoinCountChangeListener(this);
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden == false) {
-            updateMyCoinCount();
-        }
     }
 
     private void updateMyCoinCount() {
@@ -49,20 +64,57 @@ public class ParticipateFragment extends BaseFragment {
     }
 
     private void initView() {
+        binding.participateSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.participateSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initInputInfo();
+                requestSeasonList(-1);
+            }
+        });
         binding.coverstarSeasonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.selectedSeasonTextView.setText("");
-                // TODO 시즌 선택 팝업 제공 및 선택시 API 다시 호출
+                // TODO 시즌 선택 팝업 제공
+//                setContestItem();
             }
         });
-        binding.paticipateCountTextView.setText(String.format(getString(R.string.participate_count), Util.getCoinDisplayCountString(AppConstants.PARTICIPATE_COIN_COUNT)));
         binding.registTextView.setOnClickListener(view -> startRegist());
+        binding.paticipateCountTextView.setText("");
+    }
+
+    private void setContestInfoItem(ContestInfoItem item) {
+        selectedContestInfoItem = item;
+        if (item != null) {
+            binding.selectedSeasonTextView.setText(item.contestTitle);
+            binding.paticipateCountTextView.setText(String.format(getString(R.string.participate_count), Util.getCoinDisplayCountString(item.contestPayAmt)));
+        } else {
+            binding.selectedSeasonTextView.setText("");
+            binding.paticipateCountTextView.setText("");
+        }
+    }
+
+    public void setContestInfoSelect(int contestId) {
+        ContestInfoItem selectedItem = null;
+        if (mContestInfoDataList != null && mContestInfoDataList.size() > 0) {
+            for (int i = 0; i< mContestInfoDataList.size(); i++) {
+                ContestInfoItem item = mContestInfoDataList.get(i);
+                if (item.contestId == contestId) {
+                    selectedItem = item;
+                    break;
+                }
+            }
+
+            if (selectedItem == null) {
+                selectedItem = mContestInfoDataList.get(0);
+            }
+        }
+
+        setContestInfoItem(selectedItem);
     }
 
     private void startRegist() {
-        String selectedSeasonRound = binding.selectedSeasonTextView.getText().toString();
-        if (TextUtils.isEmpty(selectedSeasonRound)) {
+        if (selectedContestInfoItem == null) {
             Toast.makeText(getActivity(), getString(R.string.select_season_round), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -88,27 +140,104 @@ public class ParticipateFragment extends BaseFragment {
             return;
         }
 
-        int myCoin = LoginHelper.getSingleInstance().getMyCoinCount();
-        int participateCoin = AppConstants.PARTICIPATE_COIN_COUNT;
-        if (myCoin < participateCoin) {
-            DialogHelper.showPointCheckPopup(getActivity());
-            return;
-        }
+        // TODO test
+//        if (LoginHelper.getSingleInstance().getMyCoinCount() < selectedContestInfoItem.contestPayAmt) {
+//            DialogHelper.showPointCheckPopup(getActivity());
+//            return;
+//        }
 
-        DialogHelper.showRegistConfirmPopup(getActivity(), new View.OnClickListener() {
+        DialogHelper.showRegistConfirmPopup(getActivity(), selectedContestInfoItem.contestPayAmt, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 참가 신청 API 호출하고 코인 차감? 화면 초기화 하기
+                LoginUserData userData = LoginHelper.getSingleInstance().getSavedLoginUserData();
+                if (userData == null) {
+                    Intent intent = new Intent(getActivity(), LaunchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    return;
+                }
+
+                HashMap<String, String> param = new HashMap<>();
+                param.put("castId", userData.userId + "");
+                param.put("castCode", userData.userId + Util.dateToFormatString(new Date(), "yyyymmddhhmmss"));
+                param.put("nickName", userData.nickName);
+                param.put("profileImage", userData.userProfileImage);
+
+                param.put("castTitle", songTitle);
+                param.put("logoImage", singerName);
+                param.put("location", mediaLink);
+                param.put("sortBig", mention);
+
+                param.put("category", "2");
+                param.put("product", "");
+                param.put("likes", "");
+                param.put("episode", "");
+
+                param.put("castType", selectedContestInfoItem.contestType + "");
+                param.put("castPath", selectedContestInfoItem.contestId + "");
+                param.put("castStartDate", selectedContestInfoItem.contestStartDate);
+                param.put("castEndDate", selectedContestInfoItem.contestEndDate);
+                param.put("store", selectedContestInfoItem.contestShotDate);
+                param.put("sortSmall", selectedContestInfoItem.contestTitle);
+                param.put("sortMid", selectedContestInfoItem.contestAward + "");
+
+                ProgressDialogHelper.show(getActivity());
+                RetroClient.getApiInterface().startBroadCast(param).enqueue(new RetroCallback<defaultResult>() {
+                    @Override
+                    public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                        ProgressDialogHelper.dismiss();
+                        LoginHelper.getSingleInstance().updateMyCoin(-selectedContestInfoItem.contestPayAmt);
+                        initInputInfo();
+                    }
+
+                    @Override
+                    public void onFailure(BaseResponse<defaultResult> response) {
+                        ProgressDialogHelper.dismiss();
+                    }
+                });
             }
         });
     }
 
-    private void requestSeasonList() {
-        ProgressDialogHelper.show(getActivity());
-        // TODO 참가신청 가능한 시즌 목록 가져와서 세팅
-        binding.selectedSeasonTextView.setText("");
-
-        ProgressDialogHelper.dismiss();
+    private void initInputInfo() {
+        binding.songTitleEditText.setText("");
+        binding.singerNameEditText.setText("");
+        binding.mediaLinkEditText.setText("");
+        binding.mentionEditText.setText("");
     }
 
+    private void requestSeasonList(int contestId) {
+        binding.participateSwipeRefreshLayout.setRefreshing(false);
+        ProgressDialogHelper.show(getActivity());
+        HashMap<String, String> param = new HashMap<>();
+        param.put("temp", "1");
+        RetroClient.getApiInterface().getContestList(param).enqueue(new RetroCallback<ContestGroupDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestGroupDataList> receivedData) {
+                ProgressDialogHelper.dismiss();
+
+                mContestInfoDataList = receivedData.data;
+                if (contestId != -1) {
+                    setContestInfoSelect(contestId);
+                } else {
+                    ContestInfoItem item = null;
+                    if (mContestInfoDataList.size() > 0) {
+                        item = mContestInfoDataList.get(0);
+                    }
+                    setContestInfoItem(item);
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ContestGroupDataList> response) {
+                ProgressDialogHelper.dismiss();
+                setContestInfoItem(null);
+            }
+        });
+    }
+
+    @Override
+    public void onMyCoinUpdated(int currentCoinCount) {
+        updateMyCoinCount();
+    }
 }

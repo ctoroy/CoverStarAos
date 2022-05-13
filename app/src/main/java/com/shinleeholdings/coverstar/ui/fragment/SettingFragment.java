@@ -75,7 +75,6 @@ public class SettingFragment extends BaseFragment {
                 Intent intent = new Intent(getActivity(), LaunchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
             }
         });
 

@@ -3,6 +3,7 @@ package network;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
+import network.model.ContestGroupDataList;
 import network.model.HomeContentsDataList;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
@@ -23,6 +24,14 @@ public interface ApiInterface {
     @POST("getList")
     @FormUrlEncoded
     Call<BaseResponse<HomeContentsDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getContestList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestGroupDataList>> getContestList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("startBroadCast")
+    @FormUrlEncoded
+    Call<BaseResponse<defaultResult>> startBroadCast(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("join")
     @FormUrlEncoded

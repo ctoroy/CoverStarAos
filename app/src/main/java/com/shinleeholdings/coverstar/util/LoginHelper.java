@@ -3,6 +3,7 @@ package com.shinleeholdings.coverstar.util;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
@@ -11,13 +12,43 @@ import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
 public class LoginHelper {
-
 	public static final String PHONE_CERT_MODE_JOIN = "JOIN";
 	public static final String PHONE_CERT_MODE_LOGIN = "LOGIN";
 	public static final String PHONE_CERT_MODE_RECERT = "RECERT";
 
 	public interface ILoginResultListener {
 		void onComplete(boolean success);
+	}
+
+	public interface IMyCoinCountChangeListener {
+		void onMyCoinUpdated(int currentCoinCount);
+	}
+	private final ArrayList<IMyCoinCountChangeListener> coinCountChangeListenerList = new ArrayList<>();
+
+	public void addCoinCountChangeListener(IMyCoinCountChangeListener listener) {
+		synchronized(coinCountChangeListenerList) {
+			if (coinCountChangeListenerList.contains(listener) == false) {
+				coinCountChangeListenerList.add(listener);
+			}
+		}
+	}
+
+	public void removeCoinCountChangeListener(IMyCoinCountChangeListener listener) {
+		synchronized(coinCountChangeListenerList) {
+			coinCountChangeListenerList.remove(listener);
+		}
+	}
+
+	public void sendCoinChangeEvent(int count) {
+		synchronized(coinCountChangeListenerList) {
+			if (coinCountChangeListenerList.size() == 0) {
+				return;
+			}
+
+			for (int i=0; i<coinCountChangeListenerList.size(); i++) {
+				coinCountChangeListenerList.get(i).onMyCoinUpdated(count);
+			}
+		}
 	}
 
 	private static volatile LoginHelper instance;
@@ -42,6 +73,18 @@ public class LoginHelper {
 			return 0;
 		}
 		return getSavedLoginUserData().curCoin;
+	}
+
+	public void updateMyCoin(int updateValue) {
+		LoginUserData userData = getSavedLoginUserData();
+		if (userData == null) {
+			return;
+		}
+
+		int updateCoinCount = userData.curCoin + updateValue;
+		userData.curCoin = updateCoinCount;
+		saveLoginUserData(userData);
+		sendCoinChangeEvent(updateCoinCount);
 	}
 
 	public String getLoginUserImagePath() {

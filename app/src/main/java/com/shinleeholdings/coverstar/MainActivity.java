@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.tabs.TabLayout;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.ActivityMainBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.ui.fragment.HomeFragment;
@@ -32,10 +33,10 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
     private ActivityMainBinding binding;
 
-    private static final int TAB_INDEX_HOME = 0;
-    private static final int TAB_INDEX_PREV_MEDIA = 1;
-    private static final int TAB_INDEX_PARTICIPATE = 2;
-    private static final int TAB_INDEX_MYPAGE = 3;
+    public static final int TAB_INDEX_HOME = 0;
+    public static final int TAB_INDEX_PREV_MEDIA = 1;
+    public static final int TAB_INDEX_PARTICIPATE = 2;
+    public static final int TAB_INDEX_MYPAGE = 3;
 
     private enum TabMenuType {
         HOME(R.drawable.tab_menu_home_bg, R.string.tab_name_home),
@@ -138,7 +139,6 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
                 popStackExceptFirst();
             }
         });
-
     }
 
     private void popStackExceptFirst() {
@@ -242,8 +242,18 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         }
     }
 
-    public void setTabSelect(int tabIndex) {
-        binding.tabLayout.getTabAt(tabIndex).select();
+    public void registContest(ContestData contestData) {
+        if (tagStacks.get(TabMenuType.PARTICIPATE.toString()).size() == 0) {
+            // 탭 한번도 오픈안함
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstants.EXTRA.CONTEST_INFO_ID, contestData.castPath);
+            participateFragment.setArguments(bundle);
+            binding.tabLayout.getTabAt(MainActivity.TAB_INDEX_PARTICIPATE).select();
+        } else {
+            // 탭 오픈했음
+            binding.tabLayout.getTabAt(MainActivity.TAB_INDEX_PARTICIPATE).select();
+            participateFragment.setContestInfoSelect(contestData.castPath);
+        }
     }
 
     private void setCurrentTabSelected() {

@@ -90,7 +90,7 @@ public class ProfileSettingActivity extends BaseActivity {
             startActivity(intent);
         } else {
 //            loginUserData.userId;
-            // TODO 서버에 사진 및 닉네임 업데이트 API 호출, 프로필 정보 변경 및 업데이트 브로드캐스트 날리기, 받는쪽에서는 업데이트 처리
+            // TODO 서버에 사진 및 닉네임 업데이트 API 호출, 프로필 정보 변경 및 업데이트 브로드캐스트 날리기, 받는쪽에서는 업데이트 처리, 경연참가쪽 코인 업데이트 참고
             finish();
         }
     }

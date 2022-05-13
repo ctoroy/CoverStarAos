@@ -9,7 +9,7 @@ public class ContestData {
 //	public Integer watchCnt; //플레이수
 //	public String castTitle; //+*타이틀
 //	public Integer category;
-//	public Integer castPath;
+//	public Integer castPath; contestId
 //	public String nickName; //+*참가자명
 //	public String profileImage; //+*썸네일 이미지
 //	public Integer castType; //0:+,1:*
@@ -25,17 +25,17 @@ public class ContestData {
 //	public String product; //*이벤트 이미지
 //	public String likes;
 //	public String accumWatchCnt;
-    @SerializedName("castCode") public String castCode; //+*방키 방장아이디+yyyymmddhhmmss ctoroy20210726162622
     @SerializedName("castId") public String castId;  //+*방장 아이디
+    @SerializedName("castCode") public String castCode; //+*방키 방장아이디+yyyymmddhhmmss ctoroy20210726162622
     @SerializedName("watchCnt") public int watchCnt; //플레이수
     @SerializedName("castTitle") public String castTitle; //+*타이틀
 
-    @SerializedName("category") public int category;
-    @SerializedName("castPath") public String castPath;
+    @SerializedName("category") public int category; // 0 커버스타 상단, 1: 이벤트 상단, 2 경연 참가
+    @SerializedName("castPath") public int castPath; //contestId
 
     @SerializedName("nickName") public String nickName; //+*참가자명
     @SerializedName("profileImage") public String profileImage; //+*썸네일 이미지
-    @SerializedName("castType") public int castType; //0:+,1:*
+    @SerializedName("castType") public int castType; //0: 커버스타 참가,1: 이벤트 참가
 
     @SerializedName("castStartDate") public String castStartDate; //+*시작시간
     @SerializedName("castEndDate") public String castEndDate; //+*종료시간

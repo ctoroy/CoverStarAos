@@ -85,6 +85,11 @@ public class Util {
         }
     }
 
+    public static String dateToFormatString(Date date, String toFormatString) {
+        SimpleDateFormat toFormat = new SimpleDateFormat(toFormatString, Locale.KOREA);
+        return toFormat.format(date);
+    }
+
     public static MultipartBody.Part getImageBody(String key, File file)  {
         // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
