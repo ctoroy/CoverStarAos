@@ -23,13 +23,9 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
     private void handleUri(Uri data) {
         if (isTaskRoot()) {
             // 외부에서 들어옴
-            // TODO 스플래시로 시작한다. data 프리퍼런스에 저장해서 로그인 이후에 사용하자
-            Intent intent = new Intent(this, CoverStarSchemeActivity.class);
-//            intent.setData(data);
-            startActivity(intent);
+            startActivity(new Intent(this, SplashActivity.class));
         } else {
             // 내부에서 들어옴
-            // TODO 데이터 핸들하기
         }
     }
 }

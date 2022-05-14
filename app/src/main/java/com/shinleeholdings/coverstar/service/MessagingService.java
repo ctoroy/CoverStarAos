@@ -35,19 +35,20 @@ public class MessagingService extends FirebaseMessagingService {
         if (remoteMessage == null) {
             return;
         }
-        // TODO 푸시 처리
         showNotification(remoteMessage);
     }
 
     private void showNotification(RemoteMessage remoteMessage) {
         Context context = MyApplication.getContext();
         String pushLink = "";
+        String message = "";
 
+        // TODO 정리 필요
         NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushLink).
-                setSmallIcon(R.drawable.ic_launcher_background) // TODO 푸시 아이콘 필요
-                .setContentTitle("test") // TODO
-                .setContentText("message") // TODO
-                .setStyle(new NotificationCompat.BigTextStyle().bigText("message")); // TODO
+                setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("test")
+                .setContentText("message")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("message"));
         ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID, notiBuilder.build());
     }
 
