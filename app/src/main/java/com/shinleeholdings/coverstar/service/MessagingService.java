@@ -43,7 +43,7 @@ public class MessagingService extends FirebaseMessagingService {
         String pushLink = "";
         String message = "";
 
-        // TODO 정리 필요
+        // TODO 푸시 정리 필요
         NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushLink).
                 setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle("test")

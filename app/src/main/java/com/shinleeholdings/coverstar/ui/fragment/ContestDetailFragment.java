@@ -32,6 +32,8 @@ public class ContestDetailFragment extends BaseFragment {
     private CommentListAdapter mCommentListAdapter;
     private ReplyListAdapter mReplyListAdapter;
 
+    private ContestData mContestItem;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -39,11 +41,15 @@ public class ContestDetailFragment extends BaseFragment {
         initView();
 
         if (getArguments() != null) {
-            // TODO 콘테스트 아이디 가져오기
+            mContestItem = getArguments().getParcelable(AppConstants.EXTRA.CONTEST_DATA);
         }
 
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.GONE);
-        requestData();
+
+        if (mContestItem != null) {
+            requestData();
+        }
+
         return binding.getRoot();
     }
 
@@ -149,11 +155,8 @@ public class ContestDetailFragment extends BaseFragment {
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 비디오 재생 화면 시작
-//                String url = mCurrentContest.location;
-                String url = "https://www.youtube.com/watch?v=fMJMsWvOQb4";
                 Intent intent = new Intent(getActivity(), ContestPlayerActivity.class);
-                intent.putExtra(AppConstants.EXTRA.CONTEST_URL, url);
+                intent.putExtra(AppConstants.EXTRA.CONTEST_URL, mContestItem.location);
                 startActivity(intent);
             }
         });
@@ -176,15 +179,16 @@ public class ContestDetailFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 // TODO 공유하기 : 영상 링크 공유
+//                mContestItem.location;
             }
         });
 
-        binding.addToPlayListLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 재생목록에 추가
-            }
-        });
+//        binding.addToPlayListLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 재생목록에 추가 처리안함
+//            }
+//        });
 
         binding.slidingDrawer.setOnDrawerCloseListener(() -> showCommentList());
         binding.closeReplyImageView.setOnClickListener(view -> showCommentList());

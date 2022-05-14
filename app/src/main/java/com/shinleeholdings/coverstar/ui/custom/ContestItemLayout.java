@@ -3,16 +3,21 @@ package com.shinleeholdings.coverstar.ui.custom;
 import static com.shinleeholdings.coverstar.util.Util.getDisplayCountString;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
 import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
@@ -63,7 +68,17 @@ public class ContestItemLayout extends CardView {
 		mMainActivity = activity;
 		mContestItem = data;
 
-		setOnClickListener(view -> ContestManager.getSingleInstance().showContestDetailFragment(mMainActivity, mContestItem));
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				ContestDetailFragment contestDetailFragment = new ContestDetailFragment();
+				Bundle bundle = new Bundle();
+				bundle.putParcelable(AppConstants.EXTRA.CONTEST_DATA, mContestItem);
+				contestDetailFragment.setArguments(bundle);
+
+				mMainActivity.onFragmentInteractionCallback(contestDetailFragment);
+			}
+		});
 
 		ImageLoader.loadImage(contestImageView, mContestItem.getBgImagePath());
 
