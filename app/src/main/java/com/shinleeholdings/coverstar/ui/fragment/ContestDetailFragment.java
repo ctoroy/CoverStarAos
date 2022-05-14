@@ -170,16 +170,18 @@ public class ContestDetailFragment extends BaseFragment {
         binding.voteTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 투표하기
-                // TODO 투표하고 새로고침 한번 하자
+                // TODO 투표하기, 투표하고 새로고침 한번 하자
             }
         });
 
         binding.shareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 공유하기 : 영상 링크 공유
-//                mContestItem.location;
+                Intent msg = new Intent(Intent.ACTION_SEND);
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_TEXT, mContestItem.location);
+                msg.setType("text/plain");
+                startActivity(Intent.createChooser(msg, getString(R.string.share)));
             }
         });
 
