@@ -7,6 +7,8 @@ import android.widget.Toast;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
+import com.shinleeholdings.coverstar.ui.NonLeakingWebViewActivity;
+import com.shinleeholdings.coverstar.ui.custom.NonLeakingWebView;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
@@ -44,10 +46,16 @@ public class RulesAgreeActivity extends BaseActivity {
 
         binding.userRuleLayout.setOnClickListener(view -> {
             // TODO 이용자 약관 상세 보여주기
+            Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
+            startActivity(intent);
         });
 
         binding.privateRuleLayout.setOnClickListener(view -> {
             // TODO 개인정보 처리방침 약관 상세 보여주기
+            Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
+            startActivity(intent);
         });
 
         binding.userRuleCheckBoxLayout.setOnClickListener(view -> {

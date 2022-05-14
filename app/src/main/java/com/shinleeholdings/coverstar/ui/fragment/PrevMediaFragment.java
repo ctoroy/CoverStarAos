@@ -72,7 +72,6 @@ public class PrevMediaFragment extends BaseFragment {
         binding.prevMediaRecyclerView.setItemViewCacheSize(200);
         binding.prevMediaRecyclerView.setLayoutManager(mLayoutManager);
         binding.prevMediaRecyclerView.setAdapter(mListAdapter);
-
     }
 
     private void requestSeasonList() {
@@ -151,7 +150,7 @@ public class PrevMediaFragment extends BaseFragment {
                 Util.sortList(mListAdapter.mSelectedSortType, itemList);
 
                 // TODO 데이터 세팅 필요, 에필로그는 어떻게 받아오지?
-//                mListAdapter.setData(epilogue, itemList);
+                mListAdapter.setData(null, itemList);
             }
 
             @Override

@@ -1,198 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/contest_item_height"
-    card_view:cardBackgroundColor="@color/subTextColor_6a6a6a"
-    card_view:cardCornerRadius="7dp"
-    card_view:cardPreventCornerOverlap="false"
-    card_view:cardElevation="0dp"
-    card_view:cardUseCompatPadding="false">
+    android:layout_height="@dimen/contest_item_height">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/contestImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="184dp" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/contestImageView"
-            android:layout_width="match_parent"
-            android:layout_height="184dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:orientation="horizontal"
-            android:background="@drawable/gradation_black">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/contest_heart"/>
-                <TextView
-                    android:id="@+id/playCountTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="31"
-                    android:layout_marginLeft="4dp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/contest_heart"/>
-                <TextView
-                    android:id="@+id/commentCountTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="30K"
-                    android:layout_marginLeft="4dp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_weight="1"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/contest_heart"/>
-                <TextView
-                    android:id="@+id/likeCountTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="30M"
-                    android:layout_marginLeft="4dp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@drawable/gradation_black"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:orientation="horizontal"
-            android:background="#80000000"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_alignBottom="@id/contestImageView">
+            android:paddingRight="10dp">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/mic_icon_pink"/>
+                android:src="@drawable/contest_heart" />
 
             <TextView
-                android:id="@+id/songTitleTextView"
-                android:layout_width="match_parent"
+                android:id="@+id/playCountTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
+                android:layout_marginLeft="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textSize="14sp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                tools:text="사랑은 늘 도망가"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/white"/>
+                tools:text="31" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/contest_heart" />
+
+            <TextView
+                android:id="@+id/commentCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="30K" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_below="@id/contestImageView"
-            android:background="@color/white"/>
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_below="@id/contestImageView"
-            android:background="#303045"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:orientation="horizontal">
+            android:paddingRight="10dp">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:text="by :"
-                android:textColor="#fd95ae"/>
+                android:src="@drawable/contest_heart" />
+
             <TextView
-                android:id="@+id/singerNameTextView"
-                android:layout_width="match_parent"
+                android:id="@+id/likeCountTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
+                android:layout_marginLeft="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="양기원"
-                android:paddingRight="5dp"
-                android:layout_marginLeft="3dp"
-                android:textColor="@color/white"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="@string/original_singer"
-                android:textColor="@color/white"/>
-
-            <TextView
-                android:id="@+id/originalSingerNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                tools:text="임창정"
-                android:layout_marginLeft="3dp"
-                android:textColor="@color/white"/>
+                tools:text="30M" />
         </LinearLayout>
+    </LinearLayout>
 
-    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignBottom="@id/contestImageView"
+        android:background="#80000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mic_icon_pink" />
 
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/songTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="사랑은 늘 도망가" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/contestImageView"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/contestImageView"
+        android:background="#303045"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="by :"
+            android:textColor="#fd95ae"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/singerNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="양기원" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/original_singer"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/originalSingerNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="임창정" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,6 +1,8 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
 import com.shinleeholdings.coverstar.profile.ProfileSettingActivity;
+import com.shinleeholdings.coverstar.util.Util;
 
 public class SettingFragment extends BaseFragment {
 
@@ -40,13 +43,7 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-        binding.editProfileLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 개인정보
-                startActivity(new Intent(getActivity(), ProfileSettingActivity.class));
-            }
-        });
+        binding.editProfileLayout.setOnClickListener(view -> startActivity(new Intent(getActivity(), ProfileSettingActivity.class)));
 
         binding.noticeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,19 +52,13 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-        binding.alarmLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 알림
-            }
-        });
+        binding.alarmLayout.setOnClickListener(view -> addFragment(new AlarmListFragment()));
 
-        binding.versionLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 버전
-            }
-        });
+        try {
+            PackageInfo pInfo = getActivity().getApplicationContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            binding.appVersionCodeTextView.setText(pInfo.versionName);
+        } catch (Exception e) {
+        }
 
         binding.logoutLayout.setOnClickListener(new View.OnClickListener() {
             @Override

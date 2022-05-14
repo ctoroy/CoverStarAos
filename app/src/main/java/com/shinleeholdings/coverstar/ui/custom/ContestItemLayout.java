@@ -5,17 +5,19 @@ import static com.shinleeholdings.coverstar.util.Util.getDisplayCountString;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.util.ContestManager;
+import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.Util;
 
-public class ContestItemLayout extends FrameLayout {
+public class ContestItemLayout extends CardView {
 
 	private Context mContext;
 	private MainActivity mMainActivity;
@@ -41,6 +43,11 @@ public class ContestItemLayout extends FrameLayout {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.layout_contest_item, this, true);
 
+		setCardBackgroundColor(context.getColor(R.color.subTextColor_6a6a6a));
+		setPreventCornerOverlap(false);
+		setUseCompatPadding(false);
+		setCardElevation(0f);
+		setRadius(Util.convertDpToPixel(7f, context));
 		mContext = context;
 
 		contestImageView = findViewById(R.id.contestImageView);
@@ -58,11 +65,16 @@ public class ContestItemLayout extends FrameLayout {
 
 		setOnClickListener(view -> ContestManager.getSingleInstance().showContestDetailFragment(mMainActivity, mContestItem));
 
-		// TODO UI 업데이트 및 데이터 세팅
+		ImageLoader.loadImage(contestImageView, mContestItem.getBgImagePath());
 
-		// TODO 아이콘 업데이트 필요
-		playCountTextView.setText(getDisplayCountString(200));
-		commentCountTextView.setText(getDisplayCountString(200));
-		likeCountTextView.setText(getDisplayCountString(200));
+		// TODO 아이콘 받아서 적용 필요
+		playCountTextView.setText(getDisplayCountString(mContestItem.watchCnt));
+		commentCountTextView.setText(getDisplayCountString(mContestItem.episode));
+		// TODO 별표 개수 표시
+		likeCountTextView.setText(getDisplayCountString(mContestItem.episode));
+
+		songTitleTextView.setText(mContestItem.getTitle());
+		singerNameTextView.setText(mContestItem.getNickName());
+		originalSingerNameTextView = findViewById(R.id.originalSingerNameTextView);
 	}
 }

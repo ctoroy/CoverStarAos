@@ -146,10 +146,9 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
             }
 
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            // TODO  이미지
-            ImageLoader.loadImage(viewHolder.contestImageView, "");
-            viewHolder.songTitleTextView.setText("e" + position);
-            viewHolder.singerNameTextView.setText("e" + position);
+            ImageLoader.loadImage(viewHolder.contestImageView, item.getBgImagePath());
+            viewHolder.songTitleTextView.setText(item.getTitle());
+            viewHolder.singerNameTextView.setText(item.getNickName());
         }
     }
 

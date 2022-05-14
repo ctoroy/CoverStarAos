@@ -16,6 +16,7 @@ public class AppConstants {
         public static final String IS_JOIN = "IS_JOIN";
         public static final String CONTEST_INFO_ID = "CONTEST_INFO_ID";
         public static final String CONTEST_URL = "CONTEST_URL";
+        public static final String WEBVIEW_URL = "WEBVIEW_URL";
     }
 
     public static final class REQUEST_CODE {

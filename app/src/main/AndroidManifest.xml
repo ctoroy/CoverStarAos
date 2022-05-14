@@ -58,6 +58,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
+            android:name=".ui.NonLeakingWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
             android:name=".ui.ContestPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"

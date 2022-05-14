@@ -49,4 +49,25 @@ public class ContestData {
     @SerializedName("product") public String product; //*이벤트 이미지
     @SerializedName("likes") public String likes;
     @SerializedName("accumWatchCnt") public String accumWatchCnt;
+
+    public String getBgImagePath() {
+        // TODO  이미지 경로
+        return "";
+    }
+
+    public String getTitle() {
+        return castTitle;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public String getSubTitle() {
+        return "";
+    }
+
+    public String getSubContent() {
+        return "";
+    }
 }
