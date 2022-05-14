@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,13 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
+import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer;
 import com.shinleeholdings.coverstar.util.ImageLoader;
@@ -147,6 +150,11 @@ public class ContestDetailFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 // TODO 비디오 재생 화면 시작
+//                String url = mCurrentContest.location;
+                String url = "https://www.youtube.com/watch?v=fMJMsWvOQb4";
+                Intent intent = new Intent(getActivity(), ContestPlayerActivity.class);
+                intent.putExtra(AppConstants.EXTRA.CONTEST_URL, url);
+                startActivity(intent);
             }
         });
 
