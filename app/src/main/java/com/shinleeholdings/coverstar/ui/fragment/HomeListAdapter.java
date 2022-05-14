@@ -15,6 +15,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 
@@ -115,7 +116,15 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
         }
 
-        // TODO 데이터 세팅 : contestRegistItem
+        viewHolder.titleTextView.setText(contestRegistItem.sortSmall);
+        viewHolder.contestInfoTextView.setText(contestRegistItem.castTitle);
+        viewHolder.registTermTextView.setText(String.format(mMainActivity.getString(R.string.contest_term),
+                Util.changeFormattedDate(contestRegistItem.castStartDate),
+                Util.changeFormattedDate(contestRegistItem.castEndDate)));
+        viewHolder.totalPriceTextView.setText(String.format(mMainActivity.getString(R.string.contest_total_price),
+                String.format(mMainActivity.getString(R.string.price_display_format), Util.numberToDisplayFormat(contestRegistItem.sortMid))));
+        viewHolder.finalDateTextView.setText(String.format(mMainActivity.getString(R.string.contest_final_date),
+                Util.changeFormattedDate(contestRegistItem.store)));
         viewHolder.registTextView.setOnClickListener(view -> mMainActivity.registContest(contestRegistItem));
     }
 
@@ -145,6 +154,11 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         TextView homeRightTitleSelectedTextView;
         LinearLayout homeLeftTitleUnSelectedLayout;
 
+        TextView titleTextView;
+        TextView contestInfoTextView;
+        TextView registTermTextView;
+        TextView totalPriceTextView;
+        TextView finalDateTextView;
         TextView registTextView;
 
         View homeLeftTriangleView;
@@ -161,6 +175,11 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
             homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);
 
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            contestInfoTextView = itemView.findViewById(R.id.contestInfoTextView);
+            registTermTextView = itemView.findViewById(R.id.registTermTextView);
+            totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
+            finalDateTextView = itemView.findViewById(R.id.finalDateTextView);
             registTextView = itemView.findViewById(R.id.registTextView);
         }
     }

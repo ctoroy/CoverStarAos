@@ -17,7 +17,7 @@ import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
-public class MyPageFragment extends BaseFragment {
+public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUserInfoChangeEventListener {
 
     private FragmentMypageBinding binding;
 
@@ -161,5 +161,16 @@ public class MyPageFragment extends BaseFragment {
 //        }
 
         ProgressDialogHelper.dismiss();
+    }
+
+    @Override
+    public void onMyCoinUpdated(int currentCoinCount) {
+        binding.myCoinCountTextView.setText(Util.numberToDisplayFormat(LoginHelper.getSingleInstance().getMyCoinCount()));
+    }
+
+    @Override
+    public void onUserInfoUpdated() {
+        ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+        binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
     }
 }

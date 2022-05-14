@@ -20,35 +20,49 @@ public class LoginHelper {
 		void onComplete(boolean success);
 	}
 
-	public interface IMyCoinCountChangeListener {
+	public interface ILoginUserInfoChangeEventListener {
 		void onMyCoinUpdated(int currentCoinCount);
+		void onUserInfoUpdated();
 	}
-	private final ArrayList<IMyCoinCountChangeListener> coinCountChangeListenerList = new ArrayList<>();
+	private final ArrayList<ILoginUserInfoChangeEventListener> userInfoChangeListenerList = new ArrayList<>();
 
-	public void addCoinCountChangeListener(IMyCoinCountChangeListener listener) {
-		synchronized(coinCountChangeListenerList) {
-			if (coinCountChangeListenerList.contains(listener) == false) {
-				coinCountChangeListenerList.add(listener);
+	public void addUserInfoChangeListener(ILoginUserInfoChangeEventListener listener) {
+		synchronized(userInfoChangeListenerList) {
+			if (userInfoChangeListenerList.contains(listener) == false) {
+				userInfoChangeListenerList.add(listener);
 			}
 		}
 	}
 
-	public void removeCoinCountChangeListener(IMyCoinCountChangeListener listener) {
-		synchronized(coinCountChangeListenerList) {
-			coinCountChangeListenerList.remove(listener);
+	public void removeUserInfoChangeListener(ILoginUserInfoChangeEventListener listener) {
+		synchronized(userInfoChangeListenerList) {
+			userInfoChangeListenerList.remove(listener);
 		}
 	}
 
 	public void sendCoinChangeEvent(int count) {
-		synchronized(coinCountChangeListenerList) {
-			if (coinCountChangeListenerList.size() == 0) {
+		synchronized(userInfoChangeListenerList) {
+			if (userInfoChangeListenerList.size() == 0) {
 				return;
 			}
 
-			for (int i=0; i<coinCountChangeListenerList.size(); i++) {
-				coinCountChangeListenerList.get(i).onMyCoinUpdated(count);
+			for (int i = 0; i< userInfoChangeListenerList.size(); i++) {
+				userInfoChangeListenerList.get(i).onMyCoinUpdated(count);
 			}
 		}
+	}
+
+	public void sendUserInfoChangeEvent() {
+		synchronized(userInfoChangeListenerList) {
+			if (userInfoChangeListenerList.size() == 0) {
+				return;
+			}
+
+			for (int i = 0; i< userInfoChangeListenerList.size(); i++) {
+				userInfoChangeListenerList.get(i).onUserInfoUpdated();
+			}
+		}
+
 	}
 
 	private static volatile LoginHelper instance;
@@ -87,6 +101,19 @@ public class LoginHelper {
 		sendCoinChangeEvent(updateCoinCount);
 	}
 
+	public void updateUserInfo(String imagePath, String nickName) {
+		LoginUserData userData = getSavedLoginUserData();
+		if (userData == null) {
+			return;
+		}
+
+		userData.userProfileImage = imagePath;
+		userData.nickName = nickName;
+
+		saveLoginUserData(userData);
+		sendUserInfoChangeEvent();
+	}
+
 	public String getLoginUserImagePath() {
 		if (getSavedLoginUserData() == null) {
 			return "";
@@ -99,6 +126,13 @@ public class LoginHelper {
 			return "";
 		}
 		return getSavedLoginUserData().nickName;
+	}
+
+	public String getLoginUserId() {
+		if (getSavedLoginUserData() == null) {
+			return "";
+		}
+		return getSavedLoginUserData().userId;
 	}
 
 	public LoginUserData getSavedLoginUserData() {

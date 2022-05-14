@@ -42,7 +42,7 @@ public class ContestData {
     @SerializedName("episode") public int episode; //+*댓글수
     @SerializedName("logoImage") public String logoImage; //+*원곡가수명
     @SerializedName("sortBig") public String sortBig; //+*한마디
-    @SerializedName("sortMid") public String sortMid; //*이벤트총상금
+    @SerializedName("sortMid") public long sortMid; //*이벤트총상금
     @SerializedName("sortSmall") public String sortSmall; //*이벤트타이틀
     @SerializedName("location") public String location; //영상 URL
     @SerializedName("store") public String store; //*이벤트발표일

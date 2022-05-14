@@ -16,15 +16,9 @@ import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.Util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Locale;
 
-import network.model.HomeContentsDataList;
+import network.model.ContestDataList;
 
 public class HomePagerAdapter extends PagerAdapter {
     ArrayList<Pair<ContestData, ArrayList<ContestData>>> itemList = new ArrayList<>();
@@ -48,7 +42,7 @@ public class HomePagerAdapter extends PagerAdapter {
         }
     }
 
-    public void setData(HomeContentsDataList result) {
+    public void setData(ContestDataList result) {
         itemList.clear();
 
         ContestData coverStartRegistItem = null;

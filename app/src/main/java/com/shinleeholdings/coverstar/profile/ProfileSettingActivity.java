@@ -14,6 +14,8 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityProfileSettingBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
+import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -21,6 +23,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import gun0912.tedimagepicker.builder.TedImagePicker;
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener;
@@ -28,6 +31,7 @@ import gun0912.tedimagepicker.builder.type.MediaType;
 import network.model.BaseResponse;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
+import network.model.defaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -61,6 +65,8 @@ public class ProfileSettingActivity extends BaseActivity {
             binding.nextButton.setText(getString(R.string.next));
         } else {
             binding.nextButton.setText(getString(R.string.change));
+            ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+            binding.nickNameEditText.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
         }
 
         binding.nextButton.setOnClickListener(view -> {
@@ -89,9 +95,25 @@ public class ProfileSettingActivity extends BaseActivity {
             intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
             startActivity(intent);
         } else {
-//            loginUserData.userId;
-            // TODO 서버에 사진 및 닉네임 업데이트 API 호출, 프로필 정보 변경 및 업데이트 브로드캐스트 날리기, 받는쪽에서는 업데이트 처리, 경연참가쪽 코인 업데이트 참고
-            finish();
+            ProgressDialogHelper.show(this);
+            // TODO 서버에 사진 및 닉네임 업데이트 API 규격 확인해서 적용
+            HashMap<String, String> param = new HashMap<>();
+            param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+            param.put("userProfileImage", imagePath);
+            param.put("nickName", nickName);
+            RetroClient.getApiInterface().updateUserProfile(param).enqueue(new RetroCallback<defaultResult>() {
+                @Override
+                public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                    ProgressDialogHelper.dismiss();
+                    LoginHelper.getSingleInstance().updateUserInfo(imagePath, nickName);
+                    finish();
+                }
+
+                @Override
+                public void onFailure(BaseResponse<defaultResult> response) {
+                    ProgressDialogHelper.dismiss();
+                }
+            });
         }
     }
 

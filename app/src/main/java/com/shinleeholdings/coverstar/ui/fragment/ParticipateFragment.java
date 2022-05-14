@@ -33,7 +33,7 @@ import network.model.defaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
-public class ParticipateFragment extends BaseFragment implements LoginHelper.IMyCoinCountChangeListener {
+public class ParticipateFragment extends BaseFragment implements LoginHelper.ILoginUserInfoChangeEventListener {
     private ContestGroupDataList mContestInfoDataList;
     private ContestInfoItem selectedContestInfoItem;
 
@@ -50,13 +50,13 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
             contestInfoId = getArguments().getInt(AppConstants.EXTRA.CONTEST_INFO_ID, -1);
         }
         requestSeasonList(contestInfoId);
-        LoginHelper.getSingleInstance().addCoinCountChangeListener(this);
+        LoginHelper.getSingleInstance().addUserInfoChangeListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        LoginHelper.getSingleInstance().removeCoinCountChangeListener(this);
+        LoginHelper.getSingleInstance().removeUserInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
@@ -258,5 +258,9 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.IMy
     @Override
     public void onMyCoinUpdated(int currentCoinCount) {
         updateMyCoinCount();
+    }
+
+    @Override
+    public void onUserInfoUpdated() {
     }
 }

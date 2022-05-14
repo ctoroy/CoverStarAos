@@ -56,12 +56,7 @@ public class ContestItemLayout extends FrameLayout {
 		mMainActivity = activity;
 		mContestItem = data;
 
-		setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				ContestManager.getSingleInstance().showContestDetailFragment(mMainActivity, mContestItem);
-			}
-		});
+		setOnClickListener(view -> ContestManager.getSingleInstance().showContestDetailFragment(mMainActivity, mContestItem));
 
 		// TODO UI 업데이트 및 데이터 세팅
 

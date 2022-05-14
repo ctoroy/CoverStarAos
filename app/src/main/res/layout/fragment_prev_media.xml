@@ -40,35 +40,11 @@
             android:layout_height="1dp"
             android:background="#66ffffff"/>
 
-        <RelativeLayout
-            android:id="@+id/coverstarSeasonLayout"
+        <Spinner
+            android:id="@+id/contestInfoItemSpinner"
             android:layout_width="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_height="40dp">
-
-            <TextView
-                android:id="@+id/selectedSeasonTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textColor="#ff7a9a"
-                android:textSize="16sp" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/polygon_1" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_alignParentBottom="true"
-                android:background="#ff7a9a" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="@null" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/prevMediaRecyclerView"

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import network.model.BaseResponse;
 import network.model.ContestGroupDataList;
-import network.model.HomeContentsDataList;
+import network.model.ContestDataList;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
 import network.model.defaultResult;
@@ -23,11 +23,19 @@ public interface ApiInterface {
 
     @POST("getList")
     @FormUrlEncoded
-    Call<BaseResponse<HomeContentsDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<ContestDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getLiveListName")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getLiveListName(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getContestList")
     @FormUrlEncoded
     Call<BaseResponse<ContestGroupDataList>> getContestList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getLastList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getLastList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("startBroadCast")
     @FormUrlEncoded
@@ -48,4 +56,8 @@ public interface ApiInterface {
     @POST("checkRecommend")
     @FormUrlEncoded
     Call<BaseResponse<defaultResult>> checkRecommend(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("updateUserProfile")
+    @FormUrlEncoded
+    Call<BaseResponse<defaultResult>> updateUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
 }

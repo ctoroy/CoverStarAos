@@ -16,6 +16,14 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.Util;
+
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.ContestDataList;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class SearchFragment extends BaseFragment {
 
@@ -39,12 +47,7 @@ public class SearchFragment extends BaseFragment {
     private void initView() {
 
         binding.titleLayout.titleTextView.setText(getString(R.string.search));
-        binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
 
         binding.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -66,18 +69,34 @@ public class SearchFragment extends BaseFragment {
     }
 
     private void requestSearch() {
-        ProgressDialogHelper.show(getActivity());
         String inputText = binding.searchEditText.getText().toString();
         if (TextUtils.isEmpty(inputText)) {
             binding.searchResultRecyclerView.setVisibility(View.GONE);
             binding.noSearchResultView.setVisibility(View.GONE);
             return;
         }
-        // TODO 검색 호출하기, 결과 유무로 세팅
-//        ProgressDialogHelper.dismiss();
-//        mAdapter.setData();
-//        binding.searchResultRecyclerView.setVisibility(View.VISIBLE);
-//        binding.noSearchResultView.setVisibility(View.VISIBLE);
 
+        ProgressDialogHelper.show(getActivity());
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("keyword", inputText);
+        RetroClient.getApiInterface().getLiveListName(param).enqueue(new RetroCallback<ContestDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
+                ProgressDialogHelper.dismiss();
+                ContestDataList itemList = receivedData.data;
+
+                mAdapter.setData(itemList);
+                binding.searchResultRecyclerView.setVisibility(View.VISIBLE);
+                binding.noSearchResultView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ContestDataList> response) {
+                ProgressDialogHelper.dismiss();
+                binding.searchResultRecyclerView.setVisibility(View.GONE);
+                binding.noSearchResultView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

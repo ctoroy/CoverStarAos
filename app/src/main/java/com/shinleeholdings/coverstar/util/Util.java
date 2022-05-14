@@ -31,6 +31,7 @@ import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +91,19 @@ public class Util {
         return toFormat.format(date);
     }
 
+    public static String changeFormattedDate(String date) {
+        SimpleDateFormat fromFormat = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat toFormat = new SimpleDateFormat("yyyy.MM.dd");
+        Date fromDate = null;
+
+        try {
+            fromDate = fromFormat.parse(date);
+        } catch (ParseException e) {
+            fromDate = new Date();
+        }
+
+        return toFormat.format(fromDate);
+    }
     public static MultipartBody.Part getImageBody(String key, File file)  {
         // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
@@ -100,6 +114,7 @@ public class Util {
         try {
             return new DecimalFormat("###,###,###,###", decimalFormatSimbol).format(value);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return value + "";
     }

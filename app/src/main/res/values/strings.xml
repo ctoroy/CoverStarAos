@@ -136,7 +136,7 @@
 
     <string name="tab_name_home">홈</string>
     <string name="tab_name_prev_media">지난영상</string>
-    <string name="tab_name_participate">참가신청</string>
+    <string name="tab_name_participate">참가 신청</string>
     <string name="tab_name_mypage">마이페이지</string>
 
     <string name="my_wallet">My Wallet</string>
@@ -163,4 +163,9 @@
 
     <string name="home_coverstar">Cover Star</string>
     <string name="home_event">Event</string>
+
+    <string name="contest_term" formatted="false">참여기간 : %s~%s</string>
+    <string name="contest_total_price">총 상 금 : %s</string>
+    <string name="contest_final_date">입상자발표 : %s</string>
+    <string name="price_display_format">%s 원</string>
 </resources>

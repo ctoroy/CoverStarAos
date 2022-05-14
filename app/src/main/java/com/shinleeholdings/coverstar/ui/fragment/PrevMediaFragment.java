@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,10 +14,23 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentPrevMediaBinding;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.Util;
+
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.ContestDataList;
+import network.model.ContestGroupDataList;
+import network.model.ContestInfoItem;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class PrevMediaFragment extends BaseFragment {
-
     private FragmentPrevMediaBinding binding;
+
+    private ContestGroupDataList mContestInfoDataList;
+    private ContestInfoItem selectedContestInfoItem;
+
     private PrevMediaListAdapter mListAdapter;
 
     @Nullable
@@ -23,7 +38,7 @@ public class PrevMediaFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPrevMediaBinding.inflate(inflater, container, false);
         initView();
-        requestData();
+        requestSeasonList();
         return binding.getRoot();
     }
 
@@ -35,18 +50,10 @@ public class PrevMediaFragment extends BaseFragment {
 
     private void initView() {
         binding.prevMediaSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        binding.prevMediaSwipeRefreshLayout.setOnRefreshListener(this::requestData);
+        binding.prevMediaSwipeRefreshLayout.setOnRefreshListener(this::requestSeasonList);
 
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
         binding.alarmImageView.setOnClickListener(view -> addFragment(new AlarmListFragment()));
-
-        binding.coverstarSeasonLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 시즌 선택 팝업 제공 및 선택시 API 다시 호출
-                binding.selectedSeasonTextView.setText("");
-            }
-        });
 
         mListAdapter = new PrevMediaListAdapter((MainActivity) getActivity());
         GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -68,26 +75,91 @@ public class PrevMediaFragment extends BaseFragment {
 
     }
 
-    private void requestData() {
+    private void requestSeasonList() {
         binding.prevMediaSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
+        HashMap<String, String> param = new HashMap<>();
+        param.put("temp", "1");
+        RetroClient.getApiInterface().getContestList(param).enqueue(new RetroCallback<ContestGroupDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestGroupDataList> receivedData) {
 
-        // TODO 시즌 라운드 및 정렬 값으로 데이터 받아오기
-//        mListAdapter.mSelectedSortType;
+                mContestInfoDataList = receivedData.data;
+                initSpinner();
 
+                if (mContestInfoDataList.size() > 0) {
+                    selectedContestInfoItem = mContestInfoDataList.get(0);
+                    requestData();
+                } else {
+                    ProgressDialogHelper.dismiss();
+                }
+            }
 
-//        ArrayList<ContestData> epilogue = new ArrayList<>();
-//        ArrayList<ContestData> itemList = new ArrayList<>();
-//        for(int i = 0; i < 10; i++) {
-//            ContestData item = new ContestData();
-//            epilogue.add(item);
-//
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//        }
-//        mListAdapter.setData(epilogue, itemList);
+            @Override
+            public void onFailure(BaseResponse<ContestGroupDataList> response) {
+                ProgressDialogHelper.dismiss();
+                setContestInfoItem(null);
+            }
+        });
+    }
+
+    private void setContestInfoItem(ContestInfoItem item) {
+        selectedContestInfoItem = item;
+        if (item != null) {
+        }
+    }
+
+    private void initSpinner() {
+        String[] items = new String[mContestInfoDataList.size()];
+        for(int i=0; i <mContestInfoDataList.size(); i++) {
+            ContestInfoItem item = mContestInfoDataList.get(i);
+            items[i] = item.contestTitle;
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.drop_down_list_item, R.id.selectedItemTextView, items);
+        adapter.setDropDownViewResource(R.layout.drop_down_list_select_item);
+
+        binding.contestInfoItemSpinner.setDropDownVerticalOffset(Util.convertDimenResIdToPixel(getActivity(), R.dimen.spinner_height));
+        binding.contestInfoItemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ContestInfoItem selectedItem = mContestInfoDataList.get(i);
+                if (selectedContestInfoItem != null && selectedContestInfoItem.contestId == selectedItem.contestId) {
+                    return;
+                }
+                selectedContestInfoItem = selectedItem;
+                ProgressDialogHelper.show(getActivity());
+                requestData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        binding.contestInfoItemSpinner.setAdapter(adapter);
+    }
+
+    private void requestData() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("castStartDate", selectedContestInfoItem.contestStartDate);
+        RetroClient.getApiInterface().getLastList(param).enqueue(new RetroCallback<ContestDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
+                ProgressDialogHelper.dismiss();
+                ContestDataList itemList = receivedData.data;
+                Util.sortList(mListAdapter.mSelectedSortType, itemList);
+
+                // TODO 데이터 세팅 필요, 에필로그는 어떻게 받아오지?
+//                mListAdapter.setData(epilogue, itemList);
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ContestDataList> response) {
+                ProgressDialogHelper.dismiss();
+
+            }
+        });
 
         ProgressDialogHelper.dismiss();
     }

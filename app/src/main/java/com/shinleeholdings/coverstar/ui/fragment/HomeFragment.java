@@ -16,7 +16,7 @@ import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.HomeContentsDataList;
+import network.model.ContestDataList;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -95,19 +95,19 @@ public class HomeFragment extends BaseFragment {
         HashMap<String, String> param = new HashMap<>();
         param.put("temp", "1");
 
-        RetroClient.getApiInterface().getHomeList(param).enqueue(new RetroCallback<HomeContentsDataList>() {
+        RetroClient.getApiInterface().getHomeList(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
-            public void onSuccess(BaseResponse<HomeContentsDataList> receivedData) {
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
 
-                HomeContentsDataList result = receivedData.data;
+                ContestDataList result = receivedData.data;
                 mHomePagerAdapter.setData(result);
                 mHomePagerAdapter.updateSort(selectedSortType);
                 mHomePagerAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(BaseResponse<HomeContentsDataList> response) {
+            public void onFailure(BaseResponse<ContestDataList> response) {
                 ProgressDialogHelper.dismiss();
             }
         });

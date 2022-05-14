@@ -123,8 +123,17 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
             }
         } else if (holder instanceof ContestHeaderItemViewHolder) {
             ContestHeaderItemViewHolder viewHolder = (ContestHeaderItemViewHolder) holder;
-            // TODO 선택된 필터 텍스트 입력
-            viewHolder.selectedFilterTextView.setText("");
+            switch (mSelectedSortType) {
+                case POPULAR:
+                    viewHolder.selectedFilterTextView.setText(mMainActivity.getString(R.string.order_popular));
+                    break;
+                case SEARCH:
+                    viewHolder.selectedFilterTextView.setText(mMainActivity.getString(R.string.order_search));
+                    break;
+                case LATEST:
+                    viewHolder.selectedFilterTextView.setText(mMainActivity.getString(R.string.order_recently));
+                    break;
+            }
         } else {
             int headerCount = 1;
             if (mEpilogueList.size() > 0) {
@@ -180,6 +189,7 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
                     if (mSelectedSortType == type) {
                         return;
                     }
+                    mSelectedSortType = type;
                     switch (mSelectedSortType) {
                         case POPULAR:
                             selectedFilterTextView.setText(mMainActivity.getString(R.string.order_popular));
