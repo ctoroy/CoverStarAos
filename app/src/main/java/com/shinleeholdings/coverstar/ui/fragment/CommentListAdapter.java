@@ -13,6 +13,9 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
+import com.shinleeholdings.coverstar.util.CommentHelper;
+import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 
@@ -40,7 +43,20 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         }
 
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        viewHolder.userNicknameTextView.setText("" + position);
+
+        ImageLoader.loadImage(viewHolder.userImageView, item.userImagePath);
+        viewHolder.userNicknameTextView.setText(item.userNickName);
+        viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.commentDate, CommentHelper.COMMENT_TIME_FORMAT));
+        viewHolder.commentTextView.setText(item.comment);
+
+        viewHolder.likeCountTextView.setText(item.getLikeCount() + "");
+        viewHolder.unLikeCountTextView.setText(item.getUnLikeCount() + "");
+        viewHolder.commentCountTextView.setText(item.getCommentCount() + "");
+
+        // TODO 좋아요 싫어요 이미 했을때 아이콘 적용 필요
+        viewHolder.likeLayout.setSelected(item.alreadyLike());
+        viewHolder.unLikeLayout.setSelected(item.alreadyUnLike());
+
     }
 
     public void setData(ArrayList<CommentItem> dataList) {
@@ -74,8 +90,8 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         TextView commentTextView;
         ImageView listIconImageView;
 
-        LinearLayout recommendLayout;
-        TextView recommendCountTextView;
+        LinearLayout likeLayout;
+        TextView likeCountTextView;
 
         LinearLayout unLikeLayout;
         TextView unLikeCountTextView;
@@ -91,28 +107,53 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             commentTimeTextView = itemView.findViewById(R.id.commentTimeTextView);
             commentTextView = itemView.findViewById(R.id.commentTextView);
             listIconImageView = itemView.findViewById(R.id.listIconImageView);
-            recommendLayout = itemView.findViewById(R.id.recommendLayout);
-            recommendCountTextView = itemView.findViewById(R.id.recommendCountTextView);
+            likeLayout = itemView.findViewById(R.id.recommendLayout);
+            likeCountTextView = itemView.findViewById(R.id.recommendCountTextView);
             unLikeLayout = itemView.findViewById(R.id.unLikeLayout);
             unLikeCountTextView = itemView.findViewById(R.id.unLikeCountTextView);
             commentLayout = itemView.findViewById(R.id.commentLayout);
             commentCountTextView = itemView.findViewById(R.id.commentCountTextView);
 
+            listIconImageView.setOnClickListener(this);
+            likeLayout.setOnClickListener(this);
+            unLikeLayout.setOnClickListener(this);
+            commentLayout.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int viewId = view.getId();
             int position = getBindingAdapterPosition();
+            CommentItem item = itemList.get(position);
             if (viewId == R.id.listIconImageView) {
                 // TODO 메뉴
+                if (item.isMyContestComment()) {
 //                영상 올린사람은 – 고정, 삭제, 신고
+                } else if (item.isMyComment()) {
 //                댓글 올린 사람은 - 삭제
+                } else {
 //                일반 유저는 – 신고
+                }
             } else if (viewId == R.id.recommendLayout){
                 // TODO 추천
+                if (item.alreadyLike()) {
+                    // 좋아요 취소
+                } else {
+                    if (item.alreadyUnLike()) {
+                        //  비추천 취소
+                    }
+                    // 좋아요
+                }
             } else if (viewId == R.id.unLikeLayout){
                 // TODO 비 추천
+                if (item.alreadyUnLike()) {
+                    // 비추천 취소
+                } else {
+                    if (item.alreadyLike()) {
+                        // 좋아요 취소
+                    }
+                    // 비추천
+                }
             } else if (viewId == R.id.commentLayout){
                 // TODO 코멘트 클릭
             }

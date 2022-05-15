@@ -149,7 +149,7 @@
 
 
     <string name="vote">투표하기</string>
-    <string name="revote">재투표</string>
+    <string name="vote_complete">투표완료</string>
     <string name="pick_my_star">소중한 한표로 나의 스타를 뽑아주세요.</string>
     <string name="vote_help1">※ 투표는 영상당 1회만 가능합니다.</string>
     <string name="vote_help2">※ 투표수는 심사 결과에 반영됩니다.</string>

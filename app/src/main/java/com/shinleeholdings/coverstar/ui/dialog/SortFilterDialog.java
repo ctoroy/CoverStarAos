@@ -45,7 +45,6 @@ public class SortFilterDialog extends BottomSheetDialogView {
                  break;
          }
 
-        // TODO 아이콘들 Pressed 이미지 확인
         binding.orderPopularLayout.setOnClickListener(view -> {
             listener.onSortTypeSelected(SortType.POPULAR);
             dismiss();

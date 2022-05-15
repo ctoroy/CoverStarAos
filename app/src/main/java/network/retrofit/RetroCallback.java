@@ -34,9 +34,10 @@ public abstract class RetroCallback<T> implements Callback<BaseResponse<T>> {
                 try {
                     response.errorBody().close();
                 } catch (Exception e) {
-                    DebugLogger.d(e);
+                    if (DebugLogger.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
                 }
-
             } else {
                 final BaseResponse<T> requestResult = response.body();
 
@@ -58,7 +59,9 @@ public abstract class RetroCallback<T> implements Callback<BaseResponse<T>> {
                 sendResult(requestResult);
             }
         } catch (Exception e) {
-            DebugLogger.d(e);
+            if (DebugLogger.IS_DEBUG) {
+                e.printStackTrace();
+            }
             sendCustomResultFail(e.getMessage(), ServerAPIConstants.SERVER_RETURN_CODE.API_RESULT_ERROR);
         }
     }
@@ -71,6 +74,8 @@ public abstract class RetroCallback<T> implements Callback<BaseResponse<T>> {
                 DialogHelper.showToast(activity, activity.getString(R.string.network_not_connected), false);
             }
         }
+
+        t.printStackTrace();
 
         String message = "";
         if (t != null && TextUtils.isEmpty(t.getMessage()) == false) {

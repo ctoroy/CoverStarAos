@@ -27,7 +27,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/contest_heart" />
+                android:src="@drawable/ic_icoplay" />
 
             <TextView
                 android:id="@+id/playCountTextView"
@@ -54,7 +54,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/contest_heart" />
+                android:src="@drawable/ic_icocomment" />
 
             <TextView
                 android:id="@+id/commentCountTextView"
@@ -86,7 +86,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/contest_heart" />
+                android:src="@drawable/ic_icostar" />
 
             <TextView
                 android:id="@+id/likeCountTextView"

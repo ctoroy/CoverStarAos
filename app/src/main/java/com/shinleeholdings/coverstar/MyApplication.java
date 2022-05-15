@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 
+import com.google.firebase.FirebaseApp;
 import com.shinleeholdings.coverstar.service.MessagingService;
 
 public class MyApplication extends Application {
@@ -28,6 +29,13 @@ public class MyApplication extends Application {
 
         mUiThread = Thread.currentThread();
         mHandler = new Handler();
+
+        try {
+            // Default FirebaseApp is not initialized in this process com.koikatsu.android.dokidoki2.kr.
+            // Make sure to call FirebaseApp.initializeApp(Context) first.
+            FirebaseApp.initializeApp(appContext);
+        } catch (Exception e) {
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(MessagingService.channelId,

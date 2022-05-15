@@ -96,7 +96,6 @@ public class ProfileSettingActivity extends BaseActivity {
             startActivity(intent);
         } else {
             ProgressDialogHelper.show(this);
-            // TODO 서버에 사진 및 닉네임 업데이트 API 규격 확인해서 적용
             HashMap<String, String> param = new HashMap<>();
             param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
             param.put("userProfileImage", imagePath);

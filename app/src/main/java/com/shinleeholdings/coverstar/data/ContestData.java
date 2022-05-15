@@ -2,6 +2,7 @@ package com.shinleeholdings.coverstar.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -56,8 +57,11 @@ public class ContestData implements Parcelable {
     @SerializedName("accumWatchCnt") public String accumWatchCnt;
 
     public String getBgImagePath() {
-        // TODO  이미지 경로
         return "";
+    }
+
+    public String getUploadDate() {
+        return castCode.replace(castId, "");
     }
 
     public String getTitle() {
@@ -74,6 +78,14 @@ public class ContestData implements Parcelable {
 
     public String getSubContent() {
         return "";
+    }
+
+    public int getLikes() {
+        if (TextUtils.isEmpty(likes)) {
+            return 0;
+        }
+
+        return Integer.parseInt(likes);
     }
 
     public ContestData() {

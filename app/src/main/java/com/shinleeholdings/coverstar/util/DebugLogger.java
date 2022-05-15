@@ -24,6 +24,14 @@ public class DebugLogger {
         Log.e(tag, AppConstants.APP_NAME + " : " + message);
     }
 
+    public static void exception(Exception e) {
+        if (!IS_DEBUG) {
+            return;
+        }
+
+        e.printStackTrace();
+    }
+
     public static void d(String message) {
         if (IS_DEBUG) {
             String tag = "";

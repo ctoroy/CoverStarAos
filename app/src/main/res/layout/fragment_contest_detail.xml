@@ -417,6 +417,10 @@
                 android:layout_marginRight="20dp"
                 android:orientation="horizontal">
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
                 <LinearLayout
                     android:id="@+id/shareLayout"
                     android:layout_width="wrap_content"
@@ -437,11 +441,6 @@
                         android:textColor="#303045"
                         android:textSize="14sp" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:id="@+id/addToPlayListLayout"
@@ -492,6 +491,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:allowSingleTap="true"
+        android:visibility="gone"
         app:content="@+id/content"
         app:handle="@+id/handle"
         app:topOffset="266dp">

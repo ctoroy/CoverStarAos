@@ -44,7 +44,7 @@
             android:duplicateParentState="true"
             android:text="@string/fix"
             android:textSize="16sp"
-            android:textColor="@color/filter_text_color" />
+            android:textColor="#828382" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/deleteLayout"
@@ -69,7 +69,7 @@
             android:duplicateParentState="true"
             android:text="@string/delete"
             android:textSize="16sp"
-            android:textColor="@color/filter_text_color" />
+            android:textColor="#828382" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/reportLayout"
@@ -94,7 +94,7 @@
             android:duplicateParentState="true"
             android:text="@string/report"
             android:textSize="16sp"
-            android:textColor="@color/filter_text_color" />
+            android:textColor="#828382" />
     </LinearLayout>
 
 </LinearLayout>

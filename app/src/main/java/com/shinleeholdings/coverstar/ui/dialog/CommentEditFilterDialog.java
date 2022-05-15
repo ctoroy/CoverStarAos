@@ -25,7 +25,6 @@ public class CommentEditFilterDialog extends BottomSheetDialogView {
     public void init() {
         binding.closeLayout.setOnClickListener(view -> dismiss());
 
-        // TODO 아이콘들 Pressed 이미지 확인
         binding.fixLayout.setOnClickListener(view -> {
             dismiss();
         });

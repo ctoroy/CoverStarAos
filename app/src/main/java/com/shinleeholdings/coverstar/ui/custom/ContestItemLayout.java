@@ -82,11 +82,9 @@ public class ContestItemLayout extends CardView {
 
 		ImageLoader.loadImage(contestImageView, mContestItem.getBgImagePath());
 
-		// TODO 아이콘 받아서 적용 필요
 		playCountTextView.setText(getDisplayCountString(mContestItem.watchCnt));
 		commentCountTextView.setText(getDisplayCountString(mContestItem.episode));
-		// TODO 별표 개수 표시
-		likeCountTextView.setText(getDisplayCountString(mContestItem.episode));
+		likeCountTextView.setText(getDisplayCountString(mContestItem.getLikes()));
 
 		songTitleTextView.setText(mContestItem.getTitle());
 		singerNameTextView.setText(mContestItem.getNickName());
