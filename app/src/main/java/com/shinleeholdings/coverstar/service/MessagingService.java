@@ -14,6 +14,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.shinleeholdings.coverstar.CoverStarSchemeActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.util.AlarmHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
@@ -31,10 +32,6 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         DebugLogger.i("onMessageReceived : " + remoteMessage.toString());
-
-        if (remoteMessage == null) {
-            return;
-        }
         showNotification(remoteMessage);
     }
 
@@ -43,7 +40,8 @@ public class MessagingService extends FirebaseMessagingService {
         String pushLink = "";
         String message = "";
 
-        // TODO 정리 필요 : 푸시 스펙
+        // TODO 정리 필요 : 푸시 스펙 및 알람 데이터 작업
+//        AlarmHelper.getSingleInstance().addAlarmItem();
         NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushLink).
                 setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle("test")

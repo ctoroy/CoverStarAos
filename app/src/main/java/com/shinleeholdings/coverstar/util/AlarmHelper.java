@@ -1,7 +1,5 @@
 package com.shinleeholdings.coverstar.util;
 
-import android.os.Debug;
-
 import com.shinleeholdings.coverstar.data.AlarmItem;
 
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ public class AlarmHelper {
         return instance;
     }
 
-
     public ArrayList<AlarmItem> getAlarmList() {
         DebugLogger.i(TAG, "alarmHelper getAlarmList");
 
@@ -35,11 +32,6 @@ public class AlarmHelper {
         ArrayList<AlarmItem> itemList = new ArrayList<>(defaultRealm.copyFromRealm(defaultRealm.where(AlarmItem.class).findAll()));
         DebugLogger.i(TAG, "alarmHelper getAlarmList result : " + itemList.size());
         return itemList;
-
-//        if (keywordResult.keywordDataList != null && keywordResult.keywordDataList!!.size > 0) {
-//        defaultRealm.executeTransaction {
-//            defaultRealm.insertOrUpdate(keywordResult.keywordDataList!!)
-//        }
     }
 
     public void addAlarmItem(AlarmItem item) {
