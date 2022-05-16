@@ -83,14 +83,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
-                android:src="@drawable/icon_recommend" />
+                android:src="@drawable/like_bg" />
 
             <TextView
                 android:id="@+id/recommendCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="6dp"
-                android:textColor="#303045"
+                android:duplicateParentState="true"
+                android:textColor="@color/count_text_color"
                 android:textSize="14sp"
                 tools:text="1,000" />
         </LinearLayout>
@@ -107,14 +108,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
-                android:src="@drawable/icon_unlike" />
+                android:src="@drawable/unlike_bg" />
 
             <TextView
                 android:id="@+id/unLikeCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="6dp"
-                android:textColor="#303045"
+                android:duplicateParentState="true"
+                android:textColor="@color/count_text_color"
                 android:textSize="14sp"
                 tools:text="1,000" />
         </LinearLayout>
@@ -130,14 +132,16 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_comment" />
+                android:duplicateParentState="true"
+                android:src="@drawable/comment_bg" />
 
             <TextView
                 android:id="@+id/commentCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="6dp"
-                android:textColor="#303045"
+                android:duplicateParentState="true"
+                android:textColor="@color/count_text_color"
                 android:textSize="14sp"
                 tools:text="1,000" />
         </LinearLayout>

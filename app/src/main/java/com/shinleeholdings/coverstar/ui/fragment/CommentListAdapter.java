@@ -53,7 +53,6 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         viewHolder.unLikeCountTextView.setText(item.getUnLikeCount() + "");
         viewHolder.commentCountTextView.setText(item.getCommentCount() + "");
 
-        // TODO 좋아요 싫어요 이미 했을때 아이콘 적용 필요
         viewHolder.likeLayout.setSelected(item.alreadyLike());
         viewHolder.unLikeLayout.setSelected(item.alreadyUnLike());
 

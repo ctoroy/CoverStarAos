@@ -281,7 +281,7 @@ public class ContestDetailFragment extends BaseFragment {
 
                 binding.slidingDrawer.setVisibility(View.VISIBLE);
 
-                binding.commentCountTextView.setText("(" + commentList.size()  +")");
+                binding.commentCountTextView.setText("(" + commentList.size() + ")");
 
                 showCommentList();
                 mCommentListAdapter.setData(commentList);
@@ -316,11 +316,21 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private int getSelectedStarCount() {
-        if (binding.voteStar5ImageView.isSelected()) { return 5; }
-        if (binding.voteStar4ImageView.isSelected()) { return 4; }
-        if (binding.voteStar3ImageView.isSelected()) { return 3; }
-        if (binding.voteStar2ImageView.isSelected()) { return 2; }
-        if (binding.voteStar1ImageView.isSelected()) { return 1; }
+        if (binding.voteStar5ImageView.isSelected()) {
+            return 5;
+        }
+        if (binding.voteStar4ImageView.isSelected()) {
+            return 4;
+        }
+        if (binding.voteStar3ImageView.isSelected()) {
+            return 3;
+        }
+        if (binding.voteStar2ImageView.isSelected()) {
+            return 2;
+        }
+        if (binding.voteStar1ImageView.isSelected()) {
+            return 1;
+        }
 
         return 0;
     }
@@ -336,11 +346,21 @@ public class ContestDetailFragment extends BaseFragment {
             return;
         }
 
-        if (myStarVote >= 1) { binding.voteStar1ImageView.setSelected(true); }
-        if (myStarVote >= 2) { binding.voteStar2ImageView.setSelected(true); }
-        if (myStarVote >= 3) { binding.voteStar3ImageView.setSelected(true); }
-        if (myStarVote >= 4) {  binding.voteStar4ImageView.setSelected(true); }
-        if (myStarVote >= 5) { binding.voteStar5ImageView.setSelected(true); }
+        if (myStarVote >= 1) {
+            binding.voteStar1ImageView.setSelected(true);
+        }
+        if (myStarVote >= 2) {
+            binding.voteStar2ImageView.setSelected(true);
+        }
+        if (myStarVote >= 3) {
+            binding.voteStar3ImageView.setSelected(true);
+        }
+        if (myStarVote >= 4) {
+            binding.voteStar4ImageView.setSelected(true);
+        }
+        if (myStarVote >= 5) {
+            binding.voteStar5ImageView.setSelected(true);
+        }
     }
 
     @Override
