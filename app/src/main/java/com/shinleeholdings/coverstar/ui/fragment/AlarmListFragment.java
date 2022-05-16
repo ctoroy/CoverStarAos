@@ -54,4 +54,33 @@ public class AlarmListFragment extends BaseFragment {
 //        mAdapter.setData();
         ProgressDialogHelper.dismiss();
     }
+
+//    class SearchKeywordResult(
+//            @SerializedName("LASTUPDT") var lastUpdateTime: String,
+//            @SerializedName("SALE_STOCKS") var keywordDataList: ArrayList<SearchKeywordData>?)
+//
+//
+//open class SearchKeywordData : RealmObject() {
+//        @PrimaryKey
+//        @SerializedName("PDNO")
+//        open var scode: String = "" // 종목 코드
+//
+//        @SerializedName("STOCK_ID")
+//        open var stockId: Int = 0
+//
+//        @SerializedName("KEYWORDS")
+//        open var keywordList: RealmList<String> = RealmList()
+//    }
+
+
+//    val config = RealmConfiguration.Builder().allowWritesOnUiThread(true).allowQueriesOnUiThread(true).build()
+//    val defaultRealm = Realm.getInstance(config)
+//
+//                    if (keywordResult.keywordDataList != null && keywordResult.keywordDataList!!.size > 0) {
+//        defaultRealm.executeTransaction {
+//            defaultRealm.insertOrUpdate(keywordResult.keywordDataList!!)
+//        }
+//    }
+//
+//    keywordList = defaultRealm.copyFromRealm(defaultRealm.where(SearchKeywordData::class.java).findAll()) as ArrayList<SearchKeywordData>?
 }

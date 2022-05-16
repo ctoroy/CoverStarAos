@@ -21,6 +21,10 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
+    @POST("getContestDetail")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getContestDetail(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("setVote")
     @FormUrlEncoded
     Call<BaseResponse<defaultResult>> setVote(@FieldMap(encoded = true) HashMap<String, String> body);

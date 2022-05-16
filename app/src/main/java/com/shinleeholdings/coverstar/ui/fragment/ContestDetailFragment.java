@@ -54,15 +54,15 @@ public class ContestDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentContestDetailBinding.inflate(inflater, container, false);
 
+        ContestData contestData = null;
         if (getArguments() != null) {
-            mContestItem = getArguments().getParcelable(AppConstants.EXTRA.CONTEST_DATA);
+            contestData = getArguments().getParcelable(AppConstants.EXTRA.CONTEST_DATA);
         }
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.GONE);
 
-        if (mContestItem != null) {
+        if (contestData != null) {
             initView();
-            requestAdditinalData();
-            initCommentData();
+            requestContestDetail(contestData);
         }
 
         return binding.getRoot();
@@ -129,24 +129,6 @@ public class ContestDetailFragment extends BaseFragment {
         binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity());
         binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
-
-        binding.titleTextView.setText(mContestItem.getTitle());
-        binding.songTitleTextview.setText(mContestItem.getTitle());
-
-        ImageLoader.loadImage(binding.songImageView, mContestItem.getBgImagePath());
-
-        binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
-
-        ImageLoader.loadImage(binding.singerImageView, mContestItem.getUserImagePath());
-
-        binding.singerNameTextview.setText(mContestItem.getNickName());
-
-        // TODO 부가정보 표시
-        binding.songEtcTextview.setText("");
-
-        binding.songPlayCountTextview.setText(mContestItem.watchCnt + "");
-        binding.dateTextview.setText(Util.changeFormattedDate(mContestItem.getUploadDate(), "yyyymmddhhmmss"));
-        binding.contestDescriptionTextview.setText(mContestItem.sortBig);
     }
 
     private void requestStarVote(int selectedStarCount) {
@@ -184,9 +166,59 @@ public class ContestDetailFragment extends BaseFragment {
         }
     }
 
-    private void requestAdditinalData() {
+    private void setContestInfo() {
+        binding.titleTextView.setText(mContestItem.getTitle());
+        binding.songTitleTextview.setText(mContestItem.getTitle());
+
+        ImageLoader.loadImage(binding.songImageView, mContestItem.getBgImagePath());
+
+        binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
+
+        ImageLoader.loadImage(binding.singerImageView, mContestItem.getUserImagePath());
+
+        binding.singerNameTextview.setText(mContestItem.getNickName());
+
+        // TODO 부가정보 표시
+        binding.songEtcTextview.setText("");
+
+        binding.songPlayCountTextview.setText(mContestItem.watchCnt + "");
+        binding.dateTextview.setText(Util.changeFormattedDate(mContestItem.getUploadDate(), "yyyymmddhhmmss"));
+        binding.contestDescriptionTextview.setText(mContestItem.sortBig);
+
+        updateVote(mContestItem.episode);
+
+        // TODO 팔로우 처리, 클릭이벤트에서도 잘 처리 필요
+        boolean isAlreadyFollow = false;
+        if (isAlreadyFollow) {
+            binding.followTextView.setText(getString(R.string.unfollow));
+        } else {
+            binding.followTextView.setText(getString(R.string.follow));
+        }
+    }
+
+    private void requestContestDetail(ContestData contestItem) {
         ProgressDialogHelper.show(getActivity());
 
+        HashMap<String, String> param = new HashMap<>();
+        param.put("castCode", contestItem.castCode);
+        RetroClient.getApiInterface().getContestDetail(param).enqueue(new RetroCallback<ContestDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
+                // TODO 콘테스트 데이터 세팅
+//                mContestItem = "";
+                setContestInfo();
+                requestAdditinalData();
+                initCommentData();
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ContestDataList> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
+    }
+
+    private void requestAdditinalData() {
         HashMap<String, String> param = new HashMap<>();
         param.put("castId", mContestItem.castId);
         param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
@@ -197,31 +229,17 @@ public class ContestDetailFragment extends BaseFragment {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
-
-                // TODO episode // 내가 투표한 별표 개수 받기
-                int votedStarCount = 0;
-                updateVote(votedStarCount);
-
-                // TODO 개인별 지난영상 추가하기
+                ContestDataList result = receivedData.data;
                 binding.relatedMediaListLayout.removeAllViews();
-                ArrayList<ContestData> itemList = new ArrayList<>();
 
-                // TODO 팔로우 처리, 클릭이벤트에서도 잘 처리 필요
-                boolean isAlreadyFollow = false;
-                if (isAlreadyFollow) {
-                    binding.followTextView.setText(getString(R.string.unfollow));
-                } else {
-                    binding.followTextView.setText(getString(R.string.follow));
-                }
-
-                for (int i = 0; i < itemList.size(); i++) {
+                for (int i = 0; i < result.size(); i++) {
                     ContestItemLayout layout = new ContestItemLayout(getActivity());
-                    layout.setData((MainActivity) getActivity(), itemList.get(i));
+                    layout.setData((MainActivity) getActivity(), result.get(i));
                     binding.relatedMediaListLayout.addView(layout);
 
-                    if (i < itemList.size() - 1) {
+                    if (i < result.size() - 1) {
                         View divider = new View(getActivity());
-                        divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(getActivity(), 20f), 1));
+                        divider.setLayoutParams(new LinearLayout.LayoutParams(1, Util.dpToPixel(getActivity(), 20f)));
                         binding.relatedMediaListLayout.addView(divider);
                     }
                 }
@@ -231,6 +249,7 @@ public class ContestDetailFragment extends BaseFragment {
             @Override
             public void onFailure(BaseResponse<ContestDataList> response) {
                 ProgressDialogHelper.dismiss();
+                binding.relatedMediaListLayout.removeAllViews();
                 binding.contestDetailSwipeRefreshLayout.setVisibility(View.VISIBLE);
             }
         });
