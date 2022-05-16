@@ -16,9 +16,7 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
-import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
-import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -30,7 +28,6 @@ public class ContestItemLayout extends CardView {
 	ImageView contestImageView;
 
 	TextView playCountTextView;
-	TextView commentCountTextView;
 	TextView likeCountTextView;
 	TextView songTitleTextView;
 	TextView singerNameTextView;
@@ -57,7 +54,6 @@ public class ContestItemLayout extends CardView {
 
 		contestImageView = findViewById(R.id.contestImageView);
 		playCountTextView = findViewById(R.id.playCountTextView);
-		commentCountTextView = findViewById(R.id.commentCountTextView);
 		likeCountTextView = findViewById(R.id.likeCountTextView);
 		songTitleTextView = findViewById(R.id.songTitleTextView);
 		singerNameTextView = findViewById(R.id.singerNameTextView);
@@ -83,8 +79,7 @@ public class ContestItemLayout extends CardView {
 		ImageLoader.loadImage(contestImageView, mContestItem.getBgImagePath());
 
 		playCountTextView.setText(getDisplayCountString(mContestItem.watchCnt));
-		commentCountTextView.setText(getDisplayCountString(mContestItem.episode));
-		likeCountTextView.setText(getDisplayCountString(mContestItem.getLikes()));
+		likeCountTextView.setText(getDisplayCountString(mContestItem.getTotalLikeCount()));
 
 		songTitleTextView.setText(mContestItem.getTitle());
 		singerNameTextView.setText(mContestItem.getNickName());

@@ -24,10 +24,18 @@ import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.ImageLoader;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.ContestDataList;
+import network.model.defaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class ContestDetailFragment extends BaseFragment {
 
@@ -66,7 +74,7 @@ public class ContestDetailFragment extends BaseFragment {
         binding.reportTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 신고하기
+                // TODO 정리 필요 : 신고하기
             }
         });
 
@@ -92,7 +100,7 @@ public class ContestDetailFragment extends BaseFragment {
                 if (selectedStarCount == 0) {
                     return;
                 }
-                // TODO 투표하기, 투표하고 새로고침 한번 하자
+                requestStarVote(selectedStarCount);
             }
         });
 
@@ -127,9 +135,9 @@ public class ContestDetailFragment extends BaseFragment {
 
         ImageLoader.loadImage(binding.songImageView, mContestItem.getBgImagePath());
 
-        binding.starCountTextView.setText(mContestItem.getLikes() + "");
+        binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
 
-        ImageLoader.loadImage(binding.singerImageView, mContestItem.profileImage);
+        ImageLoader.loadImage(binding.singerImageView, mContestItem.getUserImagePath());
 
         binding.singerNameTextview.setText(mContestItem.getNickName());
 
@@ -141,13 +149,31 @@ public class ContestDetailFragment extends BaseFragment {
         binding.contestDescriptionTextview.setText(mContestItem.sortBig);
     }
 
-    private void requestAdditinalData() {
+    private void requestStarVote(int selectedStarCount) {
         ProgressDialogHelper.show(getActivity());
 
-        // TODO 데이터 받아오기, 개인별 지난영상 + 내가 투표한 별표개수
+        HashMap<String, String> param = new HashMap<>();
+        param.put("voteCnt", selectedStarCount + "");
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        param.put("castCode", mContestItem.castCode);
+        RetroClient.getApiInterface().setVote(param).enqueue(new RetroCallback<defaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                updateVote(selectedStarCount);
+                mContestItem.addTotalLikeCount(selectedStarCount);
+                binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
+                ProgressDialogHelper.dismiss();
+            }
 
-        ProgressDialogHelper.dismiss();
-        int votedStarCount = 0;
+            @Override
+            public void onFailure(BaseResponse<defaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
+
+    }
+
+    private void updateVote(int votedStarCount) {
         setMyStarVote(votedStarCount);
         if (votedStarCount > 0) {
             binding.voteTextView.setText(getString(R.string.vote_complete));
@@ -156,38 +182,58 @@ public class ContestDetailFragment extends BaseFragment {
             binding.voteTextView.setText(getString(R.string.vote));
             binding.voteTextView.setEnabled(true);
         }
+    }
 
-        // TODO 팔로우 처리, 클릭이벤트에서도 잘 처리 필요
-        boolean isAlreadyFollow = false;
-        if (isAlreadyFollow) {
-            binding.followTextView.setText(getString(R.string.unfollow));
-        } else {
-            binding.followTextView.setText(getString(R.string.follow));
-        }
+    private void requestAdditinalData() {
+        ProgressDialogHelper.show(getActivity());
 
-        // TODO 관련 영상 추가하기 (API 새로 만들기)
-        binding.relatedMediaListLayout.removeAllViews();
-        ArrayList<ContestData> itemList = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
-            ContestData item = new ContestData();
-            itemList.add(item);
-            itemList.add(item);
-            itemList.add(item);
-            itemList.add(item);
-        }
+        HashMap<String, String> param = new HashMap<>();
+        param.put("castId", mContestItem.castId);
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        param.put("castStartDate", mContestItem.castStartDate);
+        param.put("castCode", mContestItem.castCode);
 
-        for (int i = 0; i < itemList.size(); i++) {
-            ContestItemLayout layout = new ContestItemLayout(getActivity());
-            layout.setData((MainActivity) getActivity(), itemList.get(i));
-            binding.relatedMediaListLayout.addView(layout);
+        RetroClient.getApiInterface().getUserVodList(param).enqueue(new RetroCallback<ContestDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
+                ProgressDialogHelper.dismiss();
 
-            if (i < itemList.size() - 1) {
-                View divider = new View(getActivity());
-                divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(getActivity(), 20f), 1));
-                binding.relatedMediaListLayout.addView(divider);
+                // TODO episode // 내가 투표한 별표 개수 받기
+                int votedStarCount = 0;
+                updateVote(votedStarCount);
+
+                // TODO 개인별 지난영상 추가하기
+                binding.relatedMediaListLayout.removeAllViews();
+                ArrayList<ContestData> itemList = new ArrayList<>();
+
+                // TODO 팔로우 처리, 클릭이벤트에서도 잘 처리 필요
+                boolean isAlreadyFollow = false;
+                if (isAlreadyFollow) {
+                    binding.followTextView.setText(getString(R.string.unfollow));
+                } else {
+                    binding.followTextView.setText(getString(R.string.follow));
+                }
+
+                for (int i = 0; i < itemList.size(); i++) {
+                    ContestItemLayout layout = new ContestItemLayout(getActivity());
+                    layout.setData((MainActivity) getActivity(), itemList.get(i));
+                    binding.relatedMediaListLayout.addView(layout);
+
+                    if (i < itemList.size() - 1) {
+                        View divider = new View(getActivity());
+                        divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(getActivity(), 20f), 1));
+                        binding.relatedMediaListLayout.addView(divider);
+                    }
+                }
+                binding.contestDetailSwipeRefreshLayout.setVisibility(View.VISIBLE);
             }
-        }
-        binding.contestDetailSwipeRefreshLayout.setVisibility(View.VISIBLE);
+
+            @Override
+            public void onFailure(BaseResponse<ContestDataList> response) {
+                ProgressDialogHelper.dismiss();
+                binding.contestDetailSwipeRefreshLayout.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initCommentData() {

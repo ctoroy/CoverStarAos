@@ -61,6 +61,8 @@
         android:layout_below="@id/searchTextLayout"
         android:clipToPadding="false"
         android:paddingTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:visibility="gone" />
 
     <TextView

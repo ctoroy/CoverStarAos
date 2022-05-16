@@ -45,14 +45,14 @@ public class RulesAgreeActivity extends BaseActivity {
         });
 
         binding.userRuleLayout.setOnClickListener(view -> {
-            // TODO 이용자 약관 상세 보여주기
+            // TODO 정리 필요 : 이용자 약관 상세 보여주기
             Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
             intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
             startActivity(intent);
         });
 
         binding.privateRuleLayout.setOnClickListener(view -> {
-            // TODO 개인정보 처리방침 약관 상세 보여주기
+            // TODO 정리 필요 : 개인정보 처리방침 약관 상세 보여주기
             Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
             intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
             startActivity(intent);

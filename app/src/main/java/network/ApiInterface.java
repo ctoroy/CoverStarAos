@@ -21,6 +21,10 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
+    @POST("setVote")
+    @FormUrlEncoded
+    Call<BaseResponse<defaultResult>> setVote(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("updateUserProfile")
     @FormUrlEncoded
     Call<BaseResponse<defaultResult>> updateUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
@@ -28,6 +32,10 @@ public interface ApiInterface {
     @POST("getList")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getUserVodList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getUserVodList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getLiveListName")
     @FormUrlEncoded

@@ -71,8 +71,8 @@ public class Util {
                             originalValue = contestData.watchCnt;
                             targetValue = t1.watchCnt;
                         } else if (selectedSortType == SortFilterDialog.SortType.POPULAR) {
-                            originalValue = contestData.episode;
-                            targetValue = t1.episode;
+                            originalValue = contestData.getTotalLikeCount();
+                            targetValue = t1.getTotalLikeCount();
                         }
                         if (originalValue < targetValue) {
                             return 1;
