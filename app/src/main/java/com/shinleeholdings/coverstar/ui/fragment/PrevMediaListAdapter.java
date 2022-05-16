@@ -1,6 +1,7 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
@@ -207,7 +209,7 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView contestImageView;
         TextView songTitleTextView;
@@ -218,6 +220,17 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
             contestImageView = itemView.findViewById(R.id.contestImageView);
             songTitleTextView = itemView.findViewById(R.id.songTitleTextView);
             singerNameTextView = itemView.findViewById(R.id.singerNameTextView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getBindingAdapterPosition();
+            ContestDetailFragment contestDetailFragment = new ContestDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.EXTRA.CONTEST_DATA, mContestMediaList.get(position));
+            contestDetailFragment.setArguments(bundle);
+            mMainActivity.onFragmentInteractionCallback(contestDetailFragment);
         }
     }
 }

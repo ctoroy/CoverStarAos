@@ -200,15 +200,20 @@ public class ContestDetailFragment extends BaseFragment {
         ProgressDialogHelper.show(getActivity());
 
         HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
         param.put("castCode", contestItem.castCode);
         RetroClient.getApiInterface().getContestDetail(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
-                // TODO 콘테스트 데이터 세팅
-//                mContestItem = "";
-                setContestInfo();
-                requestAdditinalData();
-                initCommentData();
+                ContestDataList result = receivedData.data;
+                if (result.size() > 0) {
+                    mContestItem = result.get(0);
+                    setContestInfo();
+                    requestAdditinalData();
+                    initCommentData();
+                } else {
+                    ProgressDialogHelper.dismiss();
+                }
             }
 
             @Override

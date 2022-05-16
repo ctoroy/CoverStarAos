@@ -21,7 +21,7 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
-    @POST("getContestDetail")
+    @POST("getRoom")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getContestDetail(@FieldMap(encoded = true) HashMap<String, String> body);
 

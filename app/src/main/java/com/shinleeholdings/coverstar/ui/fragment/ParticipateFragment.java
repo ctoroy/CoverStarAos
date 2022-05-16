@@ -132,11 +132,11 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.ILo
             Toast.makeText(getActivity(), getString(R.string.input_mention), Toast.LENGTH_SHORT).show();
             return;
         }
-        // TODO test
-//        if (LoginHelper.getSingleInstance().getMyCoinCount() < selectedContestInfoItem.contestPayAmt) {
-//            DialogHelper.showPointCheckPopup(getActivity());
-//            return;
-//        }
+
+        if (LoginHelper.getSingleInstance().getMyCoinCount() < selectedContestInfoItem.contestPayAmt) {
+            DialogHelper.showPointCheckPopup(getActivity());
+            return;
+        }
 
         DialogHelper.showRegistConfirmPopup(getActivity(), selectedContestInfoItem.contestPayAmt, new View.OnClickListener() {
             @Override
