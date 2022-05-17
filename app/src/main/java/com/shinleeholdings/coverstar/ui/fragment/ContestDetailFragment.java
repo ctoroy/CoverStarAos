@@ -20,6 +20,7 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.data.ReplyItem;
 import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
 import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
@@ -335,6 +336,11 @@ public class ContestDetailFragment extends BaseFragment {
                 showCommentList();
                 mCommentListAdapter.setData(commentList);
                 updateCommentCountText();
+            }
+
+            @Override
+            public void onReplyListLoaded(ArrayList<ReplyItem> replyList) {
+                // TODO
             }
         });
     }

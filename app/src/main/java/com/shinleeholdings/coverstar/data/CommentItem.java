@@ -15,8 +15,6 @@ public class CommentItem {
 //    좋아요 수 : 200
 //    싫어요 수 : 100
 //    답글 수 : 50
-//    고정 여부 : Boolean
-//    삭제 여부 : Boolean
 
     public String id;
     public String contestUserId;
@@ -29,8 +27,6 @@ public class CommentItem {
     public ArrayList<String> unLikes;
     public ArrayList<String> comments;
     public ArrayList<String> reports;
-    public boolean isFixed;
-    public boolean isRemoved;
 
     public int getLikeCount() {
         if (likes == null) {

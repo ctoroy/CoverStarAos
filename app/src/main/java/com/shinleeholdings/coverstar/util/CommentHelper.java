@@ -16,6 +16,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
+import com.shinleeholdings.coverstar.data.ReplyItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class CommentHelper {
 
     public static final String FIRESTORE_TB_COMMENT = "COMMENT";
     public static final String LIST_COLLECTION_NAME = "LIST";
+    public static final String RETRY_COLLECTION_NAME = "RETRY";
 
     public static final String FIELDNAME_CONTESTUSERID = "contestUserId";
     public static final String FIELDNAME_USERID = "userId";
@@ -35,8 +37,6 @@ public class CommentHelper {
     public static final String FIELDNAME_USERNICKNAME = "userNickName";
     public static final String FIELDNAME_COMMENTDATE = "commentDate";
     public static final String FIELDNAME_COMMENT = "comment";
-    public static final String FIELDNAME_ISFIXED = "isFixed";
-    public static final String FIELDNAME_ISREMOVED = "isRemoved";
     public static final String FIELDNAME_LIKES = "likes";
     public static final String FIELDNAME_UNLIKES = "unLikes";
     public static final String FIELDNAME_COMMENTS = "comments";
@@ -58,6 +58,7 @@ public class CommentHelper {
 
     public interface ICommentEventListener {
         public void onCommentListLoaded(ArrayList<CommentItem> commentList);
+        public void onReplyListLoaded(ArrayList<ReplyItem> replyList);
     }
 
     public CollectionReference getCommentListRef(String castCode) {
@@ -77,11 +78,6 @@ public class CommentHelper {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                         CommentItem item = getCommentItem(doc.getData());
-                        if (item.isRemoved) {
-                            DebugLogger.e("commentTest getCommentList item.isRemoved");
-                            continue;
-                        }
-
                         item.id = doc.getId();
                         itemList.add(item);
                     }
@@ -101,8 +97,6 @@ public class CommentHelper {
         valueMap.put(CommentHelper.FIELDNAME_USERNICKNAME, LoginHelper.getSingleInstance().getLoginUserNickName());
         valueMap.put(CommentHelper.FIELDNAME_COMMENTDATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_COMMENT, comment);
-        valueMap.put(CommentHelper.FIELDNAME_ISFIXED, false);
-        valueMap.put(CommentHelper.FIELDNAME_ISREMOVED, false);
         valueMap.put(CommentHelper.FIELDNAME_LIKES, new ArrayList<String>());
         valueMap.put(CommentHelper.FIELDNAME_UNLIKES, new ArrayList<String>());
         valueMap.put(CommentHelper.FIELDNAME_COMMENTS, new ArrayList<String>());
@@ -132,13 +126,6 @@ public class CommentHelper {
             item.userNickName = (String) data.get(FIELDNAME_USERNICKNAME);
             item.commentDate = (String) data.get(FIELDNAME_COMMENTDATE);
             item.comment = (String) data.get(FIELDNAME_COMMENT);
-            if (data.containsKey(FIELDNAME_ISFIXED)) {
-                item.isFixed = (boolean) data.get(FIELDNAME_ISFIXED);
-            }
-
-            if (data.containsKey(FIELDNAME_ISREMOVED)) {
-                item.isRemoved = (boolean) data.get(FIELDNAME_ISREMOVED);
-            }
 
             if (data.containsKey(FIELDNAME_LIKES)) {
                 item.likes = (ArrayList<String>) data.get(FIELDNAME_LIKES);
@@ -161,4 +148,47 @@ public class CommentHelper {
 
         return item;
     }
+
+
+    public CollectionReference getReplyListRef(String castCode, String commentId) {
+        return FireBaseHelper.getSingleInstance().getDatabase()
+                .collection(FIRESTORE_TB_COMMENT)
+                .document(castCode)
+                .collection(LIST_COLLECTION_NAME)
+                .document(commentId)
+                .collection(RETRY_COLLECTION_NAME)
+    }
+
+    public void getReplyList(String castCode, String commentId, ICommentEventListener eventListener) {
+        getReplyListRef(castCode)
+                .orderBy(FIELDNAME_COMMENTDATE, Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DebugLogger.i("commentTest getReplyList onComplete castCode : " + castCode + " , commentId : " + commentId);
+                ArrayList<ReplyItem> itemList = new ArrayList<>();
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                        ReplyItem item = getReplyItem(doc.getData());
+                        item.id = doc.getId();
+                        itemList.add(item);
+                    }
+                }
+
+                eventListener.onReplyListLoaded(itemList);
+            }
+        });
+    }
+
+    public void writeReplyItem(ContestData contest, String commentId, String reply) {
+        // TODO
+
+    }
+
+    public ReplyItem getReplyItem(Map<String, Object> data) {
+        ReplyItem item = new ReplyItem();
+        // TODO
+        return item;
+    }
+
 }
