@@ -88,12 +88,12 @@ public class ContestDetailFragment extends BaseFragment {
         binding.followTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 팔로우 처리
                 if (mContestItem.isFollow()) {
                 } else {
                 }
             }
         });
+        binding.followTextView.setVisibility(View.GONE);
 
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,8 +194,7 @@ public class ContestDetailFragment extends BaseFragment {
 
         binding.singerNameTextview.setText(mContestItem.getNickName());
 
-        // TODO 부가정보 표시
-        binding.songEtcTextview.setText("");
+        binding.songEtcTextview.setText(String.format(getString(R.string.original_singer_format), mContestItem.logoImage));
 
         binding.songPlayCountTextview.setText(mContestItem.watchCnt + "");
         binding.dateTextview.setText(Util.changeFormattedDate(mContestItem.getUploadDate(), "yyyymmddhhmmss"));

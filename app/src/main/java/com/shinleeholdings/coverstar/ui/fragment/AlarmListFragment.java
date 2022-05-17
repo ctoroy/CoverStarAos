@@ -50,7 +50,7 @@ public class AlarmListFragment extends BaseFragment {
     private void requestData() {
         binding.alarmListSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
-        // TODO 알람 리스트 디비에서 불러오기
+        // TODO 정리 필요 : 알람 리스트 디비에서 불러오기
 //        mAdapter.setData();
         ProgressDialogHelper.dismiss();
     }

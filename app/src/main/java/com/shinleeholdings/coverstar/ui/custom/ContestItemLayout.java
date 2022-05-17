@@ -83,6 +83,6 @@ public class ContestItemLayout extends CardView {
 
 		songTitleTextView.setText(mContestItem.getTitle());
 		singerNameTextView.setText(mContestItem.getNickName());
-		originalSingerNameTextView = findViewById(R.id.originalSingerNameTextView);
+		originalSingerNameTextView.setText(mContestItem.logoImage);
 	}
 }

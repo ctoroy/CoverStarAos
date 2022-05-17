@@ -12,6 +12,8 @@
     <string name="report_done">신고 되었습니다.</string>
     <string name="delete_done">삭제 되었습니다.</string>
     <string name="find_best_cover_star">최고의 커버스타를\n찾아라</string>
+    <string name="round_info">%d월 ROUND</string>
+    <string name="original_singer_format">(원곡가수 : %s)</string>
 
     <string name="login">로그인</string>
     <string name="join">가입하기</string>

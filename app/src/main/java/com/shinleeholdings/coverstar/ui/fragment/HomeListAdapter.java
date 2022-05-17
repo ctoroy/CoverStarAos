@@ -94,6 +94,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     private void setEventLayout(ContestRegistItemViewHolder viewHolder) {
         if (mIsCoverStarTab) {
+            viewHolder.titleTextView.setText(contestRegistItem.castTitle); // 경연참가 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg1);
             viewHolder.homeLeftTitleSelectedTextView.setVisibility(View.VISIBLE);
             viewHolder.homeLeftTriangleView.setVisibility(View.VISIBLE);
@@ -107,6 +108,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
                 viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
             }
         } else {
+            viewHolder.titleTextView.setText(contestRegistItem.sortSmall); // 이벤트 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg2);
             viewHolder.homeRightTitleSelectedTextView.setVisibility(View.VISIBLE);
             viewHolder.homeLeftTitleUnSelectedLayout.setVisibility(View.VISIBLE);
@@ -117,8 +119,8 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
         }
 
-        viewHolder.titleTextView.setText(contestRegistItem.sortSmall);
-        viewHolder.contestInfoTextView.setText(contestRegistItem.castTitle);
+        // 현재 달
+        viewHolder.contestInfoTextView.setText(String.format(mMainActivity.getString(R.string.round_info), Util.getCurrentMonth()));
         ImageLoader.loadImage(viewHolder.eventImageView, contestRegistItem.product);
         viewHolder.registTermTextView.setText(String.format(mMainActivity.getString(R.string.contest_term),
                 Util.changeFormattedDate(contestRegistItem.castStartDate),

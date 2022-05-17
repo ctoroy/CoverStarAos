@@ -148,8 +148,6 @@ public class PrevMediaFragment extends BaseFragment {
                 ProgressDialogHelper.dismiss();
                 ContestDataList itemList = receivedData.data;
                 Util.sortList(mListAdapter.mSelectedSortType, itemList);
-
-                // TODO 데이터 세팅 필요, 에필로그는 어떻게 받아오지?
                 mListAdapter.setData(null, itemList);
             }
 
