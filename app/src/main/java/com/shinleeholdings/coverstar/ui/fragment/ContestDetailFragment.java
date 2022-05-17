@@ -74,11 +74,20 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void initView(String castCode) {
-        binding.titleBackLayout.setOnClickListener(view -> finish());
+        binding.titleBackLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         binding.reportTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (binding.slidingDrawer.isOpened()) {
+                    binding.slidingDrawer.animateClose();
+                    return;
+                }
                 // TODO 정리 필요 : 신고하기
                 CommentHelper.getSingleInstance().writeCommentItem(mContestItem, "test " + Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
             }
@@ -97,6 +106,10 @@ public class ContestDetailFragment extends BaseFragment {
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (binding.slidingDrawer.isOpened()) {
+                    binding.slidingDrawer.animateClose();
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), ContestPlayerActivity.class);
                 intent.putExtra(AppConstants.EXTRA.CONTEST_URL, mContestItem.location);
                 startActivity(intent);
@@ -139,7 +152,12 @@ public class ContestDetailFragment extends BaseFragment {
         });
 
         binding.commentListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity(), castCode);
+        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity(), castCode, new CommentListAdapter.ICommentClickListener() {
+            @Override
+            public void onCommentClicked(CommentItem item) {
+                showReplyList(item);
+            }
+        });
         binding.commentListRecyclerView.setAdapter(mCommentListAdapter);
 
         binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -344,12 +362,13 @@ public class ContestDetailFragment extends BaseFragment {
         binding.replyListRecyclerView.setVisibility(View.GONE);
     }
 
-    private void showReplyList() {
+    private void showReplyList(CommentItem item) {
         binding.commentListTitleLayout.setVisibility(View.INVISIBLE);
         binding.commentListRecyclerView.setVisibility(View.GONE);
 
         binding.replyListTitleLayout.setVisibility(View.VISIBLE);
         binding.replyListRecyclerView.setVisibility(View.VISIBLE);
+        // TODO
     }
 
     private int getSelectedStarCount() {
