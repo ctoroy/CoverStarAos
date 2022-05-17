@@ -7,11 +7,15 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
+import com.shinleeholdings.coverstar.data.ContestData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +29,6 @@ public class CommentHelper {
     public static final String FIRESTORE_TB_COMMENT = "COMMENT";
     public static final String LIST_COLLECTION_NAME = "LIST";
 
-    public static final String FIELDNAME_ID = "id";
     public static final String FIELDNAME_CONTESTUSERID = "contestUserId";
     public static final String FIELDNAME_USERID = "userId";
     public static final String FIELDNAME_USERIMAGEPATH = "userImagePath";
@@ -65,14 +68,17 @@ public class CommentHelper {
     }
 
     public void getCommentList(String castCode, ICommentEventListener eventListener) {
-        getCommentListRef(castCode).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        getCommentListRef(castCode).orderBy(FIELDNAME_COMMENTDATE, Query.Direction.DESCENDING).
+                get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 ArrayList<CommentItem> itemList = new ArrayList<>();
+                DebugLogger.i("commentTest getCommentList onComplete : " + task.isSuccessful());
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                         CommentItem item = getCommentItem(doc.getData());
                         if (item.isRemoved) {
+                            DebugLogger.e("commentTest getCommentList item.isRemoved");
                             continue;
                         }
 
@@ -86,6 +92,29 @@ public class CommentHelper {
         });
     }
 
+    public void writeCommentItem(ContestData contest, String comment) {
+        DebugLogger.i("commentTest writeCommentItem : " + comment);
+        HashMap<String, Object> valueMap = new HashMap<>();
+        valueMap.put(CommentHelper.FIELDNAME_CONTESTUSERID, contest.castId);
+        valueMap.put(CommentHelper.FIELDNAME_USERID, LoginHelper.getSingleInstance().getLoginUserId());
+        valueMap.put(CommentHelper.FIELDNAME_USERIMAGEPATH, LoginHelper.getSingleInstance().getLoginUserImagePath());
+        valueMap.put(CommentHelper.FIELDNAME_USERNICKNAME, LoginHelper.getSingleInstance().getLoginUserNickName());
+        valueMap.put(CommentHelper.FIELDNAME_COMMENTDATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
+        valueMap.put(CommentHelper.FIELDNAME_COMMENT, comment);
+        valueMap.put(CommentHelper.FIELDNAME_ISFIXED, false);
+        valueMap.put(CommentHelper.FIELDNAME_ISREMOVED, false);
+        valueMap.put(CommentHelper.FIELDNAME_LIKES, new ArrayList<String>());
+        valueMap.put(CommentHelper.FIELDNAME_UNLIKES, new ArrayList<String>());
+        valueMap.put(CommentHelper.FIELDNAME_COMMENTS, new ArrayList<String>());
+        valueMap.put(CommentHelper.FIELDNAME_REPORTS, new ArrayList<String>());
+        getCommentListRef(contest.castCode).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                DebugLogger.i("commentTest writeComplete success : " + task.isSuccessful());
+            }
+        });
+    }
+
     public void deleteCommentItem(String castCode, CommentItem commentItem) {
         getCommentListRef(castCode).document(commentItem.id).delete();
     }
@@ -94,10 +123,9 @@ public class CommentHelper {
         getCommentListRef(castCode).document(commentItem.id).update(valueMap);
     }
 
-    private CommentItem getCommentItem(Map<String, Object> data) {
+    public CommentItem getCommentItem(Map<String, Object> data) {
         CommentItem item = new CommentItem();
         try {
-            item.id = (String) data.get(FIELDNAME_ID);
             item.userId = (String) data.get(FIELDNAME_USERID);
             item.contestUserId = (String) data.get(FIELDNAME_CONTESTUSERID);
             item.userImagePath = (String) data.get(FIELDNAME_USERIMAGEPATH);

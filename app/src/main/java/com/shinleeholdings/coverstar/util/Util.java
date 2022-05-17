@@ -110,6 +110,10 @@ public class Util {
         return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
 
+    public static String getCurrentTimeToFormat(String format) {
+        return new SimpleDateFormat(format).format(new Date());
+    }
+
     public static String changeFormattedDate(String date) {
         SimpleDateFormat fromFormat = new SimpleDateFormat("yyyyMMddHHmm");
         SimpleDateFormat toFormat = new SimpleDateFormat("yyyy.MM.dd");

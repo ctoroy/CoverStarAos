@@ -64,8 +64,6 @@ public class ContestDetailFragment extends BaseFragment {
         }
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.GONE);
 
-
-
         if (contestData != null) {
             userImagePath = contestData.getUserImagePath();
             initView(contestData.castCode);
@@ -82,6 +80,7 @@ public class ContestDetailFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 // TODO 정리 필요 : 신고하기
+                CommentHelper.getSingleInstance().writeCommentItem(mContestItem, "test " + Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
             }
         });
 
@@ -274,12 +273,11 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void initCommentData() {
-        // TODO test
-        String castCode = "ctoroy20210726162622";
-//        String castCode = mContestItem.castCode;
+        String castCode = mContestItem.castCode;
         CommentHelper.getSingleInstance().getCommentList(castCode, new CommentHelper.ICommentEventListener() {
             @Override
             public void onCommentListLoaded(ArrayList<CommentItem> commentList) {
+                DebugLogger.i("commentTest onCommentListLoaded : " + commentList.size());
                 if (isFragmentRemoved()) {
                     return;
                 }
@@ -287,15 +285,24 @@ public class ContestDetailFragment extends BaseFragment {
                 commentChangeEventListener = CommentHelper.getSingleInstance().getCommentListRef(mContestItem.castCode).addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                        // TODO 코멘트 업데이트 처리(개수 변경, 아이템 데이터 변경)
                         try {
                             if (queryDocumentSnapshots != null) {
                                 for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    String id = dc.getDocument().getId();
                                     Map<String, Object> data = dc.getDocument().getData();
-                                    DebugLogger.i("commentChangeEvent type : " + dc.getType() + ", data : " + data);
+                                    DebugLogger.i("commentTest commentChangeEvent type : " + dc.getType() + ", data : " + data);
                                     if (dc.getType() == DocumentChange.Type.ADDED) {
+                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
+                                        item.id = id;
+                                        mCommentListAdapter.addComment(item);
+                                        updateCommentCountText();
                                     } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                                        mCommentListAdapter.removeComment(id);
+                                        updateCommentCountText();
                                     } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
+                                        item.id = id;
+                                        mCommentListAdapter.changeComment(item);
                                     }
                                 }
                             }
@@ -306,12 +313,17 @@ public class ContestDetailFragment extends BaseFragment {
 
                 binding.slidingDrawer.setVisibility(View.VISIBLE);
 
-                binding.commentCountTextView.setText("(" + commentList.size() + ")");
 
                 showCommentList();
                 mCommentListAdapter.setData(commentList);
+                updateCommentCountText();
             }
         });
+    }
+
+    private void updateCommentCountText() {
+        binding.commentCountTextView.setText("(" + mCommentListAdapter.getItemCount() + ")");
+
     }
 
     @Override

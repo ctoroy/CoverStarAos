@@ -8,7 +8,6 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
 import com.shinleeholdings.coverstar.ui.NonLeakingWebViewActivity;
-import com.shinleeholdings.coverstar.ui.custom.NonLeakingWebView;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;

@@ -73,6 +73,46 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void addComment(CommentItem newItem) {
+
+        boolean hasItem = false;
+
+        for (int i=0; i <itemList.size(); i++) {
+            CommentItem item = itemList.get(i);
+            if (item.id.equals(newItem.id)) {
+                hasItem = true;
+                break;
+            }
+        }
+
+        if (hasItem == false) {
+            itemList.add(0, newItem);
+            notifyItemInserted(0);
+        }
+    }
+
+    public void changeComment(CommentItem newItem) {
+        for (int i=0; i <itemList.size(); i++) {
+            CommentItem item = itemList.get(i);
+            if (item.id.equals(newItem.id)) {
+                itemList.set(i, newItem);
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
+    public void removeComment(String id) {
+        for (int i=0; i <itemList.size(); i++) {
+            CommentItem item = itemList.get(i);
+            if (item.id.equals(id)) {
+                itemList.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
     public void clear() {
         setData(null);
     }
@@ -200,7 +240,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
                     }
                     // 비추천
                     item.addUnLike();
-                    valueMap.put(CommentHelper.FIELDNAME_LIKES, item.unLikes);
+                    valueMap.put(CommentHelper.FIELDNAME_UNLIKES, item.unLikes);
                 }
 
                 CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap);
