@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.databinding.DialogCommentEditFilterBinding;
 
 public class CommentEditFilterDialog extends BottomSheetDialogView {
@@ -22,18 +24,33 @@ public class CommentEditFilterDialog extends BottomSheetDialogView {
         return binding.getRoot();
     }
 
-    public void init() {
+    public void init(CommentItem item, View.OnClickListener listener) {
         binding.closeLayout.setOnClickListener(view -> dismiss());
 
+        binding.fixLayout.setVisibility(View.GONE);
+
+        if (item.isMyContestComment()) {
+//                영상 올린사람은 – 삭제, 신고
+        } else if (item.isMyComment()) {
+//                댓글 올린 사람은 - 삭제
+            binding.reportLayout.setVisibility(View.GONE);
+        } else {
+//                일반 유저는 – 신고
+            binding.deleteLayout.setVisibility(View.GONE);
+        }
+
         binding.fixLayout.setOnClickListener(view -> {
+            listener.onClick(view);
             dismiss();
         });
 
         binding.deleteLayout.setOnClickListener(view -> {
+            listener.onClick(view);
             dismiss();
         });
 
         binding.reportLayout.setOnClickListener(view -> {
+            listener.onClick(view);
             dismiss();
         });
     }

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -23,6 +24,7 @@ import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
 import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.util.CommentHelper;
+import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
@@ -30,6 +32,7 @@ import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import network.model.BaseResponse;
 import network.model.ContestDataList;
@@ -46,6 +49,7 @@ public class ContestDetailFragment extends BaseFragment {
 
     private ContestData mContestItem;
 
+    private String userImagePath;
 
     private ListenerRegistration commentChangeEventListener;
 
@@ -60,21 +64,34 @@ public class ContestDetailFragment extends BaseFragment {
         }
         binding.contestDetailSwipeRefreshLayout.setVisibility(View.GONE);
 
+
+
         if (contestData != null) {
-            initView();
-            requestContestDetail(contestData);
+            userImagePath = contestData.getUserImagePath();
+            initView(contestData.castCode);
+            requestContestDetail(contestData.castCode);
         }
 
         return binding.getRoot();
     }
 
-    private void initView() {
+    private void initView(String castCode) {
         binding.titleBackLayout.setOnClickListener(view -> finish());
 
         binding.reportTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO 정리 필요 : 신고하기
+            }
+        });
+
+        binding.followTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 팔로우 처리
+                if (mContestItem.isFollow()) {
+                } else {
+                }
             }
         });
 
@@ -123,7 +140,7 @@ public class ContestDetailFragment extends BaseFragment {
         });
 
         binding.commentListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity());
+        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity(), castCode);
         binding.commentListRecyclerView.setAdapter(mCommentListAdapter);
 
         binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -152,7 +169,6 @@ public class ContestDetailFragment extends BaseFragment {
                 ProgressDialogHelper.dismiss();
             }
         });
-
     }
 
     private void updateVote(int votedStarCount) {
@@ -174,7 +190,7 @@ public class ContestDetailFragment extends BaseFragment {
 
         binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
 
-        ImageLoader.loadImage(binding.singerImageView, mContestItem.getUserImagePath());
+        ImageLoader.loadImage(binding.singerImageView, userImagePath);
 
         binding.singerNameTextview.setText(mContestItem.getNickName());
 
@@ -187,21 +203,19 @@ public class ContestDetailFragment extends BaseFragment {
 
         updateVote(mContestItem.episode);
 
-        // TODO 팔로우 처리, 클릭이벤트에서도 잘 처리 필요
-        boolean isAlreadyFollow = false;
-        if (isAlreadyFollow) {
+        if (mContestItem.isFollow()) {
             binding.followTextView.setText(getString(R.string.unfollow));
         } else {
             binding.followTextView.setText(getString(R.string.follow));
         }
     }
 
-    private void requestContestDetail(ContestData contestItem) {
+    private void requestContestDetail(String castCode) {
         ProgressDialogHelper.show(getActivity());
 
         HashMap<String, String> param = new HashMap<>();
         param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
-        param.put("castCode", contestItem.castCode);
+        param.put("castCode", castCode);
         RetroClient.getApiInterface().getContestDetail(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
@@ -264,7 +278,6 @@ public class ContestDetailFragment extends BaseFragment {
         // TODO test
         String castCode = "ctoroy20210726162622";
 //        String castCode = mContestItem.castCode;
-
         CommentHelper.getSingleInstance().getCommentList(castCode, new CommentHelper.ICommentEventListener() {
             @Override
             public void onCommentListLoaded(ArrayList<CommentItem> commentList) {
@@ -274,8 +287,21 @@ public class ContestDetailFragment extends BaseFragment {
 
                 commentChangeEventListener = CommentHelper.getSingleInstance().getCommentListRef(mContestItem.castCode).addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                         // TODO 코멘트 업데이트 처리(개수 변경, 아이템 데이터 변경)
+                        try {
+                            if (queryDocumentSnapshots != null) {
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    Map<String, Object> data = dc.getDocument().getData();
+                                    DebugLogger.i("commentChangeEvent type : " + dc.getType() + ", data : " + data);
+                                    if (dc.getType() == DocumentChange.Type.ADDED) {
+                                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                                    }
+                                }
+                            }
+                        } catch (Exception exception) {
+                        }
                     }
                 });
 

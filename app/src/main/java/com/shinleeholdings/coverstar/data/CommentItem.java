@@ -28,12 +28,13 @@ public class CommentItem {
     public ArrayList<String> likes;
     public ArrayList<String> unLikes;
     public ArrayList<String> comments;
+    public ArrayList<String> reports;
     public boolean isFixed;
     public boolean isRemoved;
 
     public int getLikeCount() {
         if (likes == null) {
-            return 0;
+            likes = new ArrayList<>();
         }
 
         return likes.size();
@@ -41,7 +42,7 @@ public class CommentItem {
 
     public int getUnLikeCount() {
         if (unLikes == null) {
-            return 0;
+            unLikes = new ArrayList<>();
         }
 
         return unLikes.size();
@@ -49,7 +50,7 @@ public class CommentItem {
 
     public int getCommentCount() {
         if (comments == null) {
-            return 0;
+            comments = new ArrayList<>();
         }
 
         return comments.size();
@@ -65,6 +66,7 @@ public class CommentItem {
 
     public boolean alreadyLike() {
         if (likes == null) {
+            likes = new ArrayList<>();
             return false;
         }
         return likes.contains(LoginHelper.getSingleInstance().getLoginUserId());
@@ -72,9 +74,52 @@ public class CommentItem {
 
     public boolean alreadyUnLike() {
         if (unLikes == null) {
+            unLikes = new ArrayList<>();
             return false;
         }
         return unLikes.contains(LoginHelper.getSingleInstance().getLoginUserId());
+    }
+
+    public void addLike() {
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
+        likes.add(LoginHelper.getSingleInstance().getLoginUserId());
+    }
+
+    public void removeLike() {
+        if (likes != null) {
+            likes.remove(LoginHelper.getSingleInstance().getLoginUserId());
+        } else {
+            likes = new ArrayList<>();
+        }
+    }
+
+    public void addUnLike() {
+        if (unLikes == null) {
+            unLikes = new ArrayList<>();
+        }
+        unLikes.add(LoginHelper.getSingleInstance().getLoginUserId());
+    }
+
+    public void removeUnLike() {
+        if (unLikes != null) {
+            unLikes.remove(LoginHelper.getSingleInstance().getLoginUserId());
+        } else {
+            unLikes = new ArrayList<>();
+        }
+    }
+
+    public boolean addReport() {
+        if (reports != null) {
+            if (reports.contains(LoginHelper.getSingleInstance().getLoginUserId())) {
+                return false;
+            }
+        } else {
+            reports = new ArrayList<>();
+        }
+        reports.add(LoginHelper.getSingleInstance().getLoginUserId());
+        return true;
     }
 
     public CommentItem() {

@@ -54,7 +54,7 @@ public class ContestData implements Parcelable {
     @SerializedName("store") public String store; //*이벤트발표일
     @SerializedName("product") public String product; //*이벤트 이미지
     @SerializedName("likes") public String likes; // 총 좋아요 카운트
-    @SerializedName("accumWatchCnt") public String accumWatchCnt; // 사용자 이미지
+    @SerializedName("accumWatchCnt") public String accumWatchCnt; // 사용자 이미지, getRoom에서는 방장아이디가있으면 팔로우한상태, 아니면 언팔로우
 
     public String getBgImagePath() {
         return profileImage;
@@ -62,6 +62,15 @@ public class ContestData implements Parcelable {
 
     public String getUserImagePath() {
         return accumWatchCnt;
+    }
+
+    public boolean isFollow() {
+        // 방장아이디가 있으면 팔로우한 상태, 아니면 언팔로우
+        if (TextUtils.isEmpty(accumWatchCnt) == false && accumWatchCnt.equals(castId)) {
+            return true;
+        }
+
+        return false;
     }
 
     public String getUploadDate() {

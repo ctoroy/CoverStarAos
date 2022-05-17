@@ -1,5 +1,7 @@
 package com.shinleeholdings.coverstar.util;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -7,9 +9,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.shinleeholdings.coverstar.MyApplication;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommentHelper {
@@ -51,13 +56,13 @@ public class CommentHelper {
     public interface ICommentEventListener {
         public void onCommentListLoaded(ArrayList<CommentItem> commentList);
     }
+
     public CollectionReference getCommentListRef(String castCode) {
         return FireBaseHelper.getSingleInstance().getDatabase()
                 .collection(FIRESTORE_TB_COMMENT)
                 .document(castCode)
                 .collection(LIST_COLLECTION_NAME);
     }
-
 
     public void getCommentList(String castCode, ICommentEventListener eventListener) {
         getCommentListRef(castCode).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -79,6 +84,14 @@ public class CommentHelper {
                 eventListener.onCommentListLoaded(itemList);
             }
         });
+    }
+
+    public void deleteCommentItem(String castCode, CommentItem commentItem) {
+        getCommentListRef(castCode).document(commentItem.id).delete();
+    }
+
+    public void updateCommentItem(String castCode, CommentItem commentItem, HashMap<String, Object> valueMap) {
+        getCommentListRef(castCode).document(commentItem.id).update(valueMap);
     }
 
     private CommentItem getCommentItem(Map<String, Object> data) {
@@ -109,6 +122,10 @@ public class CommentHelper {
 
             if (data.containsKey(FIELDNAME_COMMENTS)) {
                 item.comments = (ArrayList<String>) data.get(FIELDNAME_COMMENTS);
+            }
+
+            if (data.containsKey(FIELDNAME_REPORTS)) {
+                item.reports = (ArrayList<String>) data.get(FIELDNAME_REPORTS);
             }
         } catch (Exception e) {
             DebugLogger.exception(e);

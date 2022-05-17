@@ -4,97 +4,109 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_box_top_white_bg"
     android:orientation="vertical"
-    android:paddingBottom="26dp"
-    android:background="@drawable/rounded_corner_box_top_white_bg">
+    android:paddingBottom="16dp">
 
     <FrameLayout
         android:id="@+id/closeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
         android:layout_gravity="right"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:paddingRight="20dp"
-        android:paddingBottom="37dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="37dp">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_close"/>
+            android:src="@drawable/icon_close" />
     </FrameLayout>
+
     <LinearLayout
         android:id="@+id/fixLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/item_select_bg"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_fix_bg"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/ico_fix_bg" />
+
         <TextView
+            android:id="@+id/fixTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:text="@string/fix"
-            android:textSize="16sp"
-            android:textColor="#828382" />
+            android:textColor="@color/filter_text_color"
+            android:textSize="16sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/deleteLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/item_select_bg"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_delete_bg"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/ico_delete_bg" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:text="@string/delete"
-            android:textSize="16sp"
-            android:textColor="#828382" />
+            android:textColor="@color/filter_text_color"
+            android:textSize="16sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/reportLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/item_select_bg"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:duplicateParentState="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ico_report_bg"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/ico_report_bg" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:text="@string/report"
-            android:textSize="16sp"
-            android:textColor="#828382" />
+            android:textColor="@color/filter_text_color"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -15,6 +15,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
@@ -118,6 +119,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
         viewHolder.titleTextView.setText(contestRegistItem.sortSmall);
         viewHolder.contestInfoTextView.setText(contestRegistItem.castTitle);
+        ImageLoader.loadImage(viewHolder.eventImageView, contestRegistItem.product);
         viewHolder.registTermTextView.setText(String.format(mMainActivity.getString(R.string.contest_term),
                 Util.changeFormattedDate(contestRegistItem.castStartDate),
                 Util.changeFormattedDate(contestRegistItem.castEndDate)));
@@ -156,6 +158,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
         TextView titleTextView;
         TextView contestInfoTextView;
+        ImageView eventImageView;
         TextView registTermTextView;
         TextView totalPriceTextView;
         TextView finalDateTextView;
@@ -177,6 +180,7 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
             titleTextView = itemView.findViewById(R.id.titleTextView);
             contestInfoTextView = itemView.findViewById(R.id.contestInfoTextView);
+            eventImageView = itemView.findViewById(R.id.eventImageView);
             registTermTextView = itemView.findViewById(R.id.registTermTextView);
             totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
             finalDateTextView = itemView.findViewById(R.id.finalDateTextView);

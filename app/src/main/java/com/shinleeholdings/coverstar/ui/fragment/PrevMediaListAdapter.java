@@ -228,7 +228,11 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
             int position = getBindingAdapterPosition();
             ContestDetailFragment contestDetailFragment = new ContestDetailFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.EXTRA.CONTEST_DATA, mContestMediaList.get(position));
+            int headerCount = 1;
+            if (mEpilogueList.size() > 0) {
+                headerCount = 2;
+            }
+            bundle.putParcelable(AppConstants.EXTRA.CONTEST_DATA, mContestMediaList.get(position - headerCount));
             contestDetailFragment.setArguments(bundle);
             mMainActivity.onFragmentInteractionCallback(contestDetailFragment);
         }

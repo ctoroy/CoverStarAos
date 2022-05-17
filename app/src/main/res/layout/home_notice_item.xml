@@ -134,6 +134,7 @@
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/eventImageView"
             android:layout_width="wrap_content"
             android:layout_height="167dp"
             android:layout_gravity="center_horizontal"/>
