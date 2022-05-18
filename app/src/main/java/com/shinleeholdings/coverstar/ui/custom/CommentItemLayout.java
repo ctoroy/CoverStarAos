@@ -1,9 +1,6 @@
 package com.shinleeholdings.coverstar.ui.custom;
 
-import static com.shinleeholdings.coverstar.util.Util.getDisplayCountString;
-
 import android.content.Context;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
-
-import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
-import com.shinleeholdings.coverstar.data.ContestData;
-import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
@@ -85,8 +77,8 @@ public class CommentItemLayout extends LinearLayout {
 
 		ImageLoader.loadImage(userImageView, item.userImagePath);
 		userNicknameTextView.setText(item.userNickName);
-		commentTimeTextView.setText(Util.changeFormattedDate(item.commentDate, CommentHelper.COMMENT_TIME_FORMAT));
-		commentTextView.setText(item.comment);
+		commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
+		commentTextView.setText(item.message);
 
 		likeCountTextView.setText(item.getLikeCount() + "");
 		unLikeCountTextView.setText(item.getUnLikeCount() + "");
