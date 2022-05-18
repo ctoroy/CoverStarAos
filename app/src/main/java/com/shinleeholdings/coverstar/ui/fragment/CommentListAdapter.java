@@ -16,6 +16,7 @@ import com.shinleeholdings.coverstar.ui.custom.CommentItemLayout;
 import com.shinleeholdings.coverstar.ui.dialog.CommentEditFilterDialog;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.NetworkHelper;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,17 +73,27 @@ public class CommentListAdapter extends RecyclerView.Adapter {
                             }
 
                             if (viewId == R.id.deleteLayout) {
-                                CommentHelper.getSingleInstance().deleteCommentItem(mCastCode, item);
-                                itemList.remove(position);
-                                notifyItemRemoved(position);
-                                Toast.makeText(MyApplication.getContext(), R.string.delete_done, Toast.LENGTH_SHORT).show();
+                                ProgressDialogHelper.show(mMainActivity);
+                                CommentHelper.getSingleInstance().deleteCommentItem(mCastCode, item, new CommentHelper.IFireStoreActionCompleteListener() {
+                                    @Override
+                                    public void onCompleted() {
+                                        ProgressDialogHelper.dismiss();
+                                        Toast.makeText(MyApplication.getContext(), R.string.delete_done, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             } else if (viewId ==R.id.reportLayout) {
                                 if (item.addReport()) {
                                     HashMap<String, Object> valueMap = new HashMap<>();
                                     valueMap.put(CommentHelper.FIELDNAME_REPORTS, item.reports);
-                                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap);
+                                    ProgressDialogHelper.show(mMainActivity);
+                                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, new CommentHelper.IFireStoreActionCompleteListener() {
+                                        @Override
+                                        public void onCompleted() {
+                                            ProgressDialogHelper.dismiss();
+                                            Toast.makeText(MyApplication.getContext(), R.string.report_done, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
-                                Toast.makeText(MyApplication.getContext(), R.string.report_done, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -109,8 +120,8 @@ public class CommentListAdapter extends RecyclerView.Adapter {
                         valueMap.put(CommentHelper.FIELDNAME_LIKES, item.likes);
                     }
 
-                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap);
-                    notifyItemChanged(position);
+                    ProgressDialogHelper.show(mMainActivity);
+                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, () -> ProgressDialogHelper.dismiss());
                 } else if (viewId == R.id.unLikeLayout){
                     if (NetworkHelper.isNetworkConnected() == false) {
                         Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
@@ -133,8 +144,8 @@ public class CommentListAdapter extends RecyclerView.Adapter {
                         valueMap.put(CommentHelper.FIELDNAME_UNLIKES, item.unLikes);
                     }
 
-                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap);
-                    notifyItemChanged(position);
+                    ProgressDialogHelper.show(mMainActivity);
+                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, () -> ProgressDialogHelper.dismiss());
                 } else if (viewId == R.id.commentLayout || viewId == R.id.commentInfoLayout){
                     commentClickListener.onCommentClicked(item);
                 }

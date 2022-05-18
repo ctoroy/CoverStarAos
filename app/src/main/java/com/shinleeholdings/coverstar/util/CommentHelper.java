@@ -58,6 +58,10 @@ public class CommentHelper {
         return instance;
     }
 
+    public interface IFireStoreActionCompleteListener {
+        void onCompleted();
+    }
+
     public interface ICommentEventListener {
         void onCommentListLoaded(ArrayList<CommentItem> commentList);
     }
@@ -106,7 +110,7 @@ public class CommentHelper {
         });
     }
 
-    public void writeCommentItem(ContestData contest, String comment) {
+    public void writeCommentItem(ContestData contest, String comment, IFireStoreActionCompleteListener listener) {
         DebugLogger.i("commentTest writeCommentItem : " + comment);
         HashMap<String, Object> valueMap = getDefaultHashMap();
         valueMap.put(CommentHelper.FIELDNAME_CONTESTUSERID, contest.castId);
@@ -117,16 +121,29 @@ public class CommentHelper {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 DebugLogger.i("commentTest writeCommentItem writeComplete success : " + task.isSuccessful());
+                listener.onCompleted();
             }
         });
     }
 
-    public void deleteCommentItem(String castCode, CommentItem commentItem) {
-        getCommentListRef(castCode).document(commentItem.id).delete();
+    public void deleteCommentItem(String castCode, CommentItem commentItem, IFireStoreActionCompleteListener listener) {
+        getCommentListRef(castCode).document(commentItem.id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                DebugLogger.i("commentTest deleteCommentItem complete success : " + task.isSuccessful());
+                listener.onCompleted();
+            }
+        });
     }
 
-    public void updateCommentItem(String castCode, CommentItem commentItem, HashMap<String, Object> valueMap) {
-        getCommentListRef(castCode).document(commentItem.id).update(valueMap);
+    public void updateCommentItem(String castCode, CommentItem commentItem, HashMap<String, Object> valueMap, IFireStoreActionCompleteListener listener) {
+        getCommentListRef(castCode).document(commentItem.id).update(valueMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                DebugLogger.i("commentTest updateCommentItem complete success : " + task.isSuccessful());
+                listener.onCompleted();
+            }
+        });
     }
 
     public CommentItem getCommentItem(Map<String, Object> data) {
@@ -168,12 +185,7 @@ public class CommentHelper {
         });
     }
 
-    public void writeReplyItem(ContestData contest, String commentId, String reply) {
-        if (NetworkHelper.isNetworkConnected() == false) {
-            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    public void writeReplyItem(ContestData contest, String commentId, String reply, IFireStoreActionCompleteListener listener) {
         DebugLogger.i("commentTest writeReplyItem : " + reply);
         HashMap<String, Object> valueMap = getDefaultHashMap();
         valueMap.put(CommentHelper.FIELDNAME_COMMENTID, commentId);
@@ -181,22 +193,34 @@ public class CommentHelper {
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE, reply);
 
-        getReplyListRef(contest.castCode, commentId).add(valueMap);
+        getReplyListRef(contest.castCode, commentId).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                DebugLogger.i("commentTest writeReplyItem success : " + task.isSuccessful());
+                listener.onCompleted();
+            }
+        });
         getCommentListRef(contest.castCode).document(commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(1));
     }
 
-    public void deleteReplyItem(String castCode, ReplyItem replyItem) {
-        if (NetworkHelper.isNetworkConnected() == false) {
-            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    public void deleteReplyItem(String castCode, ReplyItem replyItem, IFireStoreActionCompleteListener listener) {
         getReplyListRef(castCode, replyItem.commentId).document(replyItem.id).delete();
-        getCommentListRef(castCode).document(replyItem.commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(-1));
+        getCommentListRef(castCode).document(replyItem.commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(-1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                DebugLogger.i("commentTest deleteReplyItem success : " + task.isSuccessful());
+                listener.onCompleted();
+            }
+        });
     }
 
-    public void updateReplyItem(String castCode, ReplyItem replyItem, HashMap<String, Object> valueMap) {
-        getReplyListRef(castCode, replyItem.commentId).document(replyItem.id).update(valueMap);
+    public void updateReplyItem(String castCode, ReplyItem replyItem, HashMap<String, Object> valueMap, IFireStoreActionCompleteListener listener) {
+        getReplyListRef(castCode, replyItem.commentId).document(replyItem.id).update(valueMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onCompleted();
+            }
+        });
     }
 
     public ReplyItem getReplyItem(String id, Map<String, Object> data) {

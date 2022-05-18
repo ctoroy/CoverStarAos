@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
+import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
@@ -28,6 +30,7 @@ import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -410,6 +413,36 @@ public class ContestDetailFragment extends BaseFragment {
                     }
                 });
                 // TODO 코멘트 레이아웃, 답글리스트 UI 설정
+            }
+        });
+    }
+
+    private void writeComment(String comment) {
+        if (NetworkHelper.isNetworkConnected() == false) {
+            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ProgressDialogHelper.show(getActivity());
+        CommentHelper.getSingleInstance().writeCommentItem(mContestItem, comment, new CommentHelper.IFireStoreActionCompleteListener() {
+            @Override
+            public void onCompleted() {
+                ProgressDialogHelper.dismiss();
+            }
+        });
+    }
+
+    private void writeReply(CommentItem targetComment, String reply) {
+        if (NetworkHelper.isNetworkConnected() == false) {
+            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ProgressDialogHelper.show(getActivity());
+        CommentHelper.getSingleInstance().writeReplyItem(mContestItem, targetComment.id, reply, new CommentHelper.IFireStoreActionCompleteListener() {
+            @Override
+            public void onCompleted() {
+                ProgressDialogHelper.dismiss();
             }
         });
     }
