@@ -74,7 +74,6 @@ public class CommentItemLayout extends LinearLayout {
 		unLikeLayout.setOnClickListener(clickListener);
 		commentLayout.setOnClickListener(clickListener);
 
-
 		ImageLoader.loadImage(userImageView, item.userImagePath);
 		userNicknameTextView.setText(item.userNickName);
 		commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
@@ -82,7 +81,7 @@ public class CommentItemLayout extends LinearLayout {
 
 		likeCountTextView.setText(item.getLikeCount() + "");
 		unLikeCountTextView.setText(item.getUnLikeCount() + "");
-		commentCountTextView.setText(item.getCommentCount() + "");
+		commentCountTextView.setText(item.commentCount + "");
 
 		likeLayout.setSelected(item.alreadyLike());
 		unLikeLayout.setSelected(item.alreadyUnLike());

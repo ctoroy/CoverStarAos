@@ -1,5 +1,7 @@
 package com.shinleeholdings.coverstar.util;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -7,8 +9,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
+import com.shinleeholdings.coverstar.MyApplication;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.data.ReplyItem;
@@ -32,7 +38,7 @@ public class CommentHelper {
     public static final String FIELDNAME_USERNICKNAME = "userNickName";
     public static final String FIELDNAME_LIKES = "likes";
     public static final String FIELDNAME_UNLIKES = "unLikes";
-    public static final String FIELDNAME_COMMENTS = "comments";
+    public static final String FIELDNAME_COMMENT_COUNT = "commentCount";
     public static final String FIELDNAME_REPORTS = "reports";
 
     public static final String FIELDNAME_MESSAGE_DATE = "messageDate";
@@ -55,7 +61,10 @@ public class CommentHelper {
 
     public interface ICommentEventListener {
         void onCommentListLoaded(ArrayList<CommentItem> commentList);
-        void onReplyListLoaded(ArrayList<ReplyItem> replyList);
+    }
+
+    public interface IReplyLoadListener {
+        void onReplyListLoaded(CommentItem comment, ArrayList<ReplyItem> replyList);
     }
 
     public HashMap<String, Object> getDefaultHashMap() {
@@ -104,7 +113,7 @@ public class CommentHelper {
         valueMap.put(CommentHelper.FIELDNAME_CONTESTUSERID, contest.castId);
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE, comment);
-        valueMap.put(CommentHelper.FIELDNAME_COMMENTS, new ArrayList<String>());
+        valueMap.put(CommentHelper.FIELDNAME_COMMENT_COUNT, 0);
         getCommentListRef(contest.castCode).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -125,10 +134,7 @@ public class CommentHelper {
         CommentItem item = new CommentItem();
         try {
             item.setDefaultInfo(data);
-
-            if (data.containsKey(FIELDNAME_COMMENTS)) {
-                item.comments = (ArrayList<String>) data.get(FIELDNAME_COMMENTS);
-            }
+            item.commentCount = (int) data.get(FIELDNAME_COMMENT_COUNT);
 
         } catch (Exception e) {
             DebugLogger.exception(e);
@@ -139,31 +145,36 @@ public class CommentHelper {
 
     // TODO 답글 작업 시작
 
-    private CollectionReference getReplyListRef(String castCode, String commentId) {
+    public CollectionReference getReplyListRef(String castCode, String commentId) {
         return getCommentListRef(castCode)
                 .document(commentId)
                 .collection(RETRY_COLLECTION_NAME);
     }
 
-    public void getReplyList(String castCode, String commentId, ICommentEventListener eventListener) {
-        getReplyListRef(castCode, commentId)
+    public void getReplyList(String castCode, CommentItem comment, IReplyLoadListener eventListener) {
+        getReplyListRef(castCode, comment.id)
                 .orderBy(FIELDNAME_MESSAGE_DATE, Query.Direction.DESCENDING)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                DebugLogger.i("commentTest getReplyList onComplete castCode : " + castCode + " , commentId : " + commentId);
+                DebugLogger.i("commentTest getReplyList onComplete castCode : " + castCode + " , commentId : " + comment.id);
                 ArrayList<ReplyItem> itemList = new ArrayList<>();
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                         itemList.add(getReplyItem(doc));
                     }
                 }
-                eventListener.onReplyListLoaded(itemList);
+                eventListener.onReplyListLoaded(comment, itemList);
             }
         });
     }
 
     public void writeReplyItem(ContestData contest, String commentId, String reply) {
+        if (NetworkHelper.isNetworkConnected() == false) {
+            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         DebugLogger.i("commentTest writeReplyItem : " + reply);
         HashMap<String, Object> valueMap = getDefaultHashMap();
         valueMap.put(CommentHelper.FIELDNAME_COMMENTID, commentId);
@@ -171,16 +182,18 @@ public class CommentHelper {
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE, reply);
 
-        getReplyListRef(contest.castCode, commentId).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                DebugLogger.i("commentTest writeReplyItem writeComplete success : " + task.isSuccessful());
-            }
-        });
+        getReplyListRef(contest.castCode, commentId).add(valueMap);
+        getCommentListRef(contest.castCode).document(commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(1));
     }
 
     public void deleteReplyItem(String castCode, ReplyItem replyItem) {
+        if (NetworkHelper.isNetworkConnected() == false) {
+            Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         getReplyListRef(castCode, replyItem.commentId).document(replyItem.id).delete();
+        getCommentListRef(castCode).document(replyItem.commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(-1));
     }
 
     public void updateCommentItem(String castCode, ReplyItem replyItem, HashMap<String, Object> valueMap) {

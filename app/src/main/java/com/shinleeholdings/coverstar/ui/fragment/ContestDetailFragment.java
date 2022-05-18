@@ -53,6 +53,7 @@ public class ContestDetailFragment extends BaseFragment {
     private String userImagePath;
 
     private ListenerRegistration commentChangeEventListener;
+    private ListenerRegistration replyChangeEventListener;
 
     @Nullable
     @Override
@@ -337,11 +338,6 @@ public class ContestDetailFragment extends BaseFragment {
                 mCommentListAdapter.setData(commentList);
                 updateCommentCountText();
             }
-
-            @Override
-            public void onReplyListLoaded(ArrayList<ReplyItem> replyList) {
-                // TODO
-            }
         });
     }
 
@@ -366,6 +362,9 @@ public class ContestDetailFragment extends BaseFragment {
 
         binding.replyListTitleLayout.setVisibility(View.INVISIBLE);
         binding.replyListRecyclerView.setVisibility(View.GONE);
+        if (replyChangeEventListener != null) {
+            replyChangeEventListener.remove();
+        }
     }
 
     private void showReplyList(CommentItem item) {
@@ -374,7 +373,49 @@ public class ContestDetailFragment extends BaseFragment {
 
         binding.replyListTitleLayout.setVisibility(View.VISIBLE);
         binding.replyListRecyclerView.setVisibility(View.VISIBLE);
-        // TODO
+        mReplyListAdapter.clear();
+
+        ProgressDialogHelper.show(getActivity());
+        CommentHelper.getSingleInstance().getReplyList(mContestItem.castCode, item, new CommentHelper.IReplyLoadListener() {
+            @Override
+            public void onReplyListLoaded(CommentItem comment, ArrayList<ReplyItem> replyList) {
+                ProgressDialogHelper.dismiss();
+
+                if (isFragmentRemoved() || binding.slidingDrawer.isOpened() == false || binding.replyListTitleLayout.getVisibility() != View.VISIBLE) {
+                    return;
+                }
+
+                replyChangeEventListener = CommentHelper.getSingleInstance().getReplyListRef(mContestItem.castCode, comment.id).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        try {
+                            if (queryDocumentSnapshots != null) {
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    String id = dc.getDocument().getId();
+                                    Map<String, Object> data = dc.getDocument().getData();
+                                    DebugLogger.i("commentTest replyChangeEvent type : " + dc.getType() + ", data : " + data);
+                                    if (dc.getType() == DocumentChange.Type.ADDED) {
+//                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
+//                                        item.id = id;
+//                                        mCommentListAdapter.addComment(item);
+//                                        updateCommentCountText();
+                                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+//                                        mCommentListAdapter.removeComment(id);
+//                                        updateCommentCountText();
+                                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+//                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
+//                                        item.id = id;
+//                                        mCommentListAdapter.changeComment(item);
+                                    }
+                                }
+                            }
+                        } catch (Exception exception) {
+                        }
+                    }
+                });
+                // TODO 코멘트 레이아웃, 답글리스트 UI 설정
+            }
+        });
     }
 
     private int getSelectedStarCount() {

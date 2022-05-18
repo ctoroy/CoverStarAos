@@ -16,15 +16,7 @@ public class CommentItem extends CommentBase {
 //    싫어요 수 : 100
 //    답글 수 : 50
 
-    public ArrayList<String> comments;
-
-    public int getCommentCount() {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-
-        return comments.size();
-    }
+    public int commentCount;
 
     public CommentItem() {
         // Default constructor required for calls to DataSnapshot.getValue(ChatItem.class)
