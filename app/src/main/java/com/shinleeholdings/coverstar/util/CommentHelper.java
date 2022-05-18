@@ -12,7 +12,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
@@ -143,8 +142,6 @@ public class CommentHelper {
         return item;
     }
 
-    // TODO 답글 작업 시작
-
     public CollectionReference getReplyListRef(String castCode, String commentId) {
         return getCommentListRef(castCode)
                 .document(commentId)
@@ -161,7 +158,9 @@ public class CommentHelper {
                 ArrayList<ReplyItem> itemList = new ArrayList<>();
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        itemList.add(getReplyItem(doc));
+                        Map<String, Object> data = doc.getData();
+                        String id = doc.getId();
+                        itemList.add(getReplyItem(id, data));
                     }
                 }
                 eventListener.onReplyListLoaded(comment, itemList);
@@ -196,15 +195,13 @@ public class CommentHelper {
         getCommentListRef(castCode).document(replyItem.commentId).update(FIELDNAME_COMMENT_COUNT, FieldValue.increment(-1));
     }
 
-    public void updateCommentItem(String castCode, ReplyItem replyItem, HashMap<String, Object> valueMap) {
+    public void updateReplyItem(String castCode, ReplyItem replyItem, HashMap<String, Object> valueMap) {
         getReplyListRef(castCode, replyItem.commentId).document(replyItem.id).update(valueMap);
     }
 
-    public ReplyItem getReplyItem(DocumentSnapshot doc) {
+    public ReplyItem getReplyItem(String id, Map<String, Object> data) {
         ReplyItem item = new ReplyItem();
         try {
-            Map<String, Object> data = doc.getData();
-            item.id = doc.getId();
             item.commentId = (String) data.get(FIELDNAME_COMMENTID);
             item.setDefaultInfo(data);
         } catch (Exception e) {

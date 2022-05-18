@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.CommentBase;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.databinding.DialogCommentEditFilterBinding;
 
@@ -24,7 +25,7 @@ public class CommentEditFilterDialog extends BottomSheetDialogView {
         return binding.getRoot();
     }
 
-    public void init(CommentItem item, View.OnClickListener listener) {
+    public void init(CommentBase item, View.OnClickListener listener) {
         binding.closeLayout.setOnClickListener(view -> dismiss());
 
         binding.fixLayout.setVisibility(View.GONE);

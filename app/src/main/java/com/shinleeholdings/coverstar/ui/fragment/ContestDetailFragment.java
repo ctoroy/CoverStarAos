@@ -91,7 +91,6 @@ public class ContestDetailFragment extends BaseFragment {
                     return;
                 }
                 // TODO 정리 필요 : 신고하기
-                CommentHelper.getSingleInstance().writeCommentItem(mContestItem, "test " + Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
             }
         });
 
@@ -163,7 +162,7 @@ public class ContestDetailFragment extends BaseFragment {
         binding.commentListRecyclerView.setAdapter(mCommentListAdapter);
 
         binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity());
+        mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity(), castCode);
         binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
     }
 
@@ -395,21 +394,18 @@ public class ContestDetailFragment extends BaseFragment {
                                     Map<String, Object> data = dc.getDocument().getData();
                                     DebugLogger.i("commentTest replyChangeEvent type : " + dc.getType() + ", data : " + data);
                                     if (dc.getType() == DocumentChange.Type.ADDED) {
-//                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
-//                                        item.id = id;
-//                                        mCommentListAdapter.addComment(item);
-//                                        updateCommentCountText();
+                                        ReplyItem item = CommentHelper.getSingleInstance().getReplyItem(id, data);
+                                        mReplyListAdapter.addReply(item);
                                     } else if (dc.getType() == DocumentChange.Type.REMOVED) {
-//                                        mCommentListAdapter.removeComment(id);
-//                                        updateCommentCountText();
+                                        mReplyListAdapter.removeReply(id);
                                     } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
-//                                        CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
-//                                        item.id = id;
-//                                        mCommentListAdapter.changeComment(item);
+                                        ReplyItem item = CommentHelper.getSingleInstance().getReplyItem(id, data);
+                                        mReplyListAdapter.changeReply(item);
                                     }
                                 }
                             }
                         } catch (Exception exception) {
+                            DebugLogger.exception(exception);
                         }
                     }
                 });
@@ -419,22 +415,11 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private int getSelectedStarCount() {
-        if (binding.voteStar5ImageView.isSelected()) {
-            return 5;
-        }
-        if (binding.voteStar4ImageView.isSelected()) {
-            return 4;
-        }
-        if (binding.voteStar3ImageView.isSelected()) {
-            return 3;
-        }
-        if (binding.voteStar2ImageView.isSelected()) {
-            return 2;
-        }
-        if (binding.voteStar1ImageView.isSelected()) {
-            return 1;
-        }
-
+        if (binding.voteStar5ImageView.isSelected()) {return 5;}
+        if (binding.voteStar4ImageView.isSelected()) {return 4;}
+        if (binding.voteStar3ImageView.isSelected()) {return 3;}
+        if (binding.voteStar2ImageView.isSelected()) {return 2;}
+        if (binding.voteStar1ImageView.isSelected()) {return 1;}
         return 0;
     }
 
