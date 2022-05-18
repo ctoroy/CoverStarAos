@@ -21,5 +21,7 @@ public class AppConstants {
     }
 
     public static final class REQUEST_CODE {
+        public static final int RULE_DETAIL_USE_RULE = 12312;
+        public static final int RULE_DETAIL_PRIVATE_RULE = 12313;
     }
 }

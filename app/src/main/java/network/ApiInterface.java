@@ -7,7 +7,7 @@ import network.model.ContestGroupDataList;
 import network.model.ContestDataList;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
@@ -21,17 +21,33 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
+    @POST("reportContest")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> reportContest(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("addToPlayList")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> addToPlayList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getPlayList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getPlayList(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("getParticipateList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestDataList>> getParticipateList(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("getRoom")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getContestDetail(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("setVote")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> setVote(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> setVote(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("updateUserProfile")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> updateUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> updateUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getList")
     @FormUrlEncoded
@@ -55,11 +71,11 @@ public interface ApiInterface {
 
     @POST("startBroadCast")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> startBroadCast(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> startBroadCast(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("join")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> joinCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> joinCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("login")
     @FormUrlEncoded
@@ -67,9 +83,9 @@ public interface ApiInterface {
 
     @POST("checkDupId")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> checkExistUser(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> checkExistUser(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("checkRecommend")
     @FormUrlEncoded
-    Call<BaseResponse<defaultResult>> checkRecommend(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> checkRecommend(@FieldMap(encoded = true) HashMap<String, String> body);
 }

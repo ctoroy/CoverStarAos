@@ -48,7 +48,7 @@ public class SettingFragment extends BaseFragment {
         binding.noticeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 정리 필요 : 공지사항 처리
+                // TODO 공지사항 웹페이지 이동
             }
         });
 

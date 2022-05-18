@@ -40,7 +40,7 @@ import java.util.Map;
 
 import network.model.BaseResponse;
 import network.model.ContestDataList;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -93,19 +93,10 @@ public class ContestDetailFragment extends BaseFragment {
                     binding.slidingDrawer.animateClose();
                     return;
                 }
-                // TODO 정리 필요 : 신고하기
-            }
-        });
 
-        binding.followTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mContestItem.isFollow()) {
-                } else {
-                }
+                reportContest();
             }
         });
-        binding.followTextView.setVisibility(View.GONE);
 
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +139,32 @@ public class ContestDetailFragment extends BaseFragment {
             }
         });
 
+        binding.addToPlayListLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialogHelper.show(getActivity());
+
+                HashMap<String, String> param = new HashMap<>();
+                param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+                param.put("castCode", mContestItem.castCode);
+
+                // TODO 재생목록에 추가 API 처리
+                RetroClient.getApiInterface().addToPlayList(param).enqueue(new RetroCallback<DefaultResult>() {
+                    @Override
+                    public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                        ProgressDialogHelper.dismiss();
+                        Toast.makeText(getActivity(), R.string.add_to_playlist_complete, Toast.LENGTH_SHORT).show();
+                        ((MainActivity)getActivity()).myPageFragment.needRefreshPlayList = true;
+                    }
+
+                    @Override
+                    public void onFailure(BaseResponse<DefaultResult> response) {
+                        ProgressDialogHelper.dismiss();
+                    }
+                });
+            }
+        });
+
         binding.slidingDrawer.setOnDrawerCloseListener(() -> showCommentList());
         binding.closeReplyImageView.setOnClickListener(view -> showCommentList());
 
@@ -169,6 +186,28 @@ public class ContestDetailFragment extends BaseFragment {
         binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
     }
 
+    private void reportContest() {
+        ProgressDialogHelper.show(getActivity());
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        param.put("castCode", mContestItem.castCode);
+
+        // TODO 신고하기 API 처리
+        RetroClient.getApiInterface().reportContest(param).enqueue(new RetroCallback<DefaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
+                Toast.makeText(getActivity(), R.string.report_do_complete, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(BaseResponse<DefaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
+    }
+
     private void requestStarVote(int selectedStarCount) {
         ProgressDialogHelper.show(getActivity());
 
@@ -176,9 +215,9 @@ public class ContestDetailFragment extends BaseFragment {
         param.put("voteCnt", selectedStarCount + "");
         param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
         param.put("castCode", mContestItem.castCode);
-        RetroClient.getApiInterface().setVote(param).enqueue(new RetroCallback<defaultResult>() {
+        RetroClient.getApiInterface().setVote(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
-            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 updateVote(selectedStarCount);
                 mContestItem.addTotalLikeCount(selectedStarCount);
                 binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
@@ -186,7 +225,7 @@ public class ContestDetailFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(BaseResponse<defaultResult> response) {
+            public void onFailure(BaseResponse<DefaultResult> response) {
                 ProgressDialogHelper.dismiss();
             }
         });

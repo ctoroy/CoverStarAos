@@ -299,6 +299,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:visibility="gone"
                         android:background="@drawable/rounded_corner_box_ff7a9a"
                         android:gravity="center"
                         android:includeFontPadding="false"
@@ -433,11 +434,6 @@
                 android:layout_marginRight="20dp"
                 android:orientation="horizontal">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
                 <LinearLayout
                     android:id="@+id/shareLayout"
                     android:layout_width="wrap_content"
@@ -460,12 +456,16 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
                 <LinearLayout
                     android:id="@+id/addToPlayListLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"

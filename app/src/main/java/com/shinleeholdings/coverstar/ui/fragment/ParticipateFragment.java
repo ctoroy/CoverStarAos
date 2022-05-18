@@ -29,7 +29,7 @@ import network.model.BaseResponse;
 import network.model.ContestGroupDataList;
 import network.model.ContestInfoItem;
 import network.model.LoginUserData;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -174,9 +174,9 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.ILo
                 param.put("sortMid", selectedContestInfoItem.contestAward + "");
 
                 ProgressDialogHelper.show(getActivity());
-                RetroClient.getApiInterface().startBroadCast(param).enqueue(new RetroCallback<defaultResult>() {
+                RetroClient.getApiInterface().startBroadCast(param).enqueue(new RetroCallback<DefaultResult>() {
                     @Override
-                    public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                    public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                         ProgressDialogHelper.dismiss();
                         Toast.makeText(getActivity(), String.format(getString(R.string.regist_complete), selectedContestInfoItem.contestTitle), Toast.LENGTH_LONG).show();
                         LoginHelper.getSingleInstance().updateMyCoin(-selectedContestInfoItem.contestPayAmt);
@@ -184,7 +184,7 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.ILo
                     }
 
                     @Override
-                    public void onFailure(BaseResponse<defaultResult> response) {
+                    public void onFailure(BaseResponse<DefaultResult> response) {
                         ProgressDialogHelper.dismiss();
                     }
                 });

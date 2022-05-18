@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 import network.model.BaseResponse;
 import network.model.LoginUserData;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -132,9 +132,9 @@ public class PhoneCertActivity extends BaseActivity {
         ProgressDialogHelper.show(this);
         HashMap<String, String> param = new HashMap<>();
         param.put("userId", userId);
-        RetroClient.getApiInterface().checkExistUser(param).enqueue(new RetroCallback<defaultResult>() {
+        RetroClient.getApiInterface().checkExistUser(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
-            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 ProgressDialogHelper.dismiss();
                 Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
 
@@ -147,7 +147,7 @@ public class PhoneCertActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(BaseResponse<defaultResult> response) {
+            public void onFailure(BaseResponse<DefaultResult> response) {
                 ProgressDialogHelper.dismiss();
 
                 // 유효성 체크 실패시 가입모드로 전환(가입된 유저 정보가 없습니다. 회원가입 먼저 해주세요.

@@ -70,6 +70,7 @@
         android:background="@color/white"
         android:layout_marginTop="4dp"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:paddingLeft="15dp"
         android:paddingRight="6dp"
         android:orientation="horizontal">

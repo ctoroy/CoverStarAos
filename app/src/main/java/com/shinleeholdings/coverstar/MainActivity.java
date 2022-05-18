@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
     private final HomeFragment homeFragment = new HomeFragment();
     private final PrevMediaFragment prevMediaFragment = new PrevMediaFragment();
     private final ParticipateFragment participateFragment = new ParticipateFragment();
-    private final MyPageFragment myPageFragment = new MyPageFragment();
+    public final MyPageFragment myPageFragment = new MyPageFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

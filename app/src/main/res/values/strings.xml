@@ -18,6 +18,7 @@
     <string name="login">로그인</string>
     <string name="join">가입하기</string>
     <string name="rule_agree">약관 동의</string>
+    <string name="rule_agree_detail">약관 상세보기</string>
     <string name="use_rule">이용 약관</string>
     <string name="use_rule_agree_need">이용 약관에 동의해주세요.</string>
     <string name="agree_all_rule">모든 약관에 동의합니다.</string>
@@ -80,6 +81,7 @@
     <string name="backpressed_finish">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="next">다음</string>
     <string name="send_phone_auth">인증번호 전송</string>
+    <string name="agree_done">동의하기</string>
 
     <string name="congratulation">축하합니다.</string>
     <string name="all_setting_completed">모든 설정이 완료되었습니다.</string>
@@ -111,6 +113,7 @@
     <string name="delete">삭제</string>
     <string name="report">신고</string>
     <string name="report_do">신고하기</string>
+    <string name="report_do_complete">신고 되었습니다.</string>
 
     <string name="regist">신청하기</string>
     <string name="song_title">노래 제목(타이틀)</string>
@@ -160,6 +163,7 @@
     <string name="vote_help2">※ 투표수는 심사 결과에 반영됩니다.</string>
     <string name="share">공유하기</string>
     <string name="add_to_playlist">재생목록에 추가</string>
+    <string name="add_to_playlist_complete">재생목록에 추가 되었습니다.</string>
     <string name="comment">댓글</string>
     <string name="reply">답글</string>
     <string name="follow">팔로우</string>

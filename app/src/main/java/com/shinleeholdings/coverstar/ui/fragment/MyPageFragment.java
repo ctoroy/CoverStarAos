@@ -11,11 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
+
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.ContestDataList;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
+import retrofit2.Call;
 
 public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUserInfoChangeEventListener {
 
@@ -24,6 +33,7 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
     private ContestListAdapter playListAdapter;
     private ContestListAdapter participateListAdapter;
 
+    public boolean needRefreshPlayList = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +48,19 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         binding = null;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden == false) {
+            if (binding.playListTextView.isSelected()) {
+                if (needRefreshPlayList) {
+                    needRefreshPlayList = false;
+                    requestData();
+                }
+            }
+        }
+    }
+
     private void initView() {
 
         binding.myPageSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -45,13 +68,6 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
 
         ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
         binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
-
-        binding.messageImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 메세지 목록
-            }
-        });
 
         binding.settingImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +114,8 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
                 binding.participateLine.setVisibility(View.INVISIBLE);
                 binding.participateRecyclerView.setVisibility(View.GONE);
 
-                if (playListAdapter.getItemCount() <= 0) {
+                if (playListAdapter.getItemCount() <= 0 || needRefreshPlayList) {
+                    needRefreshPlayList = false;
                     requestData();
                 }
             }
@@ -143,24 +160,36 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         binding.myPageSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
 
-        // TODO 데이터 요청
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
 
-//        ArrayList<ContestData> itemList = new ArrayList<>();
-//        for(int i = 0; i < 10; i++) {
-//            ContestData item = new ContestData();
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//            itemList.add(item);
-//        }
-//
-//        if (binding.playListTextView.isSelected()) {
-//            playListAdapter.setData(itemList);
-//        } else {
-//            participateListAdapter.setData(itemList);
-//        }
+        Call<BaseResponse<ContestDataList>> call = null;
+        if (binding.playListTextView.isSelected()) {
+            // TODO 재생목록 API 처리
+            call = RetroClient.getApiInterface().getPlayList(param);
+        } else {
+            // TODO 참가영상 목록 API 처리
+            call = RetroClient.getApiInterface().getParticipateList(param);
+        }
 
-        ProgressDialogHelper.dismiss();
+        call.enqueue(new RetroCallback<ContestDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<ContestDataList> receivedData) {
+                ProgressDialogHelper.dismiss();
+
+                ContestDataList result = receivedData.data;
+                if (binding.playListTextView.isSelected()) {
+                    playListAdapter.setData(result);
+                } else {
+                    participateListAdapter.setData(result);
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ContestDataList> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
     }
 
     @Override

@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
 import com.shinleeholdings.coverstar.ui.NonLeakingWebViewActivity;
+import com.shinleeholdings.coverstar.ui.RuleDetailActivity;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
@@ -44,17 +47,20 @@ public class RulesAgreeActivity extends BaseActivity {
         });
 
         binding.userRuleLayout.setOnClickListener(view -> {
-            // TODO 정리 필요 : 이용자 약관 상세 보여주기
-            Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
-            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
-            startActivity(intent);
+
+            // TODO 이용자 약관 상세 URL 설정
+            String ruleUrl = "https://www.naver.com";
+            Intent intent = new Intent(this, RuleDetailActivity.class);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE.RULE_DETAIL_USE_RULE);
         });
 
         binding.privateRuleLayout.setOnClickListener(view -> {
-            // TODO 정리 필요 : 개인정보 처리방침 약관 상세 보여주기
-            Intent intent = new Intent(this, NonLeakingWebViewActivity.class);
-            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, "https://www.naver.com");
-            startActivity(intent);
+            // TODO 개인정보 처리방침 약관 상세 URL 설정
+            String ruleUrl = "https://www.naver.com";
+            Intent intent = new Intent(this, RuleDetailActivity.class);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE.RULE_DETAIL_PRIVATE_RULE);
         });
 
         binding.userRuleCheckBoxLayout.setOnClickListener(view -> {
@@ -82,5 +88,19 @@ public class RulesAgreeActivity extends BaseActivity {
         Intent phoneCertIntent = new Intent(this, PhoneCertActivity.class);
         phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_JOIN);
         startActivity(phoneCertIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == AppConstants.REQUEST_CODE.RULE_DETAIL_USE_RULE) {
+                binding.userRuleCheckBoxLayout.setSelected(true);
+                updateAllRuleAgree();
+            } else if (requestCode == AppConstants.REQUEST_CODE.RULE_DETAIL_PRIVATE_RULE) {
+                binding.privateRuleCheckBoxLayout.setSelected(true);
+                updateAllRuleAgree();
+            }
+        }
     }
 }

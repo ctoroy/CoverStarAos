@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import network.model.BaseResponse;
 import network.model.LoginUserData;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -199,9 +199,9 @@ public class UserPasswordActivity extends BaseActivity {
         param.put("recommendKey", loginUserData.recommend);
 
         ProgressDialogHelper.show(this);
-        RetroClient.getApiInterface().joinCoverStar(param).enqueue(new RetroCallback<defaultResult>() {
+        RetroClient.getApiInterface().joinCoverStar(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
-            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 ProgressDialogHelper.dismiss();
                 Intent intent = new Intent(UserPasswordActivity.this, SettingCompleteActivity.class);
                 intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
@@ -209,7 +209,7 @@ public class UserPasswordActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(BaseResponse<defaultResult> response) {
+            public void onFailure(BaseResponse<DefaultResult> response) {
                 ProgressDialogHelper.dismiss();
             }
         });

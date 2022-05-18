@@ -38,15 +38,14 @@ public class MessagingService extends FirebaseMessagingService {
     private void showNotification(RemoteMessage remoteMessage) {
         Context context = MyApplication.getContext();
         String pushLink = "";
-        String message = "";
+        String message = getString(R.string.ok);
 
-        // TODO 정리 필요 : 푸시 스펙 및 알람 데이터 작업
 //        AlarmHelper.getSingleInstance().addAlarmItem();
         NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushLink).
                 setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("test")
-                .setContentText("message")
-                .setStyle(new NotificationCompat.BigTextStyle().bigText("message"));
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID, notiBuilder.build());
     }
 

@@ -31,7 +31,7 @@ import gun0912.tedimagepicker.builder.type.MediaType;
 import network.model.BaseResponse;
 import network.model.LoginUserData;
 import network.model.PhotoUploadResult;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -100,16 +100,16 @@ public class ProfileSettingActivity extends BaseActivity {
             param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
             param.put("userProfileImage", imagePath);
             param.put("nickName", nickName);
-            RetroClient.getApiInterface().updateUserProfile(param).enqueue(new RetroCallback<defaultResult>() {
+            RetroClient.getApiInterface().updateUserProfile(param).enqueue(new RetroCallback<DefaultResult>() {
                 @Override
-                public void onSuccess(BaseResponse<defaultResult> receivedData) {
+                public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                     ProgressDialogHelper.dismiss();
                     LoginHelper.getSingleInstance().updateUserInfo(imagePath, nickName);
                     finish();
                 }
 
                 @Override
-                public void onFailure(BaseResponse<defaultResult> response) {
+                public void onFailure(BaseResponse<DefaultResult> response) {
                     ProgressDialogHelper.dismiss();
                 }
             });

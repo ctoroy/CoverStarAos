@@ -26,11 +26,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:src="@drawable/alarm_icon"/>
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/searchImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/alarmImageView"
                 android:src="@drawable/search_icon"/>
@@ -69,6 +71,6 @@
             android:id="@+id/homeViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

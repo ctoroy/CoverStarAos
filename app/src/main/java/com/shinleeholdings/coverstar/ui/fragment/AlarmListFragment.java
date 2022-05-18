@@ -7,12 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentAlarmlistBinding;
-import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class AlarmListFragment extends BaseFragment {
@@ -50,7 +47,6 @@ public class AlarmListFragment extends BaseFragment {
     private void requestData() {
         binding.alarmListSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
-        // TODO 정리 필요 : 알람 리스트 디비에서 불러오기
 //        mAdapter.setData();
         ProgressDialogHelper.dismiss();
     }

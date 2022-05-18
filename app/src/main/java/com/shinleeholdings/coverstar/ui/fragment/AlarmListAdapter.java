@@ -44,7 +44,6 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
 
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
 
-        // TODO 정리 필요 : 알람 데이터 세팅
         viewHolder.alarmTypeTextView.setText("Alarm");
         viewHolder.alarmTitleTextView.setText("알림타이틀");
         viewHolder.arrowImageView.setSelected(item.isSelected);

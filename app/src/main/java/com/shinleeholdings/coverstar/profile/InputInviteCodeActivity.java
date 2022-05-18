@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 import network.model.BaseResponse;
 import network.model.LoginUserData;
-import network.model.defaultResult;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -55,15 +55,15 @@ public class InputInviteCodeActivity extends BaseActivity {
         ProgressDialogHelper.show(this);
         HashMap<String, String> param = new HashMap<>();
         param.put("recommend", inviteCode);
-        RetroClient.getApiInterface().checkRecommend(param).enqueue(new RetroCallback<defaultResult>() {
+        RetroClient.getApiInterface().checkRecommend(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
-            public void onSuccess(BaseResponse<defaultResult> receivedData) {
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 ProgressDialogHelper.dismiss();
                 startPasswordActivity(inviteCode);
             }
 
             @Override
-            public void onFailure(BaseResponse<defaultResult> response) {
+            public void onFailure(BaseResponse<DefaultResult> response) {
                 ProgressDialogHelper.dismiss();
             }
         });
