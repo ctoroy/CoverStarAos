@@ -103,6 +103,8 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             CommentItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 hasItem = true;
+                itemList.set(i, newItem);
+                notifyItemChanged(i + headerCount);
                 break;
             }
         }

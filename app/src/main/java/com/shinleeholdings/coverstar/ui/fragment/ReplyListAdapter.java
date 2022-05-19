@@ -121,6 +121,11 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void updateCommentItem(CommentItem item) {
+        mCommentItem = item;
+        notifyItemChanged(0);
+    }
+
     public void setData(CommentItem item, ArrayList<ReplyItem> dataList) {
         itemList.clear();
         mCommentItem = item;
@@ -139,13 +144,15 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 hasItem = true;
+                itemList.set(i, newItem);
+                notifyItemChanged(i + headerCount);
                 break;
             }
         }
 
         if (hasItem == false) {
             itemList.add(0, newItem);
-            notifyItemInserted(0);
+            notifyItemInserted(0 + headerCount);
         }
     }
 
@@ -154,7 +161,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 itemList.set(i, newItem);
-                notifyItemChanged(i);
+                notifyItemChanged(i + headerCount);
                 break;
             }
         }
@@ -165,7 +172,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(id)) {
                 itemList.remove(i);
-                notifyItemRemoved(i);
+                notifyItemRemoved(i + headerCount);
                 break;
             }
         }

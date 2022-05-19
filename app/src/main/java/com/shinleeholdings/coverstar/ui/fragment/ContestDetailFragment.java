@@ -394,7 +394,8 @@ public class ContestDetailFragment extends BaseFragment {
                                         mCommentListAdapter.changeComment(item);
                                         if (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
                                             if (replyTargetCommentItem.id.equals(id)) {
-                                                mReplyListAdapter.notifyDataSetChanged();
+                                                replyTargetCommentItem = item;
+                                                mReplyListAdapter.updateCommentItem(item);
                                             }
                                         }
                                     }

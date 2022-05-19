@@ -1,7 +1,5 @@
 package com.shinleeholdings.coverstar.util;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -12,8 +10,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.shinleeholdings.coverstar.MyApplication;
-import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.data.ReplyItem;
@@ -29,7 +25,7 @@ public class CommentHelper {
 
     public static final String FIRESTORE_TB_COMMENT = "COMMENT";
     public static final String LIST_COLLECTION_NAME = "LIST";
-    public static final String RETRY_COLLECTION_NAME = "RETRY";
+    public static final String REPLY_COLLECTION_NAME = "REPLY";
 
     public static final String FIELDNAME_CONTESTUSERID = "contestUserId";
     public static final String FIELDNAME_USERID = "userId";
@@ -150,7 +146,7 @@ public class CommentHelper {
         CommentItem item = new CommentItem();
         try {
             item.setDefaultInfo(data);
-            item.commentCount = (int) data.get(FIELDNAME_COMMENT_COUNT);
+            item.commentCount = (long) data.get(FIELDNAME_COMMENT_COUNT);
 
         } catch (Exception e) {
             DebugLogger.exception(e);
@@ -162,7 +158,7 @@ public class CommentHelper {
     public CollectionReference getReplyListRef(String castCode, String commentId) {
         return getCommentListRef(castCode)
                 .document(commentId)
-                .collection(RETRY_COLLECTION_NAME);
+                .collection(REPLY_COLLECTION_NAME);
     }
 
     public void getReplyList(String castCode, CommentItem comment, IReplyLoadListener eventListener) {
@@ -226,6 +222,7 @@ public class CommentHelper {
     public ReplyItem getReplyItem(String id, Map<String, Object> data) {
         ReplyItem item = new ReplyItem();
         try {
+            item.id = id;
             item.commentId = (String) data.get(FIELDNAME_COMMENTID);
             item.setDefaultInfo(data);
         } catch (Exception e) {
