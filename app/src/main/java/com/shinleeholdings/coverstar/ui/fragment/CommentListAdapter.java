@@ -55,6 +55,10 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         return itemList.size() + headerCount; // header +
     }
 
+    public int getCommentItemCount() {
+        return itemList.size();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

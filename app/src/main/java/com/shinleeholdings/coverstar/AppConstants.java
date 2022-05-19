@@ -13,6 +13,7 @@ public class AppConstants {
         public static final String USER_DATA = "USER_DATA";
         public static final String PHONE_CERT_MODE = "PHONE_CERT_MODE";
         public static final String MODE = "MODE";
+        public static final String MESSAGE = "MESSAGE";
         public static final String IS_JOIN = "IS_JOIN";
         public static final String CONTEST_INFO_ID = "CONTEST_INFO_ID";
         public static final String CONTEST_DATA = "CONTEST_DATA";
@@ -23,5 +24,7 @@ public class AppConstants {
     public static final class REQUEST_CODE {
         public static final int RULE_DETAIL_USE_RULE = 12312;
         public static final int RULE_DETAIL_PRIVATE_RULE = 12313;
+        public static final int INPUT_COMMENT = 12314;
+        public static final int INPUT_REPLY = 12315;
     }
 }

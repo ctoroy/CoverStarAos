@@ -1,7 +1,9 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.data.ReplyItem;
 import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
 import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
+import com.shinleeholdings.coverstar.ui.InputMessageActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
@@ -79,12 +82,7 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void initView(String castCode) {
-        binding.titleBackLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        binding.titleBackLayout.setOnClickListener(view -> onBackPressed());
 
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,10 +179,41 @@ public class ContestDetailFragment extends BaseFragment {
 
     private void showWriteComment() {
         // TODO 화면 하단 댓글 영역 및 키보드 노출
+        Intent intent = new Intent(getActivity(), InputMessageActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_COMMENT);
     }
 
     private void showWriteReply() {
         // TODO 화면 하단 답글 영역 및 키보드 노출
+        Intent intent = new Intent(getActivity(), InputMessageActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_REPLY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AppConstants.REQUEST_CODE.INPUT_COMMENT) {
+                if (data != null) {
+                    String message = data.getStringExtra(AppConstants.EXTRA.MESSAGE);
+                    DebugLogger.i("inputMessage result : " + message);
+                    if (TextUtils.isEmpty(message) == false) {
+                        ProgressDialogHelper.show(getActivity());
+                        CommentHelper.getSingleInstance().writeCommentItem(mContestItem, message, new CommentHelper.IFireStoreActionCompleteListener() {
+                            @Override
+                            public void onCompleted() {
+                                ProgressDialogHelper.dismiss();
+                            }
+                        });
+                    }
+                }
+            } else if (requestCode == AppConstants.REQUEST_CODE.INPUT_REPLY) {
+                if (data != null) {
+                    String message = data.getStringExtra(AppConstants.EXTRA.MESSAGE);
+                    DebugLogger.i("inputMessage result : " + message);
+                }
+            }
+        }
     }
 
     private void requestStarVote(int selectedStarCount) {
@@ -363,7 +392,7 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void updateCommentCountText() {
-        binding.commentCountTextView.setText("(" + mCommentListAdapter.getItemCount() + ")");
+        binding.commentCountTextView.setText("(" + mCommentListAdapter.getCommentItemCount() + ")");
 
     }
 

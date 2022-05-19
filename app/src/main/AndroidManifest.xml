@@ -70,6 +70,13 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
+            android:name=".ui.InputMessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/TransparentTheme"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.ContestPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
