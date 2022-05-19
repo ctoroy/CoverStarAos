@@ -159,6 +159,7 @@ public class ContestDetailFragment extends BaseFragment {
                 replyTargetCommentItem = null;
                 if (replyChangeEventListener != null) {
                     replyChangeEventListener.remove();
+                    replyChangeEventListener = null;
                 }
             }
         });
@@ -423,6 +424,11 @@ public class ContestDetailFragment extends BaseFragment {
         super.onDestroyView();
         if (commentChangeEventListener != null) {
             commentChangeEventListener.remove();
+        }
+
+        if (replyChangeEventListener != null) {
+            replyChangeEventListener.remove();
+            replyChangeEventListener = null;
         }
         binding = null;
     }
