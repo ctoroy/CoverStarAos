@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ReplyItem;
+import com.shinleeholdings.coverstar.ui.custom.CommentItemLayout;
 import com.shinleeholdings.coverstar.ui.dialog.CommentEditFilterDialog;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.ImageLoader;
@@ -28,45 +30,99 @@ import java.util.HashMap;
 public class ReplyListAdapter extends RecyclerView.Adapter {
 
     private MainActivity mMainActivity;
-
-    private final ArrayList<ReplyItem> itemList = new ArrayList<>();
     private String mCastCode;
+
+    private CommentItem mCommentItem;
+    private final ArrayList<ReplyItem> itemList = new ArrayList<>();
+
+    public interface IReplyListEventListener {
+        void onWriteClicked();
+    }
+
+    private IReplyListEventListener mEventListener;
 
     public ReplyListAdapter(MainActivity activity, String castCode) {
         mMainActivity = activity;
         mCastCode = castCode;
     }
 
+    private final int ITEM_TYPE_COMMENT = 1;
+    private final int ITEM_TYPE_REPLY_WRITE = 2;
+    private final int ITEM_TYPE_REPLY = 3;
+
+    private final int headerCount = 2;
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return ITEM_TYPE_COMMENT;
+        } else if (position == 1) {
+            return ITEM_TYPE_REPLY_WRITE;
+        }
+        return ITEM_TYPE_REPLY;
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemList.size() + headerCount; // header +
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_reply, parent, false);
-        return new ItemViewHolder(view);
+        if (viewType == ITEM_TYPE_COMMENT) {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_comment, parent, false);
+            return new CommentItemViewHolder(view);
+        } else if (viewType == ITEM_TYPE_REPLY_WRITE) {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_write, parent, false);
+            return new WriteItemViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_reply, parent, false);
+            return new ReplyItemViewHolder(view);
+        }
+    }
+
+    private ReplyItem getReplyItem(int position) {
+        return itemList.get(position - headerCount);
+    }
+
+    private void setCommentItem(RecyclerView.ViewHolder holder) {
+        CommentItemViewHolder viewHolder = (CommentItemViewHolder) holder;
+        viewHolder.commentItemLayout.setData(mMainActivity, mCastCode, mCommentItem, null);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final ReplyItem item = itemList.get(position);
-        if (item == null) {
-            return;
+        if (holder instanceof CommentItemViewHolder) {
+            if (mCommentItem != null) {
+                setCommentItem(holder);
+            }
+        } else if (holder instanceof WriteItemViewHolder) {
+            // nothing
+        } else {
+            final ReplyItem item = getReplyItem(position);
+            if (item == null) {
+                return;
+            }
+
+            ReplyItemViewHolder viewHolder = (ReplyItemViewHolder) holder;
+
+            ImageLoader.loadImage(viewHolder.userImageView, item.userImagePath);
+            viewHolder.userNicknameTextView.setText(item.userNickName);
+            viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
+            viewHolder.commentTextView.setText(item.message);
+
+            viewHolder.likeCountTextView.setText(item.getLikeCount() + "");
+            viewHolder.unLikeCountTextView.setText(item.getUnLikeCount() + "");
+
+            viewHolder.likeLayout.setSelected(item.alreadyLike());
+            viewHolder.unLikeLayout.setSelected(item.alreadyUnLike());
         }
-
-        ItemViewHolder viewHolder = (ItemViewHolder) holder;
-
-        ImageLoader.loadImage(viewHolder.userImageView, item.userImagePath);
-        viewHolder.userNicknameTextView.setText(item.userNickName);
-        viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
-        viewHolder.commentTextView.setText(item.message);
-
-        viewHolder.likeCountTextView.setText(item.getLikeCount() + "");
-        viewHolder.unLikeCountTextView.setText(item.getUnLikeCount() + "");
-
-        viewHolder.likeLayout.setSelected(item.alreadyLike());
-        viewHolder.unLikeLayout.setSelected(item.alreadyUnLike());
     }
 
-    public void setData(ArrayList<ReplyItem> dataList) {
+    public void setData(CommentItem item, ArrayList<ReplyItem> dataList) {
         itemList.clear();
+        mCommentItem = item;
         if (dataList != null && dataList.size() > 0) {
             itemList.addAll(dataList);
         }
@@ -78,7 +134,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
         boolean hasItem = false;
 
-        for (int i=0; i <itemList.size(); i++) {
+        for (int i = 0; i < itemList.size(); i++) {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 hasItem = true;
@@ -93,7 +149,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
     }
 
     public void changeReply(ReplyItem newItem) {
-        for (int i=0; i <itemList.size(); i++) {
+        for (int i = 0; i < itemList.size(); i++) {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 itemList.set(i, newItem);
@@ -104,7 +160,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
     }
 
     public void removeReply(String id) {
-        for (int i=0; i <itemList.size(); i++) {
+        for (int i = 0; i < itemList.size(); i++) {
             ReplyItem item = itemList.get(i);
             if (item.id.equals(id)) {
                 itemList.remove(i);
@@ -115,7 +171,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
     }
 
     public void clear() {
-        setData(null);
+        setData(null, null);
     }
 
     @Override
@@ -123,12 +179,35 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    @Override
-    public int getItemCount() {
-        return itemList.size();
+    private class WriteItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView writeTextView;
+
+        public WriteItemViewHolder(View itemView) {
+            super(itemView);
+            // TODO 디자인 적용
+            writeTextView = itemView.findViewById(R.id.writeTextView);
+            writeTextView.setText(R.string.write_reply);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mEventListener.onWriteClicked();
+        }
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static class CommentItemViewHolder extends RecyclerView.ViewHolder {
+
+        CommentItemLayout commentItemLayout;
+
+        public CommentItemViewHolder(View itemView) {
+            super(itemView);
+            commentItemLayout = (CommentItemLayout) itemView;
+        }
+    }
+
+    private class ReplyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView userImageView;
         TextView userNicknameTextView;
@@ -142,7 +221,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
         LinearLayout unLikeLayout;
         TextView unLikeCountTextView;
 
-        public ItemViewHolder(View itemView) {
+        public ReplyItemViewHolder(View itemView) {
             super(itemView);
             userImageView = itemView.findViewById(R.id.userImageView);
             userNicknameTextView = itemView.findViewById(R.id.userNicknameTextView);
@@ -162,8 +241,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View view) {
             int viewId = view.getId();
-            int position = getBindingAdapterPosition();
-            ReplyItem item = itemList.get(position);
+            ReplyItem item = getReplyItem(getBindingAdapterPosition());
             if (viewId == R.id.replyListIconImageView) {
                 CommentEditFilterDialog dialog = new CommentEditFilterDialog(mMainActivity);
                 dialog.init(item, new View.OnClickListener() {
@@ -184,7 +262,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
                                     Toast.makeText(MyApplication.getContext(), R.string.delete_done, Toast.LENGTH_SHORT).show();
                                 }
                             });
-                        } else if (viewId ==R.id.reportLayout) {
+                        } else if (viewId == R.id.reportLayout) {
                             if (item.addReport()) {
                                 HashMap<String, Object> valueMap = new HashMap<>();
                                 valueMap.put(CommentHelper.FIELDNAME_REPORTS, item.reports);
@@ -201,7 +279,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
                     }
                 });
                 dialog.show();
-            } else if (viewId == R.id.replyRecommendLayout){
+            } else if (viewId == R.id.replyRecommendLayout) {
                 if (NetworkHelper.isNetworkConnected() == false) {
                     Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
                     return;
@@ -225,7 +303,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
                 ProgressDialogHelper.show(mMainActivity);
                 CommentHelper.getSingleInstance().updateReplyItem(mCastCode, item, valueMap, () -> ProgressDialogHelper.dismiss());
-            } else if (viewId == R.id.replyUnLikeLayout){
+            } else if (viewId == R.id.replyUnLikeLayout) {
                 if (NetworkHelper.isNetworkConnected() == false) {
                     Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
                     return;

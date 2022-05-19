@@ -86,18 +86,6 @@ public class ContestDetailFragment extends BaseFragment {
             }
         });
 
-        binding.reportTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.slidingDrawer.isOpened()) {
-                    binding.slidingDrawer.animateClose();
-                    return;
-                }
-
-                reportContest();
-            }
-        });
-
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +161,12 @@ public class ContestDetailFragment extends BaseFragment {
         });
 
         binding.commentListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity(), castCode, new CommentListAdapter.ICommentClickListener() {
+        mCommentListAdapter = new CommentListAdapter((MainActivity) getActivity(), castCode, new CommentListAdapter.ICommentListEventListener() {
+            @Override
+            public void onWriteClicked() {
+                showWriteComment();
+            }
+
             @Override
             public void onCommentClicked(CommentItem item) {
                 showReplyList(item);
@@ -186,26 +179,12 @@ public class ContestDetailFragment extends BaseFragment {
         binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
     }
 
-    private void reportContest() {
-        ProgressDialogHelper.show(getActivity());
+    private void showWriteComment() {
+        // TODO 화면 하단 댓글 영역 및 키보드 노출
+    }
 
-        HashMap<String, String> param = new HashMap<>();
-        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
-        param.put("castCode", mContestItem.castCode);
-
-        // TODO 신고하기 API 처리
-        RetroClient.getApiInterface().reportContest(param).enqueue(new RetroCallback<DefaultResult>() {
-            @Override
-            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
-                ProgressDialogHelper.dismiss();
-                Toast.makeText(getActivity(), R.string.report_do_complete, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(BaseResponse<DefaultResult> response) {
-                ProgressDialogHelper.dismiss();
-            }
-        });
+    private void showWriteReply() {
+        // TODO 화면 하단 답글 영역 및 키보드 노출
     }
 
     private void requestStarVote(int selectedStarCount) {
@@ -365,6 +344,8 @@ public class ContestDetailFragment extends BaseFragment {
                                         item.id = id;
                                         mCommentListAdapter.changeComment(item);
                                     }
+
+                                    // TODO 답글 리스트 보여지고 있다면 해당 부분도 처리 필요
                                 }
                             }
                         } catch (Exception exception) {
@@ -373,7 +354,6 @@ public class ContestDetailFragment extends BaseFragment {
                 });
 
                 binding.slidingDrawer.setVisibility(View.VISIBLE);
-
 
                 showCommentList();
                 mCommentListAdapter.setData(commentList);
@@ -525,6 +505,8 @@ public class ContestDetailFragment extends BaseFragment {
 
     @Override
     public void onBackPressed() {
+        // TODO 댓글이나 답글 write 영역 노출되어있는 경우 사라지게 만들기
+
         if (binding.slidingDrawer.isOpened()) {
             binding.slidingDrawer.animateClose();
             return;

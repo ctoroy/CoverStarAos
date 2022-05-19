@@ -3,7 +3,7 @@ package com.shinleeholdings.coverstar.ui.fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,13 +13,8 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.ui.custom.CommentItemLayout;
-import com.shinleeholdings.coverstar.ui.dialog.CommentEditFilterDialog;
-import com.shinleeholdings.coverstar.util.CommentHelper;
-import com.shinleeholdings.coverstar.util.NetworkHelper;
-import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CommentListAdapter extends RecyclerView.Adapter {
 
@@ -28,129 +23,63 @@ public class CommentListAdapter extends RecyclerView.Adapter {
 
     private final ArrayList<CommentItem> itemList = new ArrayList<>();
 
-    public interface ICommentClickListener {
-        public void onCommentClicked(CommentItem item);
+    public interface ICommentListEventListener {
+        void onWriteClicked();
+        void onCommentClicked(CommentItem item);
     }
 
-    private ICommentClickListener commentClickListener;
+    private ICommentListEventListener commentEventListener;
 
-    public CommentListAdapter(MainActivity activity, String castCode, ICommentClickListener clickListener) {
+    private final int ITEM_TYPE_COMMENT_WRITE = 1;
+    private final int ITEM_TYPE_COMMENT = 2;
+
+    private final int headerCount = 1;
+
+    public CommentListAdapter(MainActivity activity, String castCode, ICommentListEventListener clickListener) {
         mMainActivity = activity;
         mCastCode = castCode;
-        commentClickListener = clickListener;
+        commentEventListener = clickListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return ITEM_TYPE_COMMENT_WRITE;
+        }
+
+        return ITEM_TYPE_COMMENT;
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemList.size() + headerCount; // header +
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_comment, parent, false);
-        return new ItemViewHolder(view);
+        if (viewType == ITEM_TYPE_COMMENT_WRITE) {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_write, parent, false);
+            return new WriteCommentViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.list_item_comment, parent, false);
+            return new ItemViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final CommentItem item = itemList.get(position);
+        if (holder instanceof WriteCommentViewHolder) {
+            return;
+        }
+
+        final CommentItem item = itemList.get(position - headerCount);
         if (item == null) {
             return;
         }
 
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        viewHolder.commentItemLayout.setData(mMainActivity, item, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int viewId = view.getId();
-                int position = holder.getBindingAdapterPosition();
-                CommentItem item = itemList.get(position);
-                if (viewId == R.id.listIconImageView) {
-                    CommentEditFilterDialog dialog = new CommentEditFilterDialog(mMainActivity);
-                    dialog.init(item, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            int viewId = view.getId();
-                            if (NetworkHelper.isNetworkConnected() == false) {
-                                Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if (viewId == R.id.deleteLayout) {
-                                ProgressDialogHelper.show(mMainActivity);
-                                CommentHelper.getSingleInstance().deleteCommentItem(mCastCode, item, new CommentHelper.IFireStoreActionCompleteListener() {
-                                    @Override
-                                    public void onCompleted() {
-                                        ProgressDialogHelper.dismiss();
-                                        Toast.makeText(MyApplication.getContext(), R.string.delete_done, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } else if (viewId ==R.id.reportLayout) {
-                                if (item.addReport()) {
-                                    HashMap<String, Object> valueMap = new HashMap<>();
-                                    valueMap.put(CommentHelper.FIELDNAME_REPORTS, item.reports);
-                                    ProgressDialogHelper.show(mMainActivity);
-                                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, new CommentHelper.IFireStoreActionCompleteListener() {
-                                        @Override
-                                        public void onCompleted() {
-                                            ProgressDialogHelper.dismiss();
-                                            Toast.makeText(MyApplication.getContext(), R.string.report_done, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    });
-                    dialog.show();
-                } else if (viewId == R.id.recommendLayout){
-                    if (NetworkHelper.isNetworkConnected() == false) {
-                        Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    HashMap<String, Object> valueMap = new HashMap<>();
-                    if (item.alreadyLike()) {
-                        // 좋아요 취소
-                        item.removeLike();
-                        valueMap.put(CommentHelper.FIELDNAME_LIKES, item.likes);
-                    } else {
-                        if (item.alreadyUnLike()) {
-                            //  비추천 취소
-                            item.removeUnLike();
-                            valueMap.put(CommentHelper.FIELDNAME_UNLIKES, item.unLikes);
-                        }
-                        // 좋아요
-                        item.addLike();
-                        valueMap.put(CommentHelper.FIELDNAME_LIKES, item.likes);
-                    }
-
-                    ProgressDialogHelper.show(mMainActivity);
-                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, () -> ProgressDialogHelper.dismiss());
-                } else if (viewId == R.id.unLikeLayout){
-                    if (NetworkHelper.isNetworkConnected() == false) {
-                        Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    HashMap<String, Object> valueMap = new HashMap<>();
-                    if (item.alreadyUnLike()) {
-                        // 비추천 취소
-                        item.removeUnLike();
-                        valueMap.put(CommentHelper.FIELDNAME_UNLIKES, item.unLikes);
-                    } else {
-                        if (item.alreadyLike()) {
-                            // 좋아요 취소
-                            item.removeLike();
-                            valueMap.put(CommentHelper.FIELDNAME_LIKES, item.likes);
-                        }
-                        // 비추천
-                        item.addUnLike();
-                        valueMap.put(CommentHelper.FIELDNAME_UNLIKES, item.unLikes);
-                    }
-
-                    ProgressDialogHelper.show(mMainActivity);
-                    CommentHelper.getSingleInstance().updateCommentItem(mCastCode, item, valueMap, () -> ProgressDialogHelper.dismiss());
-                } else if (viewId == R.id.commentLayout || viewId == R.id.commentInfoLayout){
-                    commentClickListener.onCommentClicked(item);
-                }
-            }
-        });
+        viewHolder.commentItemLayout.setData(mMainActivity, mCastCode, item, commentEventListener);
     }
 
     public void setData(ArrayList<CommentItem> dataList) {
@@ -211,9 +140,21 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    @Override
-    public int getItemCount() {
-        return itemList.size();
+    private class WriteCommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView writeTextView;
+        public WriteCommentViewHolder(View itemView) {
+            super(itemView);
+            // TODO 디자인 적용
+            writeTextView = itemView.findViewById(R.id.writeTextView);
+            writeTextView.setText(R.string.write_comment);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            commentEventListener.onWriteClicked();
+        }
     }
 
     private static class ItemViewHolder extends RecyclerView.ViewHolder {
