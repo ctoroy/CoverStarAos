@@ -149,7 +149,6 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         TextView writeTextView;
         public WriteCommentViewHolder(View itemView) {
             super(itemView);
-            // TODO 디자인 적용
             writeTextView = itemView.findViewById(R.id.writeTextView);
             writeTextView.setText(R.string.write_comment);
             itemView.setOnClickListener(this);

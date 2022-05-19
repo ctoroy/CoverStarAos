@@ -196,13 +196,13 @@ public class ContestDetailFragment extends BaseFragment {
 
     private void showWriteComment() {
         Intent intent = new Intent(getActivity(), InputMessageActivity.class);
-        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_comment));
+        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_comment_hint));
         startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_COMMENT);
     }
 
     private void showWriteReply() {
         Intent intent = new Intent(getActivity(), InputMessageActivity.class);
-        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_reply));
+        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_reply_hint));
         startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_REPLY);
     }
 
@@ -488,7 +488,6 @@ public class ContestDetailFragment extends BaseFragment {
                 });
 
                 mReplyListAdapter.setData(comment, replyList);
-                // TODO 코멘트 레이아웃, 답글리스트 UI 설정
             }
         });
     }

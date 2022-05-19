@@ -186,7 +186,6 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
         public WriteItemViewHolder(View itemView) {
             super(itemView);
-            // TODO 디자인 적용
             writeTextView = itemView.findViewById(R.id.writeTextView);
             writeTextView.setText(R.string.write_reply);
             itemView.setOnClickListener(this);

@@ -18,11 +18,10 @@ public class InputMessageActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setResult(RESULT_CANCELED);
 
-        // TODO 디자인 적용
-
         String hint = getIntent().getStringExtra(AppConstants.EXTRA.HINT_TEXT);
         binding.messageEditTextView.setHint(hint);
 
+        binding.messageEditTextView.requestFocus();
         binding.sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

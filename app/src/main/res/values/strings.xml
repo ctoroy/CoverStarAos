@@ -16,6 +16,8 @@
     <string name="original_singer_format">(원곡가수 : %s)</string>
     <string name="write_comment">댓글 추가</string>
     <string name="write_reply">답글 추가</string>
+    <string name="write_comment_hint">댓글을 입력하세요</string>
+    <string name="write_reply_hint">답글을 입력하세요</string>
 
     <string name="login">로그인</string>
     <string name="join">가입하기</string>
@@ -154,6 +156,7 @@
     <string name="buy">구매</string>
     <string name="deposite">입금</string>
     <string name="withdraw">출금</string>
+    <string name="deposite_point">포인트 입금</string>
     <string name="playlist">재생목록</string>
     <string name="participate_media">참가영상</string>
 

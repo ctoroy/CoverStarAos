@@ -76,6 +76,13 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
             }
         });
 
+        binding.depositePointLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 포인트 입금 처리
+            }
+        });
+
         binding.myCoinCountTextView.setText(Util.numberToDisplayFormat(LoginHelper.getSingleInstance().getMyCoinCount()));
         binding.buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override

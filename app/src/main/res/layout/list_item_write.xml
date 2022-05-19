@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="60dp"
+    android:background="#f8f8f8">
 
+    <com.shinleeholdings.coverstar.ui.CircleImageView
+        android:id="@+id/userImageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/avator_man" />
     <TextView
         android:id="@+id/writeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/userImageView"
         android:textSize="16sp"
         android:layout_centerVertical="true"
-        android:paddingLeft="20dp"
+        android:paddingLeft="18dp"
+        android:textStyle="bold"
         android:includeFontPadding="false"
         android:textColor="@color/black"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#dddddd"/>
 </RelativeLayout>
