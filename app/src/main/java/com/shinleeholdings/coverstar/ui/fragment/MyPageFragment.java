@@ -161,15 +161,13 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         ProgressDialogHelper.show(getActivity());
 
         HashMap<String, String> param = new HashMap<>();
-        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
-
         Call<BaseResponse<ContestDataList>> call = null;
         if (binding.playListTextView.isSelected()) {
-            // TODO 재생목록 API 처리
+            param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
             call = RetroClient.getApiInterface().getPlayList(param);
         } else {
-            // TODO 참가영상 목록 API 처리
-            call = RetroClient.getApiInterface().getParticipateList(param);
+            param.put("castId", LoginHelper.getSingleInstance().getLoginUserId());
+            call = RetroClient.getApiInterface().getMyList(param);
         }
 
         call.enqueue(new RetroCallback<ContestDataList>() {

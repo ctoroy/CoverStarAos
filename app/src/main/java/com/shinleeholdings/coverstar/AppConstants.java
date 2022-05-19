@@ -19,6 +19,7 @@ public class AppConstants {
         public static final String CONTEST_DATA = "CONTEST_DATA";
         public static final String CONTEST_URL = "CONTEST_URL";
         public static final String WEBVIEW_URL = "WEBVIEW_URL";
+        public static final String HINT_TEXT = "HINT_TEXT";
     }
 
     public static final class REQUEST_CODE {

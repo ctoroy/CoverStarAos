@@ -29,6 +29,7 @@ import com.shinleeholdings.coverstar.databinding.FragmentContestDetailBinding;
 import com.shinleeholdings.coverstar.ui.ContestPlayerActivity;
 import com.shinleeholdings.coverstar.ui.InputMessageActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer;
 import com.shinleeholdings.coverstar.util.CommentHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ImageLoader;
@@ -55,6 +56,7 @@ public class ContestDetailFragment extends BaseFragment {
     private ReplyListAdapter mReplyListAdapter;
 
     private ContestData mContestItem;
+    private CommentItem replyTargetCommentItem;
 
     private String userImagePath;
 
@@ -133,9 +135,7 @@ public class ContestDetailFragment extends BaseFragment {
                 HashMap<String, String> param = new HashMap<>();
                 param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
                 param.put("castCode", mContestItem.castCode);
-
-                // TODO 재생목록에 추가 API 처리
-                RetroClient.getApiInterface().addToPlayList(param).enqueue(new RetroCallback<DefaultResult>() {
+                RetroClient.getApiInterface().setPlay(param).enqueue(new RetroCallback<DefaultResult>() {
                     @Override
                     public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                         ProgressDialogHelper.dismiss();
@@ -151,7 +151,18 @@ public class ContestDetailFragment extends BaseFragment {
             }
         });
 
-        binding.slidingDrawer.setOnDrawerCloseListener(() -> showCommentList());
+        binding.slidingDrawer.setOnDrawerCloseListener(new MySlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                showCommentList();
+
+                replyTargetCommentItem = null;
+                if (replyChangeEventListener != null) {
+                    replyChangeEventListener.remove();
+                }
+            }
+        });
+
         binding.closeReplyImageView.setOnClickListener(view -> showCommentList());
 
         binding.content.setOnClickListener(view -> {
@@ -173,19 +184,24 @@ public class ContestDetailFragment extends BaseFragment {
         binding.commentListRecyclerView.setAdapter(mCommentListAdapter);
 
         binding.replyListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity(), castCode);
+        mReplyListAdapter = new ReplyListAdapter((MainActivity) getActivity(), castCode, new ReplyListAdapter.IReplyListEventListener() {
+            @Override
+            public void onWriteClicked() {
+                showWriteReply();
+            }
+        });
         binding.replyListRecyclerView.setAdapter(mReplyListAdapter);
     }
 
     private void showWriteComment() {
-        // TODO 화면 하단 댓글 영역 및 키보드 노출
         Intent intent = new Intent(getActivity(), InputMessageActivity.class);
+        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_comment));
         startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_COMMENT);
     }
 
     private void showWriteReply() {
-        // TODO 화면 하단 답글 영역 및 키보드 노출
         Intent intent = new Intent(getActivity(), InputMessageActivity.class);
+        intent.putExtra(AppConstants.EXTRA.HINT_TEXT, getString(R.string.write_reply));
         startActivityForResult(intent, AppConstants.REQUEST_CODE.INPUT_REPLY);
     }
 
@@ -196,21 +212,18 @@ public class ContestDetailFragment extends BaseFragment {
             if (requestCode == AppConstants.REQUEST_CODE.INPUT_COMMENT) {
                 if (data != null) {
                     String message = data.getStringExtra(AppConstants.EXTRA.MESSAGE);
-                    DebugLogger.i("inputMessage result : " + message);
+                    DebugLogger.i("inputMessage INPUT_COMMENT result : " + message);
                     if (TextUtils.isEmpty(message) == false) {
-                        ProgressDialogHelper.show(getActivity());
-                        CommentHelper.getSingleInstance().writeCommentItem(mContestItem, message, new CommentHelper.IFireStoreActionCompleteListener() {
-                            @Override
-                            public void onCompleted() {
-                                ProgressDialogHelper.dismiss();
-                            }
-                        });
+                        writeComment(message);
                     }
                 }
             } else if (requestCode == AppConstants.REQUEST_CODE.INPUT_REPLY) {
                 if (data != null) {
                     String message = data.getStringExtra(AppConstants.EXTRA.MESSAGE);
-                    DebugLogger.i("inputMessage result : " + message);
+                    DebugLogger.i("inputMessage INPUT_REPLY result : " + message);
+                    if (TextUtils.isEmpty(message) == false) {
+                        writeReply(replyTargetCommentItem, message);
+                    }
                 }
             }
         }
@@ -368,13 +381,22 @@ public class ContestDetailFragment extends BaseFragment {
                                     } else if (dc.getType() == DocumentChange.Type.REMOVED) {
                                         mCommentListAdapter.removeComment(id);
                                         updateCommentCountText();
+
+                                        if  (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
+                                            if (replyTargetCommentItem.id.equals(id)) {
+                                                showCommentList();
+                                            }
+                                        }
                                     } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
                                         CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
                                         item.id = id;
                                         mCommentListAdapter.changeComment(item);
+                                        if  (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
+                                            if (replyTargetCommentItem.id.equals(id)) {
+                                                mReplyListAdapter.notifyDataSetChanged();
+                                            }
+                                        }
                                     }
-
-                                    // TODO 답글 리스트 보여지고 있다면 해당 부분도 처리 필요
                                 }
                             }
                         } catch (Exception exception) {
@@ -405,16 +427,12 @@ public class ContestDetailFragment extends BaseFragment {
         binding = null;
     }
 
-
     private void showCommentList() {
         binding.commentListTitleLayout.setVisibility(View.VISIBLE);
         binding.commentListRecyclerView.setVisibility(View.VISIBLE);
 
         binding.replyListTitleLayout.setVisibility(View.INVISIBLE);
         binding.replyListRecyclerView.setVisibility(View.GONE);
-        if (replyChangeEventListener != null) {
-            replyChangeEventListener.remove();
-        }
     }
 
     private void showReplyList(CommentItem item) {
@@ -424,6 +442,8 @@ public class ContestDetailFragment extends BaseFragment {
         binding.replyListTitleLayout.setVisibility(View.VISIBLE);
         binding.replyListRecyclerView.setVisibility(View.VISIBLE);
         mReplyListAdapter.clear();
+
+        replyTargetCommentItem = item;
 
         ProgressDialogHelper.show(getActivity());
         CommentHelper.getSingleInstance().getReplyList(mContestItem.castCode, item, new CommentHelper.IReplyLoadListener() {
@@ -460,6 +480,8 @@ public class ContestDetailFragment extends BaseFragment {
                         }
                     }
                 });
+
+                mReplyListAdapter.setData(comment, replyList);
                 // TODO 코멘트 레이아웃, 답글리스트 UI 설정
             }
         });
@@ -481,6 +503,10 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private void writeReply(CommentItem targetComment, String reply) {
+        if (targetComment == null) {
+            return;
+        }
+
         if (NetworkHelper.isNetworkConnected() == false) {
             Toast.makeText(MyApplication.getContext(), R.string.network_not_connected, Toast.LENGTH_SHORT).show();
             return;
@@ -534,8 +560,6 @@ public class ContestDetailFragment extends BaseFragment {
 
     @Override
     public void onBackPressed() {
-        // TODO 댓글이나 답글 write 영역 노출되어있는 경우 사라지게 만들기
-
         if (binding.slidingDrawer.isOpened()) {
             binding.slidingDrawer.animateClose();
             return;

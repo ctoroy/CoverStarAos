@@ -41,9 +41,10 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
     private IReplyListEventListener mEventListener;
 
-    public ReplyListAdapter(MainActivity activity, String castCode) {
+    public ReplyListAdapter(MainActivity activity, String castCode, IReplyListEventListener eventListener) {
         mMainActivity = activity;
         mCastCode = castCode;
+        mEventListener = eventListener;
     }
 
     private final int ITEM_TYPE_COMMENT = 1;

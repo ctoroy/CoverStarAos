@@ -21,17 +21,17 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
-    @POST("addToPlayList")
+    @POST("setPlay")
     @FormUrlEncoded
-    Call<BaseResponse<DefaultResult>> addToPlayList(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> setPlay(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getPlayList")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getPlayList(@FieldMap(encoded = true) HashMap<String, String> body);
 
-    @POST("getParticipateList")
+    @POST("getMyList")
     @FormUrlEncoded
-    Call<BaseResponse<ContestDataList>> getParticipateList(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<ContestDataList>> getMyList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getRoom")
     @FormUrlEncoded
