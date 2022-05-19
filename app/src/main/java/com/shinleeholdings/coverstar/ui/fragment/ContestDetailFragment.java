@@ -140,7 +140,7 @@ public class ContestDetailFragment extends BaseFragment {
                     public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                         ProgressDialogHelper.dismiss();
                         Toast.makeText(getActivity(), R.string.add_to_playlist_complete, Toast.LENGTH_SHORT).show();
-                        ((MainActivity)getActivity()).myPageFragment.needRefreshPlayList = true;
+                        ((MainActivity) getActivity()).myPageFragment.needRefreshPlayList = true;
                     }
 
                     @Override
@@ -305,7 +305,7 @@ public class ContestDetailFragment extends BaseFragment {
                     mContestItem = result.get(0);
                     setContestInfo();
                     requestAdditinalData();
-                    initCommentData();
+                    getCommentList();
                 } else {
                     ProgressDialogHelper.dismiss();
                 }
@@ -355,7 +355,7 @@ public class ContestDetailFragment extends BaseFragment {
         });
     }
 
-    private void initCommentData() {
+    private void getCommentList() {
         String castCode = mContestItem.castCode;
         CommentHelper.getSingleInstance().getCommentList(castCode, new CommentHelper.ICommentEventListener() {
             @Override
@@ -383,7 +383,7 @@ public class ContestDetailFragment extends BaseFragment {
                                         mCommentListAdapter.removeComment(id);
                                         updateCommentCountText();
 
-                                        if  (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
+                                        if (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
                                             if (replyTargetCommentItem.id.equals(id)) {
                                                 showCommentList();
                                             }
@@ -392,7 +392,7 @@ public class ContestDetailFragment extends BaseFragment {
                                         CommentItem item = CommentHelper.getSingleInstance().getCommentItem(data);
                                         item.id = id;
                                         mCommentListAdapter.changeComment(item);
-                                        if  (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
+                                        if (replyTargetCommentItem != null && binding.replyListTitleLayout.getVisibility() == View.VISIBLE) {
                                             if (replyTargetCommentItem.id.equals(id)) {
                                                 mReplyListAdapter.notifyDataSetChanged();
                                             }
@@ -436,6 +436,9 @@ public class ContestDetailFragment extends BaseFragment {
     private void showCommentList() {
         binding.commentListTitleLayout.setVisibility(View.VISIBLE);
         binding.commentListRecyclerView.setVisibility(View.VISIBLE);
+        if (mCommentListAdapter.getCommentItemCount() > 0) {
+            binding.commentListRecyclerView.scrollToPosition(0);
+        }
 
         binding.replyListTitleLayout.setVisibility(View.INVISIBLE);
         binding.replyListRecyclerView.setVisibility(View.GONE);
@@ -527,11 +530,21 @@ public class ContestDetailFragment extends BaseFragment {
     }
 
     private int getSelectedStarCount() {
-        if (binding.voteStar5ImageView.isSelected()) {return 5;}
-        if (binding.voteStar4ImageView.isSelected()) {return 4;}
-        if (binding.voteStar3ImageView.isSelected()) {return 3;}
-        if (binding.voteStar2ImageView.isSelected()) {return 2;}
-        if (binding.voteStar1ImageView.isSelected()) {return 1;}
+        if (binding.voteStar5ImageView.isSelected()) {
+            return 5;
+        }
+        if (binding.voteStar4ImageView.isSelected()) {
+            return 4;
+        }
+        if (binding.voteStar3ImageView.isSelected()) {
+            return 3;
+        }
+        if (binding.voteStar2ImageView.isSelected()) {
+            return 2;
+        }
+        if (binding.voteStar1ImageView.isSelected()) {
+            return 1;
+        }
         return 0;
     }
 

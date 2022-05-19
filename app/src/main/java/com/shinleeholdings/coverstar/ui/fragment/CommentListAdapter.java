@@ -109,7 +109,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
 
         if (hasItem == false) {
             itemList.add(0, newItem);
-            notifyItemInserted(0);
+            notifyItemInserted(0 + headerCount);
         }
     }
 
@@ -118,7 +118,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             CommentItem item = itemList.get(i);
             if (item.id.equals(newItem.id)) {
                 itemList.set(i, newItem);
-                notifyItemChanged(i);
+                notifyItemChanged(i + headerCount);
                 break;
             }
         }
@@ -129,7 +129,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             CommentItem item = itemList.get(i);
             if (item.id.equals(id)) {
                 itemList.remove(i);
-                notifyItemRemoved(i);
+                notifyItemRemoved(i + headerCount);
                 break;
             }
         }
