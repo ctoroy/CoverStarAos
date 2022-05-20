@@ -77,11 +77,27 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity
+            android:name=".payment.PaymentWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
+        <activity
             android:name=".ui.ContestPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="web"
+                    android:scheme="connectpaysample" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".profile.PhoneCertActivity"
             android:configChanges="orientation|screenSize"

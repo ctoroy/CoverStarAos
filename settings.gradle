@@ -16,3 +16,5 @@ rootProject.name = "CoverStar"
 include ':app'
 include 'cropper'
 include 'youtube-player-view'
+include ':OcrEngine'
+include ':ocrview'

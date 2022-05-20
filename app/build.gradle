@@ -51,6 +51,17 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: '*.aar')
+
+    implementation project(':OcrEngine')
+
+    // 2.2.0 이상 권장
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+
+    // 1.1.0 이상 권장
+    implementation 'androidx.biometric:biometric:1.1.0'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
 

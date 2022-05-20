@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityRulesAgreeBinding;
-import com.shinleeholdings.coverstar.ui.NonLeakingWebViewActivity;
 import com.shinleeholdings.coverstar.ui.RuleDetailActivity;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
