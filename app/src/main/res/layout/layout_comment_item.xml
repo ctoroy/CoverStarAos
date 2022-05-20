@@ -165,27 +165,6 @@
                 android:textSize="14sp"
                 tools:text="1,000" />
         </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/avator_man" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:src="@drawable/icon_like_pink" />
-        </FrameLayout>
     </LinearLayout>
 
     <View
