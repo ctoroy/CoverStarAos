@@ -607,14 +607,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:orientation="vertical">
+            android:paddingRight="20dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/commentListRecyclerView"
@@ -628,7 +627,7 @@
                 android:layout_height="match_parent"
                 android:visibility="gone" />
 
-        </LinearLayout>
+        </FrameLayout>
     </com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer>
 
 </RelativeLayout>

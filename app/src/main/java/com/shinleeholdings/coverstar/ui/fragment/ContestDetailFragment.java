@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -441,19 +442,28 @@ public class ContestDetailFragment extends BaseFragment {
             binding.commentListRecyclerView.scrollToPosition(0);
         }
 
+        binding.slidingDrawer.interceptHandleClickListener(null);
+        mReplyListAdapter.clear();
+
         binding.replyListTitleLayout.setVisibility(View.INVISIBLE);
-        binding.replyListRecyclerView.setVisibility(View.GONE);
+        binding.replyListRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void showReplyList(CommentItem item) {
         binding.commentListTitleLayout.setVisibility(View.INVISIBLE);
-        binding.commentListRecyclerView.setVisibility(View.GONE);
+        binding.commentListRecyclerView.setVisibility(View.INVISIBLE);
 
         binding.replyListTitleLayout.setVisibility(View.VISIBLE);
         binding.replyListRecyclerView.setVisibility(View.VISIBLE);
-        mReplyListAdapter.clear();
 
         replyTargetCommentItem = item;
+        binding.slidingDrawer.interceptHandleClickListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                showCommentList();
+                return false;
+            }
+        });
 
         ProgressDialogHelper.show(getActivity());
         CommentHelper.getSingleInstance().getReplyList(mContestItem.castCode, item, new CommentHelper.IReplyLoadListener() {

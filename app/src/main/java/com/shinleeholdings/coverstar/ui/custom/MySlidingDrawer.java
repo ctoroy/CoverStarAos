@@ -15,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.util.DebugLogger;
+import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 public class MySlidingDrawer extends ViewGroup {
     public static final int ORIENTATION_HORIZONTAL = 0;
@@ -67,6 +71,12 @@ public class MySlidingDrawer extends ViewGroup {
     private int mBottom = 0;
     private int mLeft = 0;
     private int mRight = 0;
+
+    private View.OnTouchListener handleClickListener;
+
+    public void interceptHandleClickListener(OnTouchListener onClickListener) {
+        handleClickListener = onClickListener;
+    }
 
     /**
      * Callback invoked when the drawer is opened.
@@ -364,11 +374,25 @@ public class MySlidingDrawer extends ViewGroup {
                                         (!mExpanded && left > mBottomOffset + mRight - mLeft -
                                                 mHandleWidth - mTapThreshold)) {
                             if (mAllowSingleTap) {
-                                playSoundEffect(SoundEffectConstants.CLICK);
-                                if (mExpanded) {
-                                    animateClose(vertical ? top : left, true);
+                                if (handleClickListener != null) {
+                                    DebugLogger.i("sliding singleTap : " + event.getX());
+
+                                    int eventX = (int) event.getX();
+                                    int closePosition = Util.dpToPixel(MyApplication.getContext(), 50f);
+                                    int displayWidth = SharedPreferenceHelper.getInstance().getIntPreference(SharedPreferenceHelper.DISPLAY_WIDTH);
+
+                                    if ((displayWidth - closePosition) < eventX) {
+                                        handleClickListener.onTouch(null, event);
+                                        performFling(vertical ? top : left, velocity, false, true);
+                                    }
+
                                 } else {
-                                    animateOpen(vertical ? top : left, true);
+                                    playSoundEffect(SoundEffectConstants.CLICK);
+                                    if (mExpanded) {
+                                        animateClose(vertical ? top : left, true);
+                                    } else {
+                                        animateOpen(vertical ? top : left, true);
+                                    }
                                 }
                             } else {
                                 performFling(vertical ? top : left, velocity, false, true);

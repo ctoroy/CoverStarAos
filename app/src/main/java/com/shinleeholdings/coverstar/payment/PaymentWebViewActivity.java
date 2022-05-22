@@ -36,7 +36,8 @@ public class PaymentWebViewActivity extends BaseActivity {
         binding = ActivityPaymentWebviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String targetUrl = getIntent().getStringExtra(AppConstants.EXTRA.WEBVIEW_URL);
+        // TODO url 확인
+        String targetUrl = "";
         DebugLogger.i("tossPayments targetUrl : " + targetUrl);
 
         WebSettings webSettings = binding.nonLeakWebView.getSettings();

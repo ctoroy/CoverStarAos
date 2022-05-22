@@ -44,9 +44,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initView() {
-        binding.homeSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        binding.homeSwipeRefreshLayout.setOnRefreshListener(this::requestData);
-
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
         binding.alarmImageView.setOnClickListener(view -> addFragment(new AlarmListFragment()));
 
@@ -90,7 +87,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestData() {
-        binding.homeSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
         HashMap<String, String> param = new HashMap<>();
         param.put("temp", "1");

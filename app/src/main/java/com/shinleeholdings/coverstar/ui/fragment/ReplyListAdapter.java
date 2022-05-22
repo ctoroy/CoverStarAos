@@ -65,6 +65,9 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
+        if (mCommentItem == null) {
+            return 0;
+        }
         return itemList.size() + headerCount; // header +
     }
 

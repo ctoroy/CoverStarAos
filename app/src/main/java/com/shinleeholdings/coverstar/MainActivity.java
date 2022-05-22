@@ -1,6 +1,7 @@
 package com.shinleeholdings.coverstar;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.shinleeholdings.coverstar.ui.fragment.PrevMediaFragment;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.FragmentUtils;
+import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -74,6 +76,8 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         initFragmentTabStackInfo();
         initUi();
 
+        saveWidth();
+
         mCurrentTab = "";
 
         // 14일 => 회원가입 및 로그인 & UI 작업 & 디자인 누락 및 기능 누락된거 확인
@@ -81,6 +85,13 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         // 이후 테스트
 
         selectedTab(TabMenuType.HOME.toString());
+    }
+
+    private void saveWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.DISPLAY_WIDTH, width);
     }
 
     private void initFragmentTabStackInfo() {
