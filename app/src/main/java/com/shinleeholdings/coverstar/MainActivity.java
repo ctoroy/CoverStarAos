@@ -24,12 +24,19 @@ import com.shinleeholdings.coverstar.ui.fragment.PrevMediaFragment;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.FragmentUtils;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Stack;
+
+import network.model.BaseResponse;
+import network.model.NoticeDataList;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class MainActivity extends BaseActivity implements FragmentInteractionCallback {
 
@@ -80,11 +87,25 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
         mCurrentTab = "";
 
-        // 14일 => 회원가입 및 로그인 & UI 작업 & 디자인 누락 및 기능 누락된거 확인
-        // 28일 => 메인화면 API 적용 & UI 작업
-        // 이후 테스트
-
         selectedTab(TabMenuType.HOME.toString());
+        requestNoticeList();
+    }
+
+    private void requestNoticeList() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("temp", "1");
+        RetroClient.getApiInterface().getNoticeList(param).enqueue(new RetroCallback<NoticeDataList>() {
+            @Override
+            public void onSuccess(BaseResponse<NoticeDataList> receivedData) {
+                NoticeDataList data = receivedData.data;
+                homeFragment.setNoticeCount(data.size());
+                prevMediaFragment.setNoticeCount(data.size());
+            }
+
+            @Override
+            public void onFailure(BaseResponse<NoticeDataList> response) {
+            }
+        });
     }
 
     private void saveWidth() {

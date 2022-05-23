@@ -45,7 +45,7 @@ public class HomeFragment extends BaseFragment {
 
     private void initView() {
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
-        // TODO 이미지변경 공지사항 뱃지 표시
+        // TODO 이미지 변경
         binding.noticeImageView.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
         binding.homeFilterLayout.setOnClickListener(new View.OnClickListener() {
@@ -108,5 +108,9 @@ public class HomeFragment extends BaseFragment {
                 ProgressDialogHelper.dismiss();
             }
         });
+    }
+
+    public void setNoticeCount(int size) {
+        // TODO 공지사항 뱃지 표시
     }
 }
