@@ -86,9 +86,14 @@ public class SearchFragment extends BaseFragment {
                 ProgressDialogHelper.dismiss();
                 ContestDataList itemList = receivedData.data;
 
-                mAdapter.setData(itemList);
-                binding.searchResultRecyclerView.setVisibility(View.VISIBLE);
-                binding.noSearchResultView.setVisibility(View.GONE);
+                if (itemList.size() <= 0) {
+                    binding.searchResultRecyclerView.setVisibility(View.GONE);
+                    binding.noSearchResultView.setVisibility(View.VISIBLE);
+                } else {
+                    mAdapter.setData(itemList);
+                    binding.searchResultRecyclerView.setVisibility(View.VISIBLE);
+                    binding.noSearchResultView.setVisibility(View.GONE);
+                }
             }
 
             @Override
