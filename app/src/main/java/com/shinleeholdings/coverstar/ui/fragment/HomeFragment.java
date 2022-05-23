@@ -45,7 +45,8 @@ public class HomeFragment extends BaseFragment {
 
     private void initView() {
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
-        binding.alarmImageView.setOnClickListener(view -> addFragment(new AlarmListFragment()));
+        // TODO 이미지변경 공지사항 뱃지 표시
+        binding.noticeImageView.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
         binding.homeFilterLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,6 +9,7 @@ import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
 import com.shinleeholdings.coverstar.ui.fragment.DepositeFragment;
+import com.shinleeholdings.coverstar.ui.fragment.NoticeListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.SettingFragment;
 
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class FragmentUtils {
     public static boolean isTabLayoutGoneFragment(BaseFragment fragment) {
         try {
             if (fragment instanceof AlarmListFragment) {
+                return true;
+            }
+            if (fragment instanceof NoticeListFragment) {
                 return true;
             }
             if (fragment instanceof SettingFragment) {

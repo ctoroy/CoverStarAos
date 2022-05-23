@@ -6,6 +6,7 @@ import network.model.BaseResponse;
 import network.model.ContestGroupDataList;
 import network.model.ContestDataList;
 import network.model.LoginUserData;
+import network.model.NoticeDataList;
 import network.model.PhotoUploadResult;
 import network.model.DefaultResult;
 import okhttp3.MultipartBody;
@@ -24,6 +25,11 @@ public interface ApiInterface {
     @POST("setPlay")
     @FormUrlEncoded
     Call<BaseResponse<DefaultResult>> setPlay(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    // TODO 공지사항 API적용
+    @POST("getNoticeList")
+    @FormUrlEncoded
+    Call<BaseResponse<NoticeDataList>> getNoticeList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getPlayList")
     @FormUrlEncoded

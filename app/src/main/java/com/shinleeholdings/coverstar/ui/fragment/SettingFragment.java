@@ -45,12 +45,7 @@ public class SettingFragment extends BaseFragment {
 
         binding.editProfileLayout.setOnClickListener(view -> startActivity(new Intent(getActivity(), ProfileSettingActivity.class)));
 
-        binding.noticeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO 공지사항 웹페이지 이동
-            }
-        });
+        binding.noticeLayout.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
         binding.alarmLayout.setOnClickListener(view -> addFragment(new AlarmListFragment()));
 
