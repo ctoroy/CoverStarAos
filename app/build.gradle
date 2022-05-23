@@ -34,6 +34,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("./keystore/debug.keystore")
+        }
+    }
     buildFeatures {
         viewBinding true
     }
@@ -42,6 +47,11 @@ android {
         enabled = true
     }
 
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
