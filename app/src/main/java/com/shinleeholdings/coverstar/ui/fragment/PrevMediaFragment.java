@@ -53,7 +53,6 @@ public class PrevMediaFragment extends BaseFragment {
         binding.prevMediaSwipeRefreshLayout.setOnRefreshListener(this::requestSeasonList);
 
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
-        // TODO 이미지 변경 : 공지사항으로
         binding.noticeImageView.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
         mListAdapter = new PrevMediaListAdapter((MainActivity) getActivity());

@@ -43,13 +43,13 @@ public class NoticeListAdapter extends RecyclerView.Adapter {
         viewHolder.arrowImageView.setSelected(item.isSelected);
         if (item.isSelected) {
             viewHolder.contentsLayout.setVisibility(View.VISIBLE);
-            if (TextUtils.isEmpty(item.imagePath)) {
+            if (TextUtils.isEmpty(item.thumbnail)) {
                 viewHolder.noticeImageView.setVisibility(View.GONE);
             } else {
                 viewHolder.noticeImageView.setVisibility(View.VISIBLE);
-                ImageLoader.loadImage(viewHolder.noticeImageView, item.imagePath);
+                ImageLoader.loadImage(viewHolder.noticeImageView, item.thumbnail);
             }
-            viewHolder.noticeContentsTextView.setText(item.contents);
+            viewHolder.noticeContentsTextView.setText(item.content);
         } else {
             viewHolder.contentsLayout.setVisibility(View.GONE);
         }
@@ -79,6 +79,15 @@ public class NoticeListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return itemList.size();
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        mRecyclerView = recyclerView;
+    }
+
+    RecyclerView mRecyclerView;
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
@@ -113,6 +122,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter {
             if (item.isSelected) {
                 item.isSelected = false;
                 selectedItemIndex = -1;
+                notifyItemChanged(position);
             } else {
                 if (selectedItemIndex != -1) {
                     NoticeItem selectedItem = itemList.get(selectedItemIndex);
@@ -122,8 +132,12 @@ public class NoticeListAdapter extends RecyclerView.Adapter {
 
                 item.isSelected = true;
                 selectedItemIndex = position;
+                notifyItemChanged(position);
+                if (mRecyclerView != null) {
+                    mRecyclerView.scrollToPosition(position);
+                }
+
             }
-            notifyItemChanged(position);
         }
     }
 }
