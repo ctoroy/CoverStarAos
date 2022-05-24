@@ -23,7 +23,6 @@ import kotlin.jvm.functions.Function1;
 
 // https://github.com/tosspayments/android-sdk-util-sample
 public class PaymentWebViewActivity extends BaseActivity {
-    // TODO 매니페스트의 data scheme 도 확인필요
 
     private ConnectPayAuthWebManager connectPayAuthWebManager = new ConnectPayAuthWebManager(this);
     private ConnectPayOcrWebManager connectPayOcrWebManager = new ConnectPayOcrWebManager(this);
@@ -36,7 +35,7 @@ public class PaymentWebViewActivity extends BaseActivity {
         binding = ActivityPaymentWebviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // TODO url 확인
+        // TODO URL 설정 필요 : 포인트 충전
         String targetUrl = "";
         DebugLogger.i("tossPayments targetUrl : " + targetUrl);
 
@@ -86,7 +85,7 @@ public class PaymentWebViewActivity extends BaseActivity {
         ConnectPayAuthManager.requestBioMetricAuth(this, "MODULUSMODULUSSE", "EXPONENTEXPONENT", new Function1<String, Unit>() {
             @Override
             public Unit invoke(String s) {
-                // TODO 결과
+                // TODO 결과 ?
                 return null;
             }
         });
@@ -105,7 +104,7 @@ public class PaymentWebViewActivity extends BaseActivity {
             connectPayOcrWebManager.handleActivityResult(requestCode, resultCode, data);
 //            if (data != null) {
 //                String cardScanResult = data.getStringExtra(ConnectPayOcrWebManager.EXTRA_CARD_SCAN_RESULT_SCRIPT);
-//                // TODO
+                // TODO ocr 직접핸들
 //            }
         }
     }

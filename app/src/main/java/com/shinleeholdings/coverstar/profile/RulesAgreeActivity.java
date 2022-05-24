@@ -47,7 +47,7 @@ public class RulesAgreeActivity extends BaseActivity {
 
         binding.userRuleLayout.setOnClickListener(view -> {
 
-            // TODO 이용자 약관 상세 URL 설정
+            // TODO URL 설정 필요 : 이용 약관
             String ruleUrl = "https://www.naver.com";
             Intent intent = new Intent(this, RuleDetailActivity.class);
             intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);
@@ -55,7 +55,7 @@ public class RulesAgreeActivity extends BaseActivity {
         });
 
         binding.privateRuleLayout.setOnClickListener(view -> {
-            // TODO 개인정보 처리방침 약관 상세 URL 설정
+            // TODO URL 설정 필요 : 개인정보 처리방침 약관
             String ruleUrl = "https://www.naver.com";
             Intent intent = new Intent(this, RuleDetailActivity.class);
             intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);

@@ -26,7 +26,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<BaseResponse<DefaultResult>> setPlay(@FieldMap(encoded = true) HashMap<String, String> body);
 
-    // TODO 공지사항 API적용
+    // TODO API 적용 : 공지사항
     @POST("getNoticeList")
     @FormUrlEncoded
     Call<BaseResponse<NoticeDataList>> getNoticeList(@FieldMap(encoded = true) HashMap<String, String> body);

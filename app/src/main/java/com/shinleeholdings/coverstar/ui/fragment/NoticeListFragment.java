@@ -62,7 +62,6 @@ public class NoticeListFragment extends BaseFragment {
             public void onSuccess(BaseResponse<NoticeDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
                 mAdapter.setData(receivedData.data);
-
             }
 
             @Override
