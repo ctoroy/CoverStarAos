@@ -24,19 +24,12 @@ import com.shinleeholdings.coverstar.ui.fragment.PrevMediaFragment;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.FragmentUtils;
-import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Stack;
-
-import network.model.BaseResponse;
-import network.model.NoticeDataList;
-import network.retrofit.RetroCallback;
-import network.retrofit.RetroClient;
 
 public class MainActivity extends BaseActivity implements FragmentInteractionCallback {
 
@@ -88,24 +81,6 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         mCurrentTab = "";
 
         selectedTab(TabMenuType.HOME.toString());
-        requestNoticeList();
-    }
-
-    private void requestNoticeList() {
-        HashMap<String, String> param = new HashMap<>();
-        param.put("temp", "1");
-        RetroClient.getApiInterface().getNoticeList(param).enqueue(new RetroCallback<NoticeDataList>() {
-            @Override
-            public void onSuccess(BaseResponse<NoticeDataList> receivedData) {
-                NoticeDataList data = receivedData.data;
-                homeFragment.setNoticeCount(data.size());
-                prevMediaFragment.setNoticeCount(data.size());
-            }
-
-            @Override
-            public void onFailure(BaseResponse<NoticeDataList> response) {
-            }
-        });
     }
 
     private void saveWidth() {

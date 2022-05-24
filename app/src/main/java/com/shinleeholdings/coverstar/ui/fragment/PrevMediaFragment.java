@@ -161,8 +161,4 @@ public class PrevMediaFragment extends BaseFragment {
 
         ProgressDialogHelper.dismiss();
     }
-
-    public void setNoticeCount(int size) {
-        // TODO 공지사항 뱃지 표시
-    }
 }

@@ -109,8 +109,4 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
-
-    public void setNoticeCount(int size) {
-        // TODO 공지사항 뱃지 표시
-    }
 }
