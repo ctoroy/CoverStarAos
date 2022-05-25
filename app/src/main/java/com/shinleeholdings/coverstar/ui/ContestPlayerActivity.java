@@ -39,8 +39,7 @@ public class ContestPlayerActivity extends BaseActivity {
         String contestUrl = getIntent().getStringExtra(AppConstants.EXTRA.CONTEST_URL);
         String videoId = getVideoId(contestUrl);
 
-        DebugLogger.i("ContestPlayerActivity contestUrl : " + contestUrl);
-        DebugLogger.i("ContestPlayerActivity videoId : " + videoId);
+        DebugLogger.i("ContestPlayerActivity videoId : " + videoId + ", contestUrl : " + contestUrl);
 
         if (TextUtils.isEmpty(videoId)) {
             return;

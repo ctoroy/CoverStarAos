@@ -2,6 +2,7 @@ package com.shinleeholdings.coverstar.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.shinleeholdings.coverstar.AppConstants;
@@ -26,6 +27,10 @@ public class InputMessageActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String message = binding.messageEditTextView.getText().toString();
+                if (TextUtils.isEmpty(message)) {
+                    return;
+                }
+
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(AppConstants.EXTRA.MESSAGE, message);
                 setResult(RESULT_OK, resultIntent);
