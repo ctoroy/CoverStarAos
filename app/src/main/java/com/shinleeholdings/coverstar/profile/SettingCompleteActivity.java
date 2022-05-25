@@ -9,10 +9,8 @@ import com.shinleeholdings.coverstar.databinding.ActivitySettingCompleteBinding;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
-import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import network.model.LoginUserData;
-import network.retrofit.RetroClient;
 
 public class SettingCompleteActivity extends BaseActivity {
     private ActivitySettingCompleteBinding binding;

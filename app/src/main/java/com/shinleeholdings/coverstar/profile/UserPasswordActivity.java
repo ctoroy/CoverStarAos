@@ -183,6 +183,7 @@ public class UserPasswordActivity extends BaseActivity {
         param.put("userId", loginUserData.userId);
         param.put("nickName", loginUserData.nickName);
         param.put("userPwd", loginUserData.userPwd);
+        param.put("coinPwd", loginUserData.userPwd);
         param.put("userProfileImage", loginUserData.userProfileImage);
         param.put("pushId", SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.PUSH_ID));
         param.put("device", "1");
