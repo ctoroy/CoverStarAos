@@ -206,6 +206,7 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
                     notifyDataSetChanged();
                 }
             });
+            dialog.show();
         }
     }
 
