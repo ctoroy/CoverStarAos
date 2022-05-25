@@ -21,6 +21,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/contestImageView"
             android:layout_width="match_parent"
+            android:scaleType="fitXY"
             android:layout_height="94dp"/>
 
         <TextView

@@ -84,6 +84,7 @@
                     android:id="@+id/songImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="fitXY"
                     android:background="@color/subTextColor_6a6a6a" />
 
                 <androidx.appcompat.widget.AppCompatImageView
