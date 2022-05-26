@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shinleeholdings.coverstar.MainActivity;
@@ -39,6 +40,18 @@ public class ContestListAdapter extends RecyclerView.Adapter {
 
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
         viewHolder.contestItemLayout.setData(mMainActivity, item);
+    }
+
+    public void updateCount(ContestData targetItem) {
+        for (int i=0; i< itemList.size(); i++) {
+            ContestData item = itemList.get(i);
+            if (item.castCode.equals(targetItem.castCode)) {
+                item.watchCnt = targetItem.watchCnt;
+                item.likes = targetItem.likes;
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     public void setData(ArrayList<ContestData> dataList) {

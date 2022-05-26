@@ -111,18 +111,18 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof EpilogueItemViewHolder) {
             EpilogueItemViewHolder viewHolder = (EpilogueItemViewHolder) holder;
-            for (int i =0; i < mEpilogueList.size(); i++) {
-                ContestItemLayout contest = new ContestItemLayout(mMainActivity);
-                contest.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(mMainActivity, 300f), LinearLayout.LayoutParams.WRAP_CONTENT));
-                contest.setData(mMainActivity, mEpilogueList.get(i));
-                viewHolder.horizontalScrollView.addView(contest);
-
-                if (i < mEpilogueList.size() - 1) {
-                    View divider = new View(mMainActivity);
-                    divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(mMainActivity, 20f), 1));
-                    viewHolder.horizontalScrollView.addView(divider);
-                }
-            }
+//            for (int i =0; i < mEpilogueList.size(); i++) {
+//                ContestItemLayout contest = new ContestItemLayout(mMainActivity);
+//                contest.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(mMainActivity, 300f), LinearLayout.LayoutParams.WRAP_CONTENT));
+//                contest.setData(mMainActivity, mEpilogueList.get(i));
+//                viewHolder.horizontalScrollView.addView(contest);
+//
+//                if (i < mEpilogueList.size() - 1) {
+//                    View divider = new View(mMainActivity);
+//                    divider.setLayoutParams(new LinearLayout.LayoutParams(Util.dpToPixel(mMainActivity, 20f), 1));
+//                    viewHolder.horizontalScrollView.addView(divider);
+//                }
+//            }
         } else if (holder instanceof ContestHeaderItemViewHolder) {
             ContestHeaderItemViewHolder viewHolder = (ContestHeaderItemViewHolder) holder;
             switch (mSelectedSortType) {

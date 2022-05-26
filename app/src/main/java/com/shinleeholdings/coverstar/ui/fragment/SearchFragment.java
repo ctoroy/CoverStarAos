@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
+import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -25,7 +27,7 @@ import network.model.ContestDataList;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends BaseFragment implements ContestManager.IContestInfoUpdateListener {
 
     private FragmentSearchBinding binding;
     private ContestListAdapter mAdapter;
@@ -35,11 +37,13 @@ public class SearchFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         initView();
+        ContestManager.getSingleInstance().addInfoChangeListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        ContestManager.getSingleInstance().removeInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
@@ -103,5 +107,15 @@ public class SearchFragment extends BaseFragment {
                 binding.noSearchResultView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onWatchCountUpdated(ContestData item) {
+        mAdapter.updateCount(item);
+    }
+
+    @Override
+    public void onVoteCountUpdated(ContestData item) {
+        mAdapter.updateCount(item);
     }
 }

@@ -242,9 +242,9 @@ public class ContestDetailFragment extends BaseFragment {
         RetroClient.getApiInterface().setVote(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
             public void onSuccess(BaseResponse<DefaultResult> receivedData) {
-                ContestManager.getSingleInstance().sendVoteCompleteEvent(mContestItem);
                 updateVote(selectedStarCount);
                 mContestItem.addTotalLikeCount(selectedStarCount);
+                ContestManager.getSingleInstance().sendVoteCompleteEvent(mContestItem);
                 binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
                 ProgressDialogHelper.dismiss();
             }
@@ -306,6 +306,7 @@ public class ContestDetailFragment extends BaseFragment {
                 ContestDataList result = receivedData.data;
                 if (result.size() > 0) {
                     mContestItem = result.get(0);
+                    mContestItem.watchCnt = mContestItem.watchCnt + 1;
                     ContestManager.getSingleInstance().sendWatchCountUpdateEvent(mContestItem);
                     setContestInfo();
                     requestAdditinalData();

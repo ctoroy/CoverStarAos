@@ -10,8 +10,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentHomeBinding;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
+import com.shinleeholdings.coverstar.util.ContestManager;
+import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import java.util.HashMap;
@@ -21,7 +24,7 @@ import network.model.ContestDataList;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements ContestManager.IContestInfoUpdateListener {
 
     private FragmentHomeBinding binding;
     private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.LATEST;
@@ -34,12 +37,14 @@ public class HomeFragment extends BaseFragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         initView();
         setFilterInfo();
+        ContestManager.getSingleInstance().addInfoChangeListener(this);
         requestData();
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        ContestManager.getSingleInstance().removeInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
@@ -72,6 +77,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        // TODO ViewPager2로 바꿔봐야하나 notifyDataSetchanged하면 다시그리네...
         mHomePagerAdapter = new HomePagerAdapter((MainActivity) getActivity(), position -> binding.homeViewPager.setCurrentItem(position, true));
         binding.homeViewPager.setAdapter(mHomePagerAdapter);
         binding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -128,5 +134,34 @@ public class HomeFragment extends BaseFragment {
                 ProgressDialogHelper.dismiss();
             }
         });
+    }
+
+    private boolean needNotifyDataSetChanged = false;
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden == false) {
+            if (needNotifyDataSetChanged) {
+                needNotifyDataSetChanged = false;
+                mHomePagerAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onWatchCountUpdated(ContestData item) {
+        if (mHomePagerAdapter.updateCount(item)) {
+            needNotifyDataSetChanged = true;
+        }
+        DebugLogger.i("contestUpdate home onWatchCountUpdated needNotifyDataSetChanged : " + needNotifyDataSetChanged);
+    }
+
+    @Override
+    public void onVoteCountUpdated(ContestData item) {
+        if (mHomePagerAdapter.updateCount(item)) {
+            needNotifyDataSetChanged = true;
+        }
+        DebugLogger.i("contestUpdate home onVoteCountUpdated needNotifyDataSetChanged : " + needNotifyDataSetChanged);
     }
 }

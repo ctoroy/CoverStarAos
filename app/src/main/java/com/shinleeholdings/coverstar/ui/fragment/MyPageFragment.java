@@ -15,6 +15,7 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
 import com.shinleeholdings.coverstar.payment.PaymentWebViewActivity;
+import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
@@ -28,7 +29,7 @@ import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 import retrofit2.Call;
 
-public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUserInfoChangeEventListener {
+public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUserInfoChangeEventListener, ContestManager.IContestInfoUpdateListener {
 
     private FragmentMypageBinding binding;
 
@@ -41,11 +42,13 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMypageBinding.inflate(inflater, container, false);
         initView();
+        ContestManager.getSingleInstance().addInfoChangeListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
+        ContestManager.getSingleInstance().removeInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
@@ -208,5 +211,17 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
     public void onUserInfoUpdated() {
         ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
         binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
+    }
+
+    @Override
+    public void onWatchCountUpdated(ContestData item) {
+        playListAdapter.updateCount(item);
+        participateListAdapter.updateCount(item);
+    }
+
+    @Override
+    public void onVoteCountUpdated(ContestData item) {
+        playListAdapter.updateCount(item);
+        participateListAdapter.updateCount(item);
     }
 }

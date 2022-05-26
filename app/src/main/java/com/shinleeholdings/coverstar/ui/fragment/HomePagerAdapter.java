@@ -42,6 +42,21 @@ public class HomePagerAdapter extends PagerAdapter {
         }
     }
 
+    public boolean updateCount(ContestData targetItem) {
+        for (int i=0; i< itemList.size(); i++) {
+            Pair<ContestData, ArrayList<ContestData>> data = itemList.get(i);
+            for (int j=0; j <data.second.size(); j++) {
+                ContestData item = data.second.get(j);
+                if (item.castCode.equals(targetItem.castCode)) {
+                    item.watchCnt = targetItem.watchCnt;
+                    item.likes = targetItem.likes;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void setData(ContestDataList result) {
         itemList.clear();
 
