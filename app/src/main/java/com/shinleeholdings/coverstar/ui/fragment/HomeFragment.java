@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
@@ -44,6 +45,9 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initView() {
+        binding.homeSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.homeSwipeRefreshLayout.setOnRefreshListener(this::requestData);
+
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
         binding.noticeImageView.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
@@ -70,6 +74,22 @@ public class HomeFragment extends BaseFragment {
 
         mHomePagerAdapter = new HomePagerAdapter((MainActivity) getActivity(), position -> binding.homeViewPager.setCurrentItem(position, true));
         binding.homeViewPager.setAdapter(mHomePagerAdapter);
+        binding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                binding.homeSwipeRefreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+            }
+        });
     }
 
     private void setFilterInfo() {
@@ -87,6 +107,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestData() {
+        binding.homeSwipeRefreshLayout.setRefreshing(false);
         ProgressDialogHelper.show(getActivity());
         HashMap<String, String> param = new HashMap<>();
         param.put("temp", "1");
