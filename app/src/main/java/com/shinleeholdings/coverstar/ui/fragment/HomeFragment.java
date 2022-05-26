@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
@@ -29,7 +30,11 @@ public class HomeFragment extends BaseFragment implements ContestManager.IContes
     private FragmentHomeBinding binding;
     private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.LATEST;
 
-    private HomePagerAdapter mHomePagerAdapter;
+    private HomePager2Adapter mHomePagerAdapter;
+
+    public interface IPageMoveEventListener {
+        void onPageMove(int position);
+    }
 
     @Nullable
     @Override
@@ -77,22 +82,12 @@ public class HomeFragment extends BaseFragment implements ContestManager.IContes
             }
         });
 
-        // TODO ViewPager2로 바꿔봐야하나 notifyDataSetchanged하면 다시그리네...
-        mHomePagerAdapter = new HomePagerAdapter((MainActivity) getActivity(), position -> binding.homeViewPager.setCurrentItem(position, true));
+        mHomePagerAdapter = new HomePager2Adapter((MainActivity) getActivity(), position -> binding.homeViewPager.setCurrentItem(position, true));
         binding.homeViewPager.setAdapter(mHomePagerAdapter);
-        binding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
+        binding.homeViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
                 binding.homeSwipeRefreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
             }
         });
@@ -144,7 +139,7 @@ public class HomeFragment extends BaseFragment implements ContestManager.IContes
         if (hidden == false) {
             if (needNotifyDataSetChanged) {
                 needNotifyDataSetChanged = false;
-                mHomePagerAdapter.notifyDataSetChanged();
+//                mHomePagerAdapter.notifyDataSetChanged();
             }
         }
     }

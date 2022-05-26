@@ -66,7 +66,12 @@
                 android:background="#ff7a9a" />
         </RelativeLayout>
 
-        <androidx.viewpager.widget.ViewPager
+<!--        <androidx.viewpager.widget.ViewPager-->
+<!--            android:id="@+id/homeViewPager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1" />-->
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/homeViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"

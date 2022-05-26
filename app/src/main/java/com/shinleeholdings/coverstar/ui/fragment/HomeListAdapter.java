@@ -34,9 +34,9 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     private final int ITEM_TYPE_CONTEST_NOTI = 1;
     private final int ITEM_TYPE_CONTEST = 2;
 
-    private HomePagerAdapter.IPageMoveEventListener moveEventListener;
+    private HomeFragment.IPageMoveEventListener moveEventListener;
 
-    public HomeListAdapter(MainActivity activity, HomePagerAdapter.IPageMoveEventListener listener) {
+    public HomeListAdapter(MainActivity activity, HomeFragment.IPageMoveEventListener listener) {
         mMainActivity = activity;
         moveEventListener = listener;
     }
