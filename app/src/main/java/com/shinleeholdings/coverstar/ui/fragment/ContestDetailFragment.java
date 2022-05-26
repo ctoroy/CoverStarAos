@@ -32,6 +32,7 @@ import com.shinleeholdings.coverstar.ui.InputMessageActivity;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.ui.custom.MySlidingDrawer;
 import com.shinleeholdings.coverstar.util.CommentHelper;
+import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -241,6 +242,7 @@ public class ContestDetailFragment extends BaseFragment {
         RetroClient.getApiInterface().setVote(param).enqueue(new RetroCallback<DefaultResult>() {
             @Override
             public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                ContestManager.getSingleInstance().sendVoteCompleteEvent(mContestItem);
                 updateVote(selectedStarCount);
                 mContestItem.addTotalLikeCount(selectedStarCount);
                 binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
@@ -304,6 +306,7 @@ public class ContestDetailFragment extends BaseFragment {
                 ContestDataList result = receivedData.data;
                 if (result.size() > 0) {
                     mContestItem = result.get(0);
+                    ContestManager.getSingleInstance().sendWatchCountUpdateEvent(mContestItem);
                     setContestInfo();
                     requestAdditinalData();
                     getCommentList();
