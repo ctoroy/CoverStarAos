@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shinleeholdings.coverstar.MainActivity;
@@ -15,6 +16,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
+import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -23,7 +25,8 @@ import java.util.ArrayList;
 public class HomeListAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private MainActivity mMainActivity;
+    private final MainActivity mMainActivity;
+    private final HomeFragment.IPageMoveEventListener moveEventListener;
 
     private boolean mHasEventTab;
     private boolean mIsCoverStarTab;
@@ -34,11 +37,39 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     private final int ITEM_TYPE_CONTEST_NOTI = 1;
     private final int ITEM_TYPE_CONTEST = 2;
 
-    private HomeFragment.IPageMoveEventListener moveEventListener;
-
     public HomeListAdapter(MainActivity activity, HomeFragment.IPageMoveEventListener listener) {
         mMainActivity = activity;
         moveEventListener = listener;
+        ContestManager.getSingleInstance().addInfoChangeListener(new ContestManager.IContestInfoUpdateListener() {
+            @Override
+            public void onWatchCountUpdated(ContestData item) {
+                updateInfo(item);
+            }
+
+            @Override
+            public void onVoteCountUpdated(ContestData item) {
+                updateInfo(item);
+            }
+        });
+    }
+
+    private void updateInfo(ContestData targetItem) {
+        try {
+            for (int i=0; i< mItemList.size(); i++) {
+                ContestData item = mItemList.get(i);
+                if (item.castCode.equals(targetItem.castCode)) {
+                    item.watchCnt = targetItem.watchCnt;
+                    item.likes = targetItem.likes;
+                    if (hasRegistItem()) {
+                        notifyItemChanged(i + 1);
+                    } else {
+                        notifyItemChanged(i);
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     @Override

@@ -11,11 +11,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentHomeBinding;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
-import com.shinleeholdings.coverstar.util.ContestManager;
-import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import java.util.HashMap;
@@ -25,7 +22,7 @@ import network.model.ContestDataList;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
-public class HomeFragment extends BaseFragment implements ContestManager.IContestInfoUpdateListener {
+public class HomeFragment extends BaseFragment {
 
     private FragmentHomeBinding binding;
     private SortFilterDialog.SortType selectedSortType = SortFilterDialog.SortType.LATEST;
@@ -42,14 +39,12 @@ public class HomeFragment extends BaseFragment implements ContestManager.IContes
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         initView();
         setFilterInfo();
-        ContestManager.getSingleInstance().addInfoChangeListener(this);
         requestData();
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        ContestManager.getSingleInstance().removeInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
@@ -129,34 +124,5 @@ public class HomeFragment extends BaseFragment implements ContestManager.IContes
                 ProgressDialogHelper.dismiss();
             }
         });
-    }
-
-    private boolean needNotifyDataSetChanged = false;
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden == false) {
-            if (needNotifyDataSetChanged) {
-                needNotifyDataSetChanged = false;
-//                mHomePagerAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void onWatchCountUpdated(ContestData item) {
-        if (mHomePagerAdapter.updateCount(item)) {
-            needNotifyDataSetChanged = true;
-        }
-        DebugLogger.i("contestUpdate home onWatchCountUpdated needNotifyDataSetChanged : " + needNotifyDataSetChanged);
-    }
-
-    @Override
-    public void onVoteCountUpdated(ContestData item) {
-        if (mHomePagerAdapter.updateCount(item)) {
-            needNotifyDataSetChanged = true;
-        }
-        DebugLogger.i("contestUpdate home onVoteCountUpdated needNotifyDataSetChanged : " + needNotifyDataSetChanged);
     }
 }

@@ -16,7 +16,6 @@ public class ContestManager {
 	private final ArrayList<IContestInfoUpdateListener> updateListenerList = new ArrayList<>();
 
 	public void addInfoChangeListener(IContestInfoUpdateListener listener) {
-		// TODO
 		synchronized(updateListenerList) {
 			if (updateListenerList.contains(listener) == false) {
 				updateListenerList.add(listener);
@@ -25,7 +24,6 @@ public class ContestManager {
 	}
 
 	public void removeInfoChangeListener(IContestInfoUpdateListener listener) {
-		// TODO
 		synchronized(updateListenerList) {
 			updateListenerList.remove(listener);
 		}

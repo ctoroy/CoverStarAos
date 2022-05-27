@@ -1,6 +1,5 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
@@ -62,22 +60,6 @@ public class HomePager2Adapter extends RecyclerView.Adapter {
             Pair<ContestData, ArrayList<ContestData>> data = itemList.get(i);
             Util.sortList(selectedSortType, data.second);
         }
-    }
-
-    public boolean updateCount(ContestData targetItem) {
-        for (int i=0; i< itemList.size(); i++) {
-            Pair<ContestData, ArrayList<ContestData>> data = itemList.get(i);
-            for (int j=0; j <data.second.size(); j++) {
-                ContestData item = data.second.get(j);
-                if (item.castCode.equals(targetItem.castCode)) {
-                    item.watchCnt = targetItem.watchCnt;
-                    item.likes = targetItem.likes;
-                    notifyItemChanged(i);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public void setData(ContestDataList result) {
