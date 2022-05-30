@@ -49,6 +49,7 @@ import network.model.ContestDataList;
 import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
+import retrofit2.Call;
 
 public class ContestDetailFragment extends BaseFragment {
 
@@ -287,11 +288,65 @@ public class ContestDetailFragment extends BaseFragment {
 
         updateVote(mContestItem.episode);
 
+        if (AppConstants.CHATTING_ENABLE) {
+            binding.followTextView.setVisibility(View.VISIBLE);
+            updateFollow();
+        } else {
+            binding.followTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateFollow() {
         if (mContestItem.isFollow()) {
             binding.followTextView.setText(getString(R.string.unfollow));
+            binding.followTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requestFollow(false);
+                }
+            });
         } else {
             binding.followTextView.setText(getString(R.string.follow));
+            binding.followTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requestFollow(true);
+                }
+            });
         }
+    }
+
+    private void requestFollow(boolean isFollow) {
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        param.put("castId", mContestItem.castId);
+
+        ProgressDialogHelper.show(getActivity());
+
+        Call<BaseResponse<DefaultResult>> call;
+        if (isFollow) {
+            call = RetroClient.getApiInterface().setFollow(param);
+        } else {
+            call = RetroClient.getApiInterface().deleteFollow(param);
+        }
+        call.enqueue(new RetroCallback<DefaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
+                if (isFollow) {
+                    mContestItem.accumWatchCnt = mContestItem.castId;
+                } else {
+                    mContestItem.accumWatchCnt = "";
+                }
+                updateFollow();
+            }
+
+            @Override
+            public void onFailure(BaseResponse<DefaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
     }
 
     private void requestContestDetail(String castCode) {

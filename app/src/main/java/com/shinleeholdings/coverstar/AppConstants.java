@@ -7,6 +7,8 @@ package com.shinleeholdings.coverstar;
  */
 public class AppConstants {
 
+    public static final boolean CHATTING_ENABLE = false;
+
     public static final String APP_NAME = "CoverStar";
 
     public static final class EXTRA {

@@ -22,6 +22,14 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
+    @POST("setFollow")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> setFollow(@FieldMap(encoded = true) HashMap<String, String> body);
+
+    @POST("deleteFollow")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> deleteFollow(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("setPlay")
     @FormUrlEncoded
     Call<BaseResponse<DefaultResult>> setPlay(@FieldMap(encoded = true) HashMap<String, String> body);

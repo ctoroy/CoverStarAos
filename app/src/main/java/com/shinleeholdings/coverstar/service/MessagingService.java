@@ -40,7 +40,10 @@ public class MessagingService extends FirebaseMessagingService {
         if (SharedPreferenceHelper.getInstance().getBooleanPreference(SharedPreferenceHelper.ALARM_IS_OFF)) {
             return;
         }
-        showNotification(remoteMessage);
+        try {
+            showNotification(remoteMessage);
+        } catch (Exception e) {
+        }
     }
 
     private void showNotification(RemoteMessage remoteMessage) {

@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
 import com.shinleeholdings.coverstar.payment.PaymentWebViewActivity;
@@ -78,6 +80,18 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
             @Override
             public void onClick(View view) {
                 addFragment(new SettingFragment());
+            }
+        });
+
+        if (AppConstants.CHATTING_ENABLE) {
+            binding.messageImageView.setVisibility(View.VISIBLE);
+        } else {
+            binding.messageImageView.setVisibility(View.GONE);
+        }
+        binding.messageImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFragment(new ChattingListFragment());
             }
         });
 

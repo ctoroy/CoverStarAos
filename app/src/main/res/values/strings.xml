@@ -182,4 +182,7 @@
     <string name="contest_total_price">총 상 금 : %s</string>
     <string name="contest_final_date">입상자발표 : %s</string>
     <string name="price_display_format">%s 원</string>
+
+    <string name="message">메세지</string>
+
 </resources>
