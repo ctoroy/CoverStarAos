@@ -11,7 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.shinleeholdings.coverstar.databinding.FragmentChattingListBinding;
 import com.shinleeholdings.coverstar.databinding.FragmentFollowBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+
+import java.util.HashMap;
+
+import network.model.BaseResponse;
+import network.model.DefaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class FollowListFragment extends BaseFragment {
 
@@ -42,13 +50,13 @@ public class FollowListFragment extends BaseFragment {
 
     private void requestData() {
         ProgressDialogHelper.show(getActivity());
-//        mAdapter.setData();
-//        ***get follow list
-//                /coverstarAPI/getFollow?userId=8201012345678
-//        @RequestParam("userId") String userId
-//
-//        {
-//            "data": [
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        RetroClient.getApiInterface().getFollow(param).enqueue(new RetroCallback<DefaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
+                //            "data": [
 //            {
 //                "userId": "8201051391123",
 //                    "userPwd": "*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9",
@@ -65,6 +73,13 @@ public class FollowListFragment extends BaseFragment {
 //                    "userNation": "KR",
 //                    "recommend": "4178496412"
 //            },
-        ProgressDialogHelper.dismiss();
+//        mAdapter.setData();
+            }
+
+            @Override
+            public void onFailure(BaseResponse<DefaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
     }
 }
