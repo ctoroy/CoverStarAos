@@ -42,12 +42,14 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
             return;
         }
 
+        boolean isItemSelected = (selectedItemIndex == position);
+
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
 
         viewHolder.alarmTypeTextView.setText("Alarm");
         viewHolder.alarmTitleTextView.setText("알림타이틀");
-        viewHolder.arrowImageView.setSelected(item.isSelected);
-        if (item.isSelected) {
+        viewHolder.arrowImageView.setSelected(isItemSelected);
+        if (isItemSelected) {
             viewHolder.contentsLayout.setVisibility(View.VISIBLE);
             String imagePath = "";
             if (TextUtils.isEmpty(imagePath)) {
@@ -117,17 +119,17 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
                 return;
             }
 
-            if (item.isSelected) {
-                item.isSelected = false;
+            boolean isItemSelected = (selectedItemIndex == position);
+
+            if (isItemSelected) {
                 selectedItemIndex = -1;
             } else {
                 if (selectedItemIndex != -1) {
-                    AlarmItem selectedItem = itemList.get(selectedItemIndex);
-                    selectedItem.isSelected = false;
-                    notifyItemChanged(selectedItemIndex);
+                    final int prevSelected = selectedItemIndex;
+                    selectedItemIndex = -1;
+                    notifyItemChanged(prevSelected);
                 }
 
-                item.isSelected = true;
                 selectedItemIndex = position;
             }
             notifyItemChanged(position);
