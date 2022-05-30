@@ -32,6 +32,9 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         DebugLogger.i("onMessageReceived : " + remoteMessage.toString());
+        if (SharedPreferenceHelper.getInstance().getBooleanPreference(SharedPreferenceHelper.ALARM_IS_OFF)) {
+            return;
+        }
         showNotification(remoteMessage);
     }
 

@@ -15,6 +15,7 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
 import com.shinleeholdings.coverstar.profile.ProfileSettingActivity;
+import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 public class SettingFragment extends BaseFragment {
@@ -47,7 +48,21 @@ public class SettingFragment extends BaseFragment {
 
         binding.noticeLayout.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
-        binding.alarmLayout.setOnClickListener(view -> addFragment(new AlarmListFragment()));
+        binding.alarmLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.alarmLayout.isSelected()) {
+                    binding.alarmLayout.setSelected(false);
+                    SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.ALARM_IS_OFF, true);
+                } else {
+                    binding.alarmLayout.setSelected(true);
+                    SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.ALARM_IS_OFF, false);
+                }
+            }
+        });
+
+        boolean alarmIsOff = SharedPreferenceHelper.getInstance().getBooleanPreference(SharedPreferenceHelper.ALARM_IS_OFF);
+        binding.alarmLayout.setSelected(!alarmIsOff);
 
         try {
             PackageInfo pInfo = getActivity().getApplicationContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);

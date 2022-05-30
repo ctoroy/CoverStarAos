@@ -70,7 +70,6 @@
         android:background="@color/white"
         android:layout_marginTop="4dp"
         android:gravity="center_vertical"
-        android:visibility="gone"
         android:paddingLeft="15dp"
         android:paddingRight="6dp"
         android:orientation="horizontal">
@@ -85,9 +84,10 @@
             android:text="@string/alarm"/>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:duplicateParentState="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_outlined_directions_chevron_right"/>
+            android:src="@drawable/on_off_bg"/>
     </LinearLayout>
 
     <LinearLayout
