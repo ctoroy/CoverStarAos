@@ -5,6 +5,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
+import com.shinleeholdings.coverstar.chatting.ChattingRoomFragment;
+import com.shinleeholdings.coverstar.chatting.FollowListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.ui.fragment.ContestDetailFragment;
@@ -51,6 +54,15 @@ public class FragmentUtils {
     public static boolean isTabLayoutGoneFragment(BaseFragment fragment) {
         try {
             if (fragment instanceof AlarmListFragment) {
+                return true;
+            }
+            if (fragment instanceof ChattingListFragment) {
+                return true;
+            }
+            if (fragment instanceof FollowListFragment) {
+                return true;
+            }
+            if (fragment instanceof ChattingRoomFragment) {
                 return true;
             }
             if (fragment instanceof NoticeListFragment) {

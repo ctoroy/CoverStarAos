@@ -33,6 +33,12 @@ public class ChattingListFragment extends BaseFragment {
 
     private void initView() {
         binding.titleBackLayout.setOnClickListener(view -> finish());
+        binding.newChattingImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFragment(new FollowListFragment());
+            }
+        });
 
         binding.chattingRoomListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // TODO 아답터

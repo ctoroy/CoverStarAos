@@ -9,17 +9,19 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.databinding.FragmentChattingListBinding;
+import com.shinleeholdings.coverstar.databinding.FragmentFollowBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 public class FollowListFragment extends BaseFragment {
 
-    private FragmentChattingListBinding binding;
+    private FragmentFollowBinding binding;
+    // TODO 팔로우 아답터 설정
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentChattingListBinding.inflate(inflater, container, false);
+        binding = FragmentFollowBinding.inflate(inflater, container, false);
         initView();
         requestData();
         return binding.getRoot();
@@ -34,8 +36,8 @@ public class FollowListFragment extends BaseFragment {
     private void initView() {
         binding.titleBackLayout.setOnClickListener(view -> finish());
 
-        binding.chattingRoomListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO 아답터
+        binding.followListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // TODO 아답터 설정
     }
 
     private void requestData() {
