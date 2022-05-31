@@ -5,7 +5,8 @@ import java.util.HashMap;
 import network.model.BaseResponse;
 import network.model.ContestGroupDataList;
 import network.model.ContestDataList;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
+import network.model.CoverStarUserList;
 import network.model.NoticeDataList;
 import network.model.PhotoUploadResult;
 import network.model.DefaultResult;
@@ -24,7 +25,7 @@ public interface ApiInterface {
 
     @POST("getFollow")
     @FormUrlEncoded
-    Call<BaseResponse<DefaultResult>> getFollow(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<CoverStarUserList>> getFollow(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("setFollow")
     @FormUrlEncoded
@@ -92,7 +93,7 @@ public interface ApiInterface {
 
     @POST("login")
     @FormUrlEncoded
-    Call<BaseResponse<LoginUserData>> loginCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<CoverStarUser>> loginCoverStar(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("checkDupId")
     @FormUrlEncoded

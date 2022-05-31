@@ -10,12 +10,12 @@ import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 
 public class SettingCompleteActivity extends BaseActivity {
     private ActivitySettingCompleteBinding binding;
 
-    private LoginUserData loginUserData = null;
+    private CoverStarUser loginUserData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import network.model.BaseResponse;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -138,7 +138,7 @@ public class PhoneCertActivity extends BaseActivity {
                 ProgressDialogHelper.dismiss();
                 Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
 
-                LoginUserData loginUserData = new LoginUserData();
+                CoverStarUser loginUserData = new CoverStarUser();
                 loginUserData.userId = userId;
 
                 intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
@@ -168,7 +168,7 @@ public class PhoneCertActivity extends BaseActivity {
             binding.nextButton.setText(getString(R.string.next));
         } else if (certMode.equals(PHONE_CERT_MODE_LOGIN)) {
             binding.titleLayout.titleTextView.setText(R.string.login);
-            LoginUserData loginData = LoginHelper.getSingleInstance().getSavedLoginUserData();
+            CoverStarUser loginData = LoginHelper.getSingleInstance().getSavedLoginUserData();
 
             String nickName = loginData.nickName;
             String phoneNum = loginData.getPhoneNumWithoutNationCode();
@@ -330,7 +330,7 @@ public class PhoneCertActivity extends BaseActivity {
         String countryCode = binding.ccp.getSelectedCountryCode();
         String userId = countryCode + phoneNum;
 
-        LoginUserData loginUserData = new LoginUserData();
+        CoverStarUser loginUserData = new CoverStarUser();
         loginUserData.userId = userId;
         loginUserData.phoneNumber = userId;
         loginUserData.userDialCode = countryCode;

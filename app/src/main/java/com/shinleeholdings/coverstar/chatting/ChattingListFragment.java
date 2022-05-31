@@ -41,12 +41,16 @@ public class ChattingListFragment extends BaseFragment {
         });
 
         binding.chattingRoomListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO 아답터
+        // TODO 채팅 리스트 아답터 설정
     }
 
     private void requestData() {
         ProgressDialogHelper.show(getActivity());
+        // TODO 채팅 목록 불러오기
+        // TODO 빈화면 설정
 //        mAdapter.setData();
         ProgressDialogHelper.dismiss();
     }
+
+    // 채팅 방 리스트 구조
 }

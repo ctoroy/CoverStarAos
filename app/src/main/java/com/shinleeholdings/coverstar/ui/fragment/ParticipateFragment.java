@@ -28,7 +28,7 @@ import java.util.HashMap;
 import network.model.BaseResponse;
 import network.model.ContestGroupDataList;
 import network.model.ContestInfoItem;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -141,7 +141,7 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.ILo
         DialogHelper.showRegistConfirmPopup(getActivity(), selectedContestInfoItem.contestPayAmt, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginUserData userData = LoginHelper.getSingleInstance().getSavedLoginUserData();
+                CoverStarUser userData = LoginHelper.getSingleInstance().getSavedLoginUserData();
                 if (userData == null) {
                     Intent intent = new Intent(getActivity(), LaunchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

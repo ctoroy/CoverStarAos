@@ -29,7 +29,7 @@ import gun0912.tedimagepicker.builder.TedImagePicker;
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener;
 import gun0912.tedimagepicker.builder.type.MediaType;
 import network.model.BaseResponse;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 import network.model.PhotoUploadResult;
 import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
@@ -39,7 +39,7 @@ public class ProfileSettingActivity extends BaseActivity {
     private ActivityProfileSettingBinding binding;
     private File selectedImageFile;
 
-    private LoginUserData loginUserData = null;
+    private CoverStarUser loginUserData = null;
     private boolean isJoin = false;
 
     @Override

@@ -14,7 +14,7 @@ import com.shinleeholdings.coverstar.util.Util;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -22,7 +22,7 @@ import network.retrofit.RetroClient;
 public class InputInviteCodeActivity extends BaseActivity {
     private ActivityInputInviteCodeBinding binding;
 
-    private LoginUserData loginUserData = null;
+    private CoverStarUser loginUserData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

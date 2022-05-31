@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginUserData implements Parcelable {
+public class CoverStarUser implements Parcelable {
 //	        "userId": "8201051391123",
 //					"userPwd": "*6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9",
 //					"userType": 0, //NA
@@ -46,7 +46,7 @@ public class LoginUserData implements Parcelable {
 		}
 	}
 
-	public LoginUserData() {
+	public CoverStarUser() {
 
 	}
 
@@ -70,7 +70,7 @@ public class LoginUserData implements Parcelable {
 		dest.writeString(recommend);
 	}
 
-	protected LoginUserData(Parcel in) {
+	protected CoverStarUser(Parcel in) {
 		userId = in.readString();
 		userPwd = in.readString();
 		userType = in.readInt();
@@ -84,15 +84,15 @@ public class LoginUserData implements Parcelable {
 		recommend = in.readString();
 	}
 
-	public static final Creator<LoginUserData> CREATOR = new Creator<LoginUserData>() {
+	public static final Creator<CoverStarUser> CREATOR = new Creator<CoverStarUser>() {
 		@Override
-		public LoginUserData createFromParcel(Parcel in) {
-			return new LoginUserData(in);
+		public CoverStarUser createFromParcel(Parcel in) {
+			return new CoverStarUser(in);
 		}
 
 		@Override
-		public LoginUserData[] newArray(int size) {
-			return new LoginUserData[size];
+		public CoverStarUser[] newArray(int size) {
+			return new CoverStarUser[size];
 		}
 	};
 }

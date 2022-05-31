@@ -6,8 +6,6 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-import network.model.LoginUserData;
-
 public class ContestData implements Parcelable {
     //+:경연 *:이벤트
 //	public String castCode; //+*방키 방장아이디+yyyymmddhhmmss ctoroy20210726162622

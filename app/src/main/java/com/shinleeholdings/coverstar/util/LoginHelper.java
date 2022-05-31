@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.LoginUserData;
+import network.model.CoverStarUser;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
@@ -68,7 +68,7 @@ public class LoginHelper {
 	private static volatile LoginHelper instance;
 	private final static Object lockObject = new Object();
 
-	private LoginUserData mLoginUserData;
+	private CoverStarUser mLoginUserData;
 
 	public static LoginHelper getSingleInstance() {
 		if (instance == null) {
@@ -90,7 +90,7 @@ public class LoginHelper {
 	}
 
 	public void updateMyCoin(int updateValue) {
-		LoginUserData userData = getSavedLoginUserData();
+		CoverStarUser userData = getSavedLoginUserData();
 		if (userData == null) {
 			return;
 		}
@@ -102,7 +102,7 @@ public class LoginHelper {
 	}
 
 	public void updateUserInfo(String imagePath, String nickName) {
-		LoginUserData userData = getSavedLoginUserData();
+		CoverStarUser userData = getSavedLoginUserData();
 		if (userData == null) {
 			return;
 		}
@@ -135,14 +135,14 @@ public class LoginHelper {
 		return getSavedLoginUserData().userId;
 	}
 
-	public LoginUserData getSavedLoginUserData() {
+	public CoverStarUser getSavedLoginUserData() {
 		if (mLoginUserData == null) {
-			mLoginUserData = SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, LoginUserData.class);
+			mLoginUserData = SharedPreferenceHelper.getInstance().getObject(SharedPreferenceHelper.LOGIN_USER_DATA, CoverStarUser.class);
 		}
 		return mLoginUserData;
 	}
 
-	public void saveLoginUserData(LoginUserData data) {
+	public void saveLoginUserData(CoverStarUser data) {
 		SharedPreferenceHelper.getInstance().putObject(SharedPreferenceHelper.LOGIN_USER_DATA, data);
 	}
 
@@ -165,9 +165,9 @@ public class LoginHelper {
 		param.put("device", "1");
 		param.put("pushId", SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.PUSH_ID));
 
-		RetroClient.getApiInterface().loginCoverStar(param).enqueue(new RetroCallback<LoginUserData>() {
+		RetroClient.getApiInterface().loginCoverStar(param).enqueue(new RetroCallback<CoverStarUser>() {
 			@Override
-			public void onSuccess(BaseResponse<LoginUserData> receivedData) {
+			public void onSuccess(BaseResponse<CoverStarUser> receivedData) {
 				ProgressDialogHelper.dismiss();
 				mLoginUserData = receivedData.data;
 				if (isAutoLogin == false) {
@@ -179,7 +179,7 @@ public class LoginHelper {
 			}
 
 			@Override
-			public void onFailure(BaseResponse<LoginUserData> response) {
+			public void onFailure(BaseResponse<CoverStarUser> response) {
 				ProgressDialogHelper.dismiss();
 				listener.onComplete(false);
 			}
