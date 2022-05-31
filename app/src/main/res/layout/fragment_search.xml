@@ -25,7 +25,7 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:textColor="@color/mainTextColor_0e0f0e"
@@ -38,7 +38,6 @@
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/searchImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

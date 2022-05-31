@@ -1,13 +1,13 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,8 +17,8 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentSearchBinding;
 import com.shinleeholdings.coverstar.util.ContestManager;
+import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
-import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.HashMap;
 
@@ -31,6 +31,8 @@ public class SearchFragment extends BaseFragment implements ContestManager.ICont
 
     private FragmentSearchBinding binding;
     private ContestListAdapter mAdapter;
+
+    private final Handler searchHandler = new Handler();
 
     @Nullable
     @Override
@@ -53,17 +55,25 @@ public class SearchFragment extends BaseFragment implements ContestManager.ICont
         binding.titleLayout.titleTextView.setText(getString(R.string.search));
         binding.titleLayout.titleBackLayout.setOnClickListener(view -> finish());
 
-        binding.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    requestSearch();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (searchRunnable != null) {
+                    searchHandler.removeCallbacks(searchRunnable);
                 }
-                return false;
+                final String requestKeyword = charSequence.toString();
+                searchRunnable = () -> requestSearch(requestKeyword);
+                searchHandler.postDelayed(searchRunnable, 300);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
-
-        binding.searchImageView.setOnClickListener(view -> requestSearch());
 
         binding.searchResultRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,22 +82,24 @@ public class SearchFragment extends BaseFragment implements ContestManager.ICont
         binding.searchResultRecyclerView.setAdapter(mAdapter);
     }
 
-    private void requestSearch() {
-        String inputText = binding.searchEditText.getText().toString();
-        if (TextUtils.isEmpty(inputText)) {
+    private Runnable searchRunnable;
+
+    private void requestSearch(String searchText) {
+        if (TextUtils.isEmpty(searchText)) {
             binding.searchResultRecyclerView.setVisibility(View.GONE);
             binding.noSearchResultView.setVisibility(View.GONE);
             return;
         }
 
-        ProgressDialogHelper.show(getActivity());
+        if (NetworkHelper.isNetworkConnected() == false) {
+            return;
+        }
 
         HashMap<String, String> param = new HashMap<>();
-        param.put("keyword", inputText);
+        param.put("keyword", searchText);
         RetroClient.getApiInterface().getLiveListName(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
-                ProgressDialogHelper.dismiss();
                 ContestDataList itemList = receivedData.data;
 
                 if (itemList.size() <= 0) {
@@ -102,7 +114,6 @@ public class SearchFragment extends BaseFragment implements ContestManager.ICont
 
             @Override
             public void onFailure(BaseResponse<ContestDataList> response) {
-                ProgressDialogHelper.dismiss();
                 binding.searchResultRecyclerView.setVisibility(View.GONE);
                 binding.noSearchResultView.setVisibility(View.VISIBLE);
             }
