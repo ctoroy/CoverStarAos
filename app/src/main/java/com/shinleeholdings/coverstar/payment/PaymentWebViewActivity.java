@@ -1,34 +1,33 @@
 package com.shinleeholdings.coverstar.payment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Message;
+import android.text.TextUtils;
+import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.databinding.ActivityPaymentWebviewBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
-import com.tosspayments.android.auth.interfaces.ConnectPayAuthWebManager;
-import com.tosspayments.android.auth.utils.ConnectPayAuthManager;
-import com.tosspayments.android.ocr.common.ConnectPayOcrManager;
-import com.tosspayments.android.ocr.interfaces.ConnectPayOcrWebManager;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-
-// https://github.com/tosspayments/android-sdk-util-sample
 public class PaymentWebViewActivity extends BaseActivity {
 
-    private ConnectPayAuthWebManager connectPayAuthWebManager = new ConnectPayAuthWebManager(this);
-    private ConnectPayOcrWebManager connectPayOcrWebManager = new ConnectPayOcrWebManager(this);
+    public static final int AMOUNT = 1000;
+    public static final String ORDERID = "kokoko" + System.currentTimeMillis(); //주문번호는 바꾸어서 테스트하셔 합니다.
+    public static final String ORDER = "가나다라마바사";
+    public static final String NAME = "test";
+
+    public static final String SHOP_WEBVIEW_URL = "https://coverstar.tv/pay/index.php?p="+AMOUNT+"&o="+ORDERID+"&n="+ORDER+"&c="+NAME ;
 
     private ActivityPaymentWebviewBinding binding;
-    @SuppressLint("JavascriptInterface")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,76 +35,88 @@ public class PaymentWebViewActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         // TODO URL 설정 필요 : 포인트 충전
-        String targetUrl = "";
-        DebugLogger.i("tossPayments targetUrl : " + targetUrl);
+        String targetUrl = SHOP_WEBVIEW_URL;
+        DebugLogger.i("PaymentWebViewActivity targetUrl : " + targetUrl);
 
-        WebSettings webSettings = binding.nonLeakWebView.getSettings();
+        binding.webviewLayout.setWebViewClient(new MyWebViewClient());
+
+        WebSettings webSettings = binding.webviewLayout.getSettings();
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         webSettings.setJavaScriptEnabled(true); // javascript를 실행할 수 있도록 설정
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setSupportMultipleWindows(true); // 여러개의 윈도우를 사용할 수 있도록 설정
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
         webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        binding.webviewLayout.setWebChromeClient(new CustomWebViewClient(this));
+        /**
+         * 화면 포트에 맞도록 웹 설정을 변경합니다.
+         * v 1.1.1 버전 웹 퍼블리셔 이슈로 인하여 해당 오류 사항을 수정하지않습니다.
+         *
+         * mWebView.getSettings().setUseWideViewPort(true);
+         * mWebView.getSettings().setLoadWithOverviewMode(true);
+         * mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+         *
+         */
+        binding.webviewLayout.addJavascriptInterface(new WebViewInterface(this),WebViewInterface.WEBVIEW_JS_INTERFACE_NAME);
 
-        binding.nonLeakWebView.setWebContentsDebuggingEnabled(true);
-        binding.nonLeakWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        binding.nonLeakWebView.setFocusableInTouchMode(true);
+        WebView.setWebContentsDebuggingEnabled(true);
 
-        connectPayAuthWebManager.setCallback(new ConnectPayAuthWebManager.Callback() {
-            @Override
-            public void onPostScript(@NonNull String script) {
-                DebugLogger.i("tossPayments connectPayAuthWebManager onPostScript : " + script);
-                binding.nonLeakWebView.loadUrl(script);
+        binding.webviewLayout.loadUrl(targetUrl);
+    }
+
+    private class MyWebViewClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            try {
+                DebugLogger.i("PaymentWebViewActivity shouldOverrideUrlLoading : " + url);
+                if (URLUtil.isAboutUrl(url) == false && URLUtil.isJavaScriptUrl(url) == false) {
+                    Uri uri = Uri.parse(url);
+                    if (uri.getScheme().equals("intent")) {
+                        return startSchemeIntent(url);
+                    } else {
+                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                        return true;
+                    }
+                }
+            } catch (Exception ignored) {
+                // ignore any url parsing exceptions
             }
-        });
+            return false;
+        }
 
-        connectPayOcrWebManager.setCallback(new ConnectPayOcrWebManager.Callback() {
-            @Override
-            public void onPostScript(@NonNull String script) {
-                DebugLogger.i("tossPayments connectPayOcrWebManager onPostScript : " + script);
-                binding.nonLeakWebView.loadUrl(script);
+        private boolean startSchemeIntent(String url) throws Exception {
+            Intent schemeIntent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+            try {
+                startActivity(schemeIntent);
+                return true;
+            } catch (Exception e) {
+                String packageName = schemeIntent.getPackage();
+                if (TextUtils.isEmpty(packageName) == false) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                    return true;
+                }
             }
-        });
 
-        binding.nonLeakWebView.addJavascriptInterface(connectPayOcrWebManager.getJavaScriptInterface(), ConnectPayOcrWebManager.JAVASCRIPT_INTERFACE_NAME);
-        binding.nonLeakWebView.addJavascriptInterface(connectPayAuthWebManager.getJavaScriptInterface(),ConnectPayAuthWebManager.JAVASCRIPT_INTERFACE_NAME);
-        binding.nonLeakWebView.loadUrl(targetUrl);
+            return false;
+        }
     }
 
-    @Override
-    protected void onDestroy() {
-        binding.nonLeakWebView.destroy();
-        super.onDestroy();
-    }
+    public class CustomWebViewClient extends WebChromeClient {
 
-    private void requestBioMetricAuth() {
-        ConnectPayAuthManager.requestBioMetricAuth(this, "MODULUSMODULUSSE", "EXPONENTEXPONENT", new Function1<String, Unit>() {
-            @Override
-            public Unit invoke(String s) {
-                // TODO 결과 ?
-                return null;
+        private Context context;
+
+        public CustomWebViewClient(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, Message resultMsg) {
+            if (context != null) {
+                WebView newWebView = new WebView(context);
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(newWebView);
+                resultMsg.sendToTarget();
             }
-        });
-    }
-
-    private void requestCardScan() {
-        // TODO 카드스캔 호출해야하나?
-        ConnectPayOcrManager.requestCardScan(this, "", ConnectPayOcrWebManager.REQUEST_CODE_CARD_SCAN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ConnectPayOcrWebManager.REQUEST_CODE_CARD_SCAN) {
-            connectPayOcrWebManager.handleActivityResult(requestCode, resultCode, data);
-//            if (data != null) {
-//                String cardScanResult = data.getStringExtra(ConnectPayOcrWebManager.EXTRA_CARD_SCAN_RESULT_SCRIPT);
-                // TODO ocr 직접핸들
-//            }
+            return true;
         }
     }
 }
