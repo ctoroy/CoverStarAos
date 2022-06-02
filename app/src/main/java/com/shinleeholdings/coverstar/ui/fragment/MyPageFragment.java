@@ -15,7 +15,7 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
-import com.shinleeholdings.coverstar.payment.PointPaymentFragment;
+import com.shinleeholdings.coverstar.payment.PaymentItemListFragment;
 import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -75,51 +75,22 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
         binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
 
-        binding.settingImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new SettingFragment());
-            }
-        });
+        binding.settingImageView.setOnClickListener(view -> addFragment(new SettingFragment()));
 
         if (AppConstants.CHATTING_ENABLE) {
             binding.messageImageView.setVisibility(View.VISIBLE);
         } else {
             binding.messageImageView.setVisibility(View.GONE);
         }
-        binding.messageImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new ChattingListFragment());
-            }
-        });
+        binding.messageImageView.setOnClickListener(view -> addFragment(new ChattingListFragment()));
 
-        binding.depositePointLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new PointPaymentFragment());
-            }
-        });
+        binding.depositePointLayout.setOnClickListener(view -> addFragment(new PaymentItemListFragment()));
 
-        binding.myCoinCountTextView.setText(Util.numberToDisplayFormat(LoginHelper.getSingleInstance().getMyCoinCount()));
-        binding.buyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new PurchaseFragment());
-            }
-        });
-        binding.depositeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new DepositeFragment());
-            }
-        });
-        binding.withdrawLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addFragment(new WithDrawFragment());
-            }
-        });
+        onMyCoinUpdated(LoginHelper.getSingleInstance().getMyCoinCount());
+
+        binding.buyLayout.setOnClickListener(view -> addFragment(new PurchaseFragment()));
+        binding.depositeLayout.setOnClickListener(view -> addFragment(new DepositeFragment()));
+        binding.withdrawLayout.setOnClickListener(view -> addFragment(new WithDrawFragment()));
 
         binding.playListTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +188,7 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
 
     @Override
     public void onMyCoinUpdated(int currentCoinCount) {
-        binding.myCoinCountTextView.setText(Util.numberToDisplayFormat(LoginHelper.getSingleInstance().getMyCoinCount()));
+        binding.myCoinCountTextView.setText(Util.getCoinDisplayCountString(LoginHelper.getSingleInstance().getMyCoinCount()));
     }
 
     @Override

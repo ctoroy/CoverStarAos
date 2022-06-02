@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="65dp">
+
+    <TextView
+        android:id="@+id/itemNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:textColor="#303045"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/itemPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="#303045"
+        android:textSize="14sp"
+        android:layout_toRightOf="@id/itemNameTextView"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/discountPercentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="#ff7a9a"
+        android:textSize="14sp"
+        android:paddingLeft="5dp"
+        android:visibility="gone"
+        android:layout_toRightOf="@id/itemPriceTextView"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/exchangeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_box_bg_white_border_ff7a9a"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#ff7a9a"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_marginRight="20dp"
+        android:textSize="14sp"
+        android:text="@string/exchange"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

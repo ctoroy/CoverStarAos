@@ -24,6 +24,10 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
+    @POST("useCoin")
+    @FormUrlEncoded
+    Call<BaseResponse<CurCoinItem>> useCoin(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("getCurCoin")
     @FormUrlEncoded
     Call<BaseResponse<CurCoinItem>> getCurCoin(@FieldMap(encoded = true) HashMap<String, String> body);

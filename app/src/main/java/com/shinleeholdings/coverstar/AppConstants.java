@@ -10,6 +10,8 @@ public class AppConstants {
     public static final boolean CHATTING_ENABLE = false;
 
     public static final String APP_NAME = "CoverStar";
+    public static final String PAY_URL_REAL = "https://coverstar.tv/livepay/index.php";
+    public static final String PAY_URL_DEV = "https://coverstar.tv/pay/index.php";
 
     public static final class EXTRA {
         public static final String USER_DATA = "USER_DATA";
@@ -22,9 +24,6 @@ public class AppConstants {
         public static final String CONTEST_URL = "CONTEST_URL";
         public static final String WEBVIEW_URL = "WEBVIEW_URL";
         public static final String HINT_TEXT = "HINT_TEXT";
-
-        public static final String AMOUNT = "AMOUNT";
-        public static final String ORDER = "ORDER";
     }
 
     public static final class REQUEST_CODE {

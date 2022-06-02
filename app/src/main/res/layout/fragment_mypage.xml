@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="8dp"
-                        android:text="@string/deposite_point"
+                        android:text="@string/charge_point"
                         android:textColor="#f45786"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -118,29 +118,14 @@
                 android:layout_marginBottom="10dp"
                 android:background="#80ffffff"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/myCoinCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right">
-
-                <TextView
-                    android:id="@+id/myCoinCountTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12,000"
-                    android:textColor="@color/white"
-                    android:textSize="34sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:paddingLeft="5dp"
-                    android:text="@string/star"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                android:layout_gravity="right"
+                android:textColor="@color/white"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"

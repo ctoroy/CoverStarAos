@@ -21,18 +21,13 @@ import com.shinleeholdings.coverstar.util.Util;
 
 public class PaymentWebViewActivity extends BaseActivity {
 
-    private static final String PAY_URL_REAL = "https://coverstar.tv/livepay/index.php";
-    private static final String PAY_URL_DEV = "https://coverstar.tv/pay/index.php";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityPaymentWebviewBinding binding = ActivityPaymentWebviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String amount = getIntent().getStringExtra(AppConstants.EXTRA.AMOUNT);
-        String order = getIntent().getStringExtra(AppConstants.EXTRA.ORDER);
-        String targetUrl = getRequestUrl(amount, order);
+        String targetUrl = getIntent().getStringExtra(AppConstants.EXTRA.WEBVIEW_URL);
 
         DebugLogger.i("PaymentWebViewActivity targetUrl : " + targetUrl);
 
@@ -60,30 +55,13 @@ public class PaymentWebViewActivity extends BaseActivity {
         binding.webviewLayout.loadUrl(targetUrl);
     }
 
-    private String getRequestUrl(String amount, String order) {
-//        AMOUNT : 3000 (가격)
-//        ORDERID : ORDER + NAME + YYYYMMDDHHMMSS (나중에 주문 확인용 맘대로 유니크)
-//        ORDER : 3000P (제품명)
-//        NAME : 8201031240677 (구매자명)
-        String name = LoginHelper.getSingleInstance().getLoginUserId();
-        String orderId = order + name + Util.getCurrentTimeToFormat("yyyyMMddHHmmss");
-        String payUrl = "";
-        if (DebugLogger.IS_DEBUG) {
-            payUrl = PAY_URL_DEV;
-        } else {
-            payUrl = PAY_URL_REAL;
-        }
-
-       return payUrl + "?p="+amount+"&o="+orderId+"&n="+order+"&c="+name;
-    }
-
     private class MyWebViewClient extends WebViewClient {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             try {
                 DebugLogger.i("PaymentWebViewActivity shouldOverrideUrlLoading : " + url);
-                if (URLUtil.isAboutUrl(url) == false && URLUtil.isJavaScriptUrl(url) == false) {
+                if (URLUtil.isNetworkUrl(url) == false && URLUtil.isJavaScriptUrl(url) == false) {
                     Uri uri = Uri.parse(url);
                     if (uri.getScheme().equals("intent")) {
                         return startSchemeIntent(url);
@@ -125,13 +103,7 @@ public class PaymentWebViewActivity extends BaseActivity {
 
         @Override
         public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, Message resultMsg) {
-            if (context != null) {
-                WebView newWebView = new WebView(context);
-                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-                transport.setWebView(newWebView);
-                resultMsg.sendToTarget();
-            }
-            return true;
+            return super.onCreateWindow(view, dialog, userGesture, resultMsg);
         }
     }
 }
