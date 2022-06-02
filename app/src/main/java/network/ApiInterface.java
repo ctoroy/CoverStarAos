@@ -7,6 +7,7 @@ import network.model.ContestGroupDataList;
 import network.model.ContestDataList;
 import network.model.CoverStarUser;
 import network.model.CoverStarUserList;
+import network.model.CurCoinItem;
 import network.model.NoticeDataList;
 import network.model.PhotoUploadResult;
 import network.model.DefaultResult;
@@ -22,6 +23,10 @@ public interface ApiInterface {
     @Multipart
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
+
+    @POST("getCurCoin")
+    @FormUrlEncoded
+    Call<BaseResponse<CurCoinItem>> getCurCoin(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getFollow")
     @FormUrlEncoded

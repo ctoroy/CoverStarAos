@@ -23,6 +23,24 @@ public class WebViewInterface {
     }
 
     /**
+     * 결제 결과
+     */
+    @JavascriptInterface
+        public void paymentResult(boolean success){
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                DebugLogger.i("webViewInterface", "paymentResult : " + success);
+                Activity act = (Activity)mContext;
+                if (success) {
+                    act.setResult(Activity.RESULT_OK);
+                }
+                act.finish();
+            }
+        });
+    }
+    /**
      * Activity를 종료함.
      * sendBackKey
      */
@@ -33,9 +51,7 @@ public class WebViewInterface {
             @Override
             public void run() {
                 DebugLogger.i("webViewInterface", "sendFinishKey");
-                // TODO 이걸로 처리하는지 확인
                 Activity act = (Activity)mContext;
-                act.setResult(Activity.RESULT_OK);
                 act.finish();
             }
         });

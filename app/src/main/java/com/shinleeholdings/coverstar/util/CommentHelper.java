@@ -41,7 +41,7 @@ public class CommentHelper {
 
     public static final String FIELDNAME_COMMENTID = "commentId";
 
-    public static final String COMMENT_TIME_FORMAT = "yyyymmddhhmmss";
+    public static final String COMMENT_TIME_FORMAT = "yyyyMMddHHmmss";
     public static CommentHelper getSingleInstance() {
         if (instance == null) {
             synchronized (lockObject) {

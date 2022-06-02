@@ -1,6 +1,5 @@
 package com.shinleeholdings.coverstar.payment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,29 +12,28 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.databinding.ActivityPaymentWebviewBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
+import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 public class PaymentWebViewActivity extends BaseActivity {
 
-    public static final int AMOUNT = 1000;
-    public static final String ORDERID = "kokoko" + System.currentTimeMillis(); //주문번호는 바꾸어서 테스트하셔 합니다.
-    public static final String ORDER = "가나다라마바사";
-    public static final String NAME = "test";
-
-    public static final String SHOP_WEBVIEW_URL = "https://coverstar.tv/pay/index.php?p="+AMOUNT+"&o="+ORDERID+"&n="+ORDER+"&c="+NAME ;
-
-    private ActivityPaymentWebviewBinding binding;
+    private static final String PAY_URL_REAL = "https://coverstar.tv/livepay/index.php";
+    private static final String PAY_URL_DEV = "https://coverstar.tv/pay/index.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityPaymentWebviewBinding.inflate(getLayoutInflater());
+        ActivityPaymentWebviewBinding binding = ActivityPaymentWebviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // TODO URL 설정 필요 : 포인트 충전
-        String targetUrl = SHOP_WEBVIEW_URL;
+        String amount = getIntent().getStringExtra(AppConstants.EXTRA.AMOUNT);
+        String order = getIntent().getStringExtra(AppConstants.EXTRA.ORDER);
+        String targetUrl = getRequestUrl(amount, order);
+
         DebugLogger.i("PaymentWebViewActivity targetUrl : " + targetUrl);
 
         binding.webviewLayout.setWebViewClient(new MyWebViewClient());
@@ -60,6 +58,23 @@ public class PaymentWebViewActivity extends BaseActivity {
         WebView.setWebContentsDebuggingEnabled(true);
 
         binding.webviewLayout.loadUrl(targetUrl);
+    }
+
+    private String getRequestUrl(String amount, String order) {
+//        AMOUNT : 3000 (가격)
+//        ORDERID : ORDER + NAME + YYYYMMDDHHMMSS (나중에 주문 확인용 맘대로 유니크)
+//        ORDER : 3000P (제품명)
+//        NAME : 8201031240677 (구매자명)
+        String name = LoginHelper.getSingleInstance().getLoginUserId();
+        String orderId = order + name + Util.getCurrentTimeToFormat("yyyyMMddHHmmss");
+        String payUrl = "";
+        if (DebugLogger.IS_DEBUG) {
+            payUrl = PAY_URL_DEV;
+        } else {
+            payUrl = PAY_URL_REAL;
+        }
+
+       return payUrl + "?p="+amount+"&o="+orderId+"&n="+order+"&c="+name;
     }
 
     private class MyWebViewClient extends WebViewClient {

@@ -3,9 +3,10 @@ package com.shinleeholdings.coverstar.util;
 import android.util.Log;
 
 import com.shinleeholdings.coverstar.AppConstants;
+import com.shinleeholdings.coverstar.BuildConfig;
 
 public class DebugLogger {
-    public static boolean IS_DEBUG = true;
+    public static boolean IS_DEBUG = BuildConfig.DEBUG;
     private static final String TAG = AppConstants.APP_NAME;
 
     public static void i(String tag, String message) {

@@ -89,16 +89,23 @@ public class LoginHelper {
 		return getSavedLoginUserData().curCoin;
 	}
 
-	public void updateMyCoin(int updateValue) {
+	public void setMyCoin(int coinValue) {
 		CoverStarUser userData = getSavedLoginUserData();
 		if (userData == null) {
 			return;
 		}
 
-		int updateCoinCount = userData.curCoin + updateValue;
-		userData.curCoin = updateCoinCount;
+		userData.curCoin = coinValue;
 		saveLoginUserData(userData);
-		sendCoinChangeEvent(updateCoinCount);
+		sendCoinChangeEvent(coinValue);
+	}
+
+	public void updateMyCoin(int updateValue) {
+		CoverStarUser userData = getSavedLoginUserData();
+		if (userData != null) {
+			int updateCoinCount = userData.curCoin + updateValue;
+			setMyCoin(updateCoinCount);
+		}
 	}
 
 	public void updateUserInfo(String imagePath, String nickName) {

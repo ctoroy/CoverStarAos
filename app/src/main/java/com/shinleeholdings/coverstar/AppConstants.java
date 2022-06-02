@@ -22,6 +22,9 @@ public class AppConstants {
         public static final String CONTEST_URL = "CONTEST_URL";
         public static final String WEBVIEW_URL = "WEBVIEW_URL";
         public static final String HINT_TEXT = "HINT_TEXT";
+
+        public static final String AMOUNT = "AMOUNT";
+        public static final String ORDER = "ORDER";
     }
 
     public static final class REQUEST_CODE {
@@ -29,5 +32,6 @@ public class AppConstants {
         public static final int RULE_DETAIL_PRIVATE_RULE = 12313;
         public static final int INPUT_COMMENT = 12314;
         public static final int INPUT_REPLY = 12315;
+        public static final int PAYMENT = 12316;
     }
 }

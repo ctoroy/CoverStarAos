@@ -1,6 +1,5 @@
 package com.shinleeholdings.coverstar.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
-import com.shinleeholdings.coverstar.payment.PaymentWebViewActivity;
+import com.shinleeholdings.coverstar.payment.PointPaymentFragment;
 import com.shinleeholdings.coverstar.util.ContestManager;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -98,7 +97,7 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         binding.depositePointLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PaymentWebViewActivity.class));
+                addFragment(new PointPaymentFragment());
             }
         });
 
