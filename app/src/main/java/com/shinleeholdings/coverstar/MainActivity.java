@@ -1,6 +1,8 @@
 package com.shinleeholdings.coverstar;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +26,21 @@ import com.shinleeholdings.coverstar.ui.fragment.PrevMediaFragment;
 import com.shinleeholdings.coverstar.util.BackClickEventHandler;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.FragmentUtils;
+import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Stack;
+
+import network.model.BaseResponse;
+import network.model.CurCoinItem;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class MainActivity extends BaseActivity implements FragmentInteractionCallback {
 
@@ -81,6 +92,28 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
         mCurrentTab = "";
 
         selectedTab(TabMenuType.HOME.toString());
+
+        new Handler().postDelayed(() -> requestPointCheck(), 500);
+    }
+
+    private void requestPointCheck() {
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
+        RetroClient.getApiInterface().getCurCoin(param).enqueue(new RetroCallback<CurCoinItem>() {
+            @Override
+            public void onSuccess(BaseResponse<CurCoinItem> receivedData) {
+                CurCoinItem data = receivedData.data;
+                int point = 0;
+                if (TextUtils.isEmpty(data.currentCoin) == false) {
+                    point = Integer.parseInt(data.currentCoin);
+                }
+                LoginHelper.getSingleInstance().setMyCoin(point);
+            }
+
+            @Override
+            public void onFailure(BaseResponse<CurCoinItem> response) {
+            }
+        });
     }
 
     private void saveWidth() {

@@ -162,28 +162,4 @@ public class PaymentItemListFragment extends BaseFragment {
             }
         });
     }
-
-    private void requestPointCheck() {
-        ProgressDialogHelper.show(getActivity());
-        HashMap<String, String> param = new HashMap<>();
-        param.put("userId", LoginHelper.getSingleInstance().getLoginUserId());
-        RetroClient.getApiInterface().getCurCoin(param).enqueue(new RetroCallback<CurCoinItem>() {
-            @Override
-            public void onSuccess(BaseResponse<CurCoinItem> receivedData) {
-                ProgressDialogHelper.dismiss();
-                CurCoinItem data = receivedData.data;
-                int point = 0;
-                if (TextUtils.isEmpty(data.currentCoin) == false) {
-                    point = Integer.parseInt(data.currentCoin);
-                }
-                LoginHelper.getSingleInstance().setMyCoin(point);
-                binding.myPointCountTextView.setText(Util.getCoinDisplayCountString(LoginHelper.getSingleInstance().getMyCoinCount()));
-            }
-
-            @Override
-            public void onFailure(BaseResponse<CurCoinItem> response) {
-                ProgressDialogHelper.dismiss();
-            }
-        });
-    }
 }
