@@ -44,12 +44,14 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         binding = FragmentMypageBinding.inflate(inflater, container, false);
         initView();
         ContestManager.getSingleInstance().addInfoChangeListener(this);
+        LoginHelper.getSingleInstance().addUserInfoChangeListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         ContestManager.getSingleInstance().removeInfoChangeListener(this);
+        LoginHelper.getSingleInstance().removeUserInfoChangeListener(this);
         super.onDestroyView();
         binding = null;
     }
