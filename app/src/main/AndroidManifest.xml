@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+<!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />-->
     <queries>
         <!--간편결제-->
         <package android:name="finance.chai.app" /> <!--차이페이-->
