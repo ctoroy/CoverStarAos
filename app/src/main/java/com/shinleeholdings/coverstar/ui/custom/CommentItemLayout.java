@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
@@ -87,7 +88,7 @@ public class CommentItemLayout extends LinearLayout implements View.OnClickListe
 		commentLayout.setOnClickListener(this);
 		ImageLoader.loadImage(userImageView, item.userImagePath);
 		userNicknameTextView.setText(item.userNickName);
-		commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
+		commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, AppConstants.COMMON_TIME_FORMAT));
 		commentTextView.setText(item.message);
 
 		likeCountTextView.setText(item.getLikeCount() + "");

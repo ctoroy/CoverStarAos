@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.data.CommentItem;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.data.ReplyItem;
@@ -41,7 +42,6 @@ public class CommentHelper {
 
     public static final String FIELDNAME_COMMENTID = "commentId";
 
-    public static final String COMMENT_TIME_FORMAT = "yyyyMMddHHmmss";
     public static CommentHelper getSingleInstance() {
         if (instance == null) {
             synchronized (lockObject) {
@@ -110,7 +110,7 @@ public class CommentHelper {
         DebugLogger.i("commentTest writeCommentItem : " + comment);
         HashMap<String, Object> valueMap = getDefaultHashMap();
         valueMap.put(CommentHelper.FIELDNAME_CONTESTUSERID, contest.castId);
-        valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
+        valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(AppConstants.COMMON_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE, comment);
         valueMap.put(CommentHelper.FIELDNAME_COMMENT_COUNT, 0);
         getCommentListRef(contest.castCode).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -186,7 +186,7 @@ public class CommentHelper {
         HashMap<String, Object> valueMap = getDefaultHashMap();
         valueMap.put(CommentHelper.FIELDNAME_COMMENTID, commentId);
         valueMap.put(CommentHelper.FIELDNAME_CONTESTUSERID, contest.castId);
-        valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(CommentHelper.COMMENT_TIME_FORMAT));
+        valueMap.put(CommentHelper.FIELDNAME_MESSAGE_DATE, Util.getCurrentTimeToFormat(AppConstants.COMMON_TIME_FORMAT));
         valueMap.put(CommentHelper.FIELDNAME_MESSAGE, reply);
 
         getReplyListRef(contest.castCode, commentId).add(valueMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

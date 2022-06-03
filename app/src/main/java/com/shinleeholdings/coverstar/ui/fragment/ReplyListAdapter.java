@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
@@ -113,7 +114,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
             ImageLoader.loadImage(viewHolder.userImageView, item.userImagePath);
             viewHolder.userNicknameTextView.setText(item.userNickName);
-            viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, CommentHelper.COMMENT_TIME_FORMAT));
+            viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, AppConstants.COMMON_TIME_FORMAT));
             viewHolder.commentTextView.setText(item.message);
 
             viewHolder.likeCountTextView.setText(item.getLikeCount() + "");
