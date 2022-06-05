@@ -35,11 +35,11 @@ public class ContestData implements Parcelable {
     @SerializedName("castTitle") public String castTitle; //+*타이틀
 
     @SerializedName("category") public int category; // 0 커버스타 상단, 1: 이벤트 상단, 2 경연 참가
+    @SerializedName("castType") public int castType; //0: 커버스타 참가,1: 이벤트 참가
     @SerializedName("castPath") public int castPath; //contestId
 
     @SerializedName("nickName") public String nickName; //+*참가자명
     @SerializedName("profileImage") public String profileImage; //+*썸네일 이미지
-    @SerializedName("castType") public int castType; //0: 커버스타 참가,1: 이벤트 참가
 
     @SerializedName("castStartDate") public String castStartDate; //+*시작시간
     @SerializedName("castEndDate") public String castEndDate; //+*종료시간

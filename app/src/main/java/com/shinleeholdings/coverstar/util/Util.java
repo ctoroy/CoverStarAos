@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
@@ -112,6 +113,10 @@ public class Util {
 
     public static String getCurrentTimeToFormat(String format) {
         return new SimpleDateFormat(format).format(new Date());
+    }
+
+    public static String getCurrentTimeToCommonFormat() {
+        return new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).format(new Date());
     }
 
     public static String changeFormattedDate(String date) {
