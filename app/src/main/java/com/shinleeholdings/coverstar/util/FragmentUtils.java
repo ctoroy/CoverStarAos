@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
-import com.shinleeholdings.coverstar.chatting.ChattingRoomFragment;
 import com.shinleeholdings.coverstar.chatting.FollowListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.AlarmListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
@@ -60,9 +59,6 @@ public class FragmentUtils {
                 return true;
             }
             if (fragment instanceof FollowListFragment) {
-                return true;
-            }
-            if (fragment instanceof ChattingRoomFragment) {
                 return true;
             }
             if (fragment instanceof NoticeListFragment) {

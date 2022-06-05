@@ -134,7 +134,12 @@
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-
+        <activity
+            android:name=".chatting.ChatActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".CoverStarSchemeActivity"
             android:autoRemoveFromRecents="true"

@@ -8,6 +8,7 @@ package com.shinleeholdings.coverstar.chatting;
  * 
  */
 public final class ChattingConstants {
+	public static final String MSG_TYPE_MESSAGE = "1";
 
 	public static final String TB_CHAT_INFO = "chat_info";
 	public static final String TB_CHAT_LIST = "chat_list";

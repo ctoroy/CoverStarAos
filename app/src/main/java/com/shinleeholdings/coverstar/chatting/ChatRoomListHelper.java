@@ -1,5 +1,7 @@
 package com.shinleeholdings.coverstar.chatting;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -8,14 +10,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.FireBaseHelper;
@@ -72,6 +73,362 @@ public class ChatRoomListHelper {
 
     private ChatRoomListHelper() {
     }
+
+    public void initChattingListListener() {
+        if (chatRoomListEventListener != null) {
+            chatRoomListEventListener.remove();
+        }
+        removeRegisteredChattingRoomDetailInfo();
+        removeRegisteredChattingMemberEventListener();
+    }
+
+    public ArrayList<ChatRoomItem> getChattingRoomList() {
+        return chattingRoomList;
+    }
+
+    public boolean isChattingListLoadingCompleted() {
+        return chattingListLoadingCompleted;
+    }
+
+    public ChatRoomItem getChatRoomItem(String chatId) {
+        if (TextUtils.isEmpty(chatId) || chattingRoomList == null || chattingRoomList.size() <= 0) {
+            return null;
+        }
+
+        for (ChatRoomItem item : chattingRoomList) {
+            if (item.getChatId().equals(chatId)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    private void addChatRoomItem(String chatId, Map<String, Object> data, boolean isAdded) {
+        DebugLogger.e("test", "TB_CHAT_LIST addChattingRoomItem chatId : " + chatId + " , data : " + data);
+        long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
+        String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
+
+        ChatRoomItem item = new ChatRoomItem();
+        item.setChatId(chatId);
+        item.setCustomRoomName(customName);
+
+        BadgeManager.getSingleInstance().setBadgeInfo(chatId, badgeCount);
+        chattingRoomList.add(item);
+
+        if (isAdded) {
+            sendChattingRoomAddedEvent(chatId,item);
+        }
+
+        getChattingRoomDetailInfo(item);
+    }
+
+    private CollectionReference getChatListCollectionRef() {
+        return FireBaseHelper.getSingleInstance().getDatabase()
+                .collection(ChattingConstants.TB_CHAT_LIST)
+                .document(LoginHelper.getSingleInstance().getLoginUserId())
+                .collection(ChattingConstants.TEMP_COLLECTION_NAME);
+    }
+
+    public void getChatRoomListInfo() {
+        BadgeManager.getSingleInstance().initBadgeInfo();
+        removeRegisteredChattingRoomDetailInfo();
+        removeRegisteredChattingMemberEventListener();
+        chattingRoomList = null;
+        chattingRoomMemberHashMap.clear();
+        chattingListLoadingCompleted = false;
+        if (chatRoomListEventListener != null) {
+            chatRoomListEventListener.remove();
+        }
+
+        getChatListCollectionRef().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() == false) {
+                    return;
+                }
+
+                if (chattingRoomList == null) {
+                    chattingRoomList = new ArrayList<>();
+                }
+
+                DebugLogger.e("test", "TB_CHAT_LIST getChattingRoomListInfo success");
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    String chatId = doc.getId();
+                    Map<String, Object> data = doc.getData();
+                    addChatRoomItem(chatId, data, false);
+                }
+                chattingListLoadingCompleted = true;
+                sendChattingRoomListLoadCompleteEvent();
+                chatRoomListEventListener = getChatListCollectionRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots == null) {
+                            return;
+                        }
+
+                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                            QueryDocumentSnapshot documentSnapshot = dc.getDocument();
+                            String chatId = documentSnapshot.getId();
+
+                            Map<String, Object> data = dc.getDocument().getData();
+                            DebugLogger.e("test", "TB_CHAT_LIST chatId : " + chatId + ", Type : " + dc.getType() + " , data : " + data);
+
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    if (chattingRoomList == null) {
+                                        chattingRoomList = new ArrayList<>();
+                                    }
+
+                                    for (ChatRoomItem chatRoomItem : chattingRoomList) {
+                                        if (chatId.equals(chatRoomItem.getChatId())) {
+                                            return;
+                                        }
+                                    }
+
+                                    addChatRoomItem(chatId, data, true);
+                                    break;
+                                case MODIFIED:
+                                    long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
+                                    String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
+
+                                    for (ChatRoomItem chattingItem : chattingRoomList) {
+                                        if (chattingItem.getChatId().equals(chatId)) {
+                                            chattingItem.setCustomRoomName(customName);
+                                            break;
+                                        }
+                                    }
+
+                                    if (chatId.equals(ChatMessageListHelper.getSingleInstance().getCurrentChattingId())) {
+                                        badgeCount = 0;
+                                        ChatRoomListHelper.getSingleInstance().updateChatListInfo(chatId, ChattingConstants.FIELDNAME_BADGE_CNT, badgeCount);
+                                    }
+
+                                    BadgeManager.getSingleInstance().updateBadgeInfo(chatId, badgeCount);
+                                    sendChattingRoomInfoChangeEvent(chatId);
+                                    break;
+                                case REMOVED:
+                                    for (ChatRoomItem chattingItem : chattingRoomList) {
+                                        if (chattingItem.getChatId().equals(chatId)) {
+                                            chattingRoomList.remove(chattingItem);
+                                            break;
+                                        }
+                                    }
+                                    removeChattingRoomDetailInfoListener(chatId);
+                                    chattingRoomMemberHashMap.remove(chatId);
+                                    removeRegisteredChattingMemberEventListener(chatId);
+                                    BadgeManager.getSingleInstance().deleteBadgeInfo(chatId);
+                                    sendChattingRoomRemoveEvent(chatId);
+
+                                    break;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public CollectionReference getChatInfoDocuRef() {
+        return FireBaseHelper.getSingleInstance().getDatabase().collection(ChattingConstants.TB_CHAT_INFO);
+    }
+
+    private void getChattingRoomDetailInfo(final ChatRoomItem chattingItem) {
+        final String chatId = chattingItem.getChatId();
+        DebugLogger.e(TAG, "getChattingRoomDetailInfo chattingId : " + chatId);
+
+        CollectionReference docuRef = getChatInfoDocuRef();
+        getChattingRoomMemberInfo(chatId, docuRef);
+
+        ListenerRegistration listener = docuRef.document(chatId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapShot, @Nullable FirebaseFirestoreException e) {
+                DebugLogger.i(TAG, "getChattingRoomDetailInfo onComplete getResult chatId : " + chatId + ",  data : " + snapShot);
+                chattingItem.setLastMessage((String) snapShot.get("last_message"));
+                chattingItem.setMessageDate((String) snapShot.get("mdate"));
+                chattingItem.setRoomName((String) snapShot.get("room_name"));
+
+                try {
+                    synchronized (instance) {
+                        String lastMessageKey = (String) snapShot.get("last_message_key");
+                        chattingItem.setLastMessageKey(lastMessageKey);
+
+                        ArrayList<String> deleteInfoList = (ArrayList<String>) snapShot.get("last_message_delete");
+                        chattingItem.setDeleteInfoList(deleteInfoList);
+
+                        DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo lastMessageKey : " + lastMessageKey);
+                        DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo deleteInfoList : " + deleteInfoList);
+
+                        if (deleteInfoList != null && deleteInfoList.size() > 0) {
+                            String loginUserSeq = LoginHelper.getSingleInstance().getLoginUserId();
+                            for (String userSeq : deleteInfoList) {
+                                if (userSeq.equals(loginUserSeq)) {
+                                    DebugLogger.e("test", "lastMessageTest getChattingRoomDetailInfo deleteInfoList has mySeq");
+                                    // 삭제한 사용자 목록에 내 아이디가 있을 경우
+                                    chattingItem.setLastMessage("삭제한 메세지 입니다.");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e1) {
+                    DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo lastMessageInfo Error : " + e.getMessage());
+                }
+
+                sendChattingRoomDetailInfoEvent(chatId,chattingItem);
+            }
+        });
+
+        chattingRoomDetailEventListener.put(chatId, listener);
+    }
+
+    public ArrayList<ChattingRoomMember> getChattingRoomMember(String chatId) {
+        return chattingRoomMemberHashMap.get(chatId);
+    }
+
+    private void getChattingRoomMemberInfo(final String chatId, CollectionReference docuRef) {
+        DebugLogger.i(TAG, "getChattingRoomMemberInfo chatId : " + chatId);
+        ListenerRegistration listener = docuRef.document(chatId)
+                .collection("room_member")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        try {
+                            ArrayList<ChattingRoomMember> hashedMemberList = getChattingRoomMember(chatId);
+                            if (hashedMemberList == null) {
+                                hashedMemberList = new ArrayList<>();
+                                chattingRoomMemberHashMap.put(chatId, hashedMemberList);
+                            }
+
+                            if (queryDocumentSnapshots != null) {
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    Map<String, Object> data = dc.getDocument().getData();
+                                    DebugLogger.i(TAG, "getChattingRoomMemberInfo chatId : " + chatId + " type : " + dc.getType() + ", userName : " + data);
+                                    String userId = (String) data.get(ChattingConstants.FIELDNAME_USER_ID);
+
+                                    if (dc.getType() == DocumentChange.Type.ADDED) {
+
+                                        boolean alreadyHasMember = false;
+                                        for (ChattingRoomMember hasMember : hashedMemberList) {
+                                            if (hasMember.getUserId().equals(userId)) {
+                                                hasMember.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
+                                                hasMember.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
+                                                alreadyHasMember = true;
+                                                break;
+                                            }
+                                        }
+                                        if (alreadyHasMember == false) {
+                                            ChattingRoomMember member = new ChattingRoomMember();
+                                            member.setUserId(userId);
+                                            member.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
+                                            member.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
+                                            hashedMemberList.add(member);
+                                        }
+                                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
+                                        for (ChattingRoomMember member : hashedMemberList) {
+                                            if (member.getUserId().equals(userId)) {
+                                                hashedMemberList.remove(member);
+                                                break;
+                                            }
+                                        }
+                                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                                        for (ChattingRoomMember member : hashedMemberList) {
+                                            if (member.getUserId().equals(userId)) {
+                                                member.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
+                                                member.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            sendChattingMemberUpdateEvent(chatId);
+                        } catch (Exception exception) {
+                        }
+                    }
+                });
+
+        chattingRoomMemberEventListener.put(chatId, listener);
+    }
+
+    public void updateChatListInfo(String chatId, String key, Object value) {
+        HashMap<String, Object> valueMap = new HashMap<>();
+        valueMap.put(key, value);
+        getChatListCollectionRef().document(chatId).update(valueMap);
+    }
+
+    // TODO 채팅방 시작
+//    public void createChatRoom(final Activity activity, CoverStarUser userData, String friendsNames, final RetroCallback<ChatCreate> callback) {
+//        if (userData == null) {
+//            return;
+//        }
+//        ArrayList<CoverStarUser> selectedUserList = new ArrayList<>();
+//        selectedUserList.add(userData);
+//
+//        String myUserId = LoginHelper.getSingleInstance().getLoginUserId();
+//
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(myUserId);
+//        sb.append(",");
+//
+//        for (int i = 0; i < selectedUserList.size(); i++) {
+//            CoverStarUser user = selectedUserList.get(i);
+//            sb.append(user.userId);
+//
+//            if (i < selectedUserList.size() - 1) {
+//                sb.append(",");
+//            }
+//        }
+//
+//        createChatRoom(activity, sb.toString(), friendsNames, callback);
+//    }
+
+    // TODO 채팅방 시작
+//    public void createChatRoom(final Activity activity, String userSeq, final String friendsNames, final RetroCallback<ChatCreate> callback) {
+//        HashMap<String, String> bodyProperty = new HashMap<String, String>();
+//        bodyProperty.put("users", userSeq);
+//
+//        DebugLogger.i("test", "startChat users : " + userSeq);
+//
+//        ProgressDialogHelper.show(activity);
+//        RetroClient.getApiInterface().createChattingRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
+//            @Override
+//            public void onSuccess(BaseResponse receivedData) {
+//                ProgressDialogHelper.dismiss();
+//                ChatCreate result = (ChatCreate) receivedData;
+//                String chattingRoomId = result.getChattingRoomId();
+//                startChatActivity(activity, chattingRoomId);
+//
+//                String resultMessage = receivedData.getMessage();
+//                String alreadyMessage = "이미 있는 방입니다.";
+//                if (alreadyMessage.equals(resultMessage) == false) {
+//                    String message = String.format(activity.getString(R.string.invite_message), LoginHelper.getSingleInstance().getLoginUser().getUserName(), friendsNames);
+//                    sendMemberChangeMessage(chattingRoomId, message, ChattingHelper.MSG_TYPE_MEMBER_ENTER);
+//                }
+//
+//                if (callback != null) {
+//                    callback.onSuccess(receivedData);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(BaseResponse response) {
+//                ProgressDialogHelper.dismiss();
+//                if (callback != null) {
+//                    callback.onFailure(response);
+//                }
+//            }
+//        });
+//    }
+
+    public void startChatActivity(Activity activity, String chattingId) {
+        Intent intent = new Intent(activity, ChatActivity.class);
+        intent.putExtra(AppConstants.EXTRA.CHAT_ID, chattingId);
+        activity.startActivity(intent);
+    }
+
+
+    // 리스너 부분
 
     public void addChattingRoomListListener(IChattingRoomEventListener chattingRoomListListener) {
         synchronized (chattingRoomInfoUpdateListeners) {
@@ -237,406 +594,6 @@ public class ChatRoomListHelper {
                     }
                 });
             } catch (Exception e) {
-            }
-        }
-    }
-
-    public void initChattingListListener() {
-        if (chatRoomListEventListener != null) {
-            chatRoomListEventListener.remove();
-        }
-        removeRegisteredChattingRoomDetailInfo();
-        removeRegisteredChattingMemberEventListener();
-    }
-
-    public ArrayList<ChatRoomItem> getChattingRoomList() {
-        return chattingRoomList;
-    }
-
-    public boolean isChattingListLoadingCompleted() {
-        return chattingListLoadingCompleted;
-    }
-
-    private CollectionReference getChatListCollectionRef() {
-        return FireBaseHelper.getSingleInstance().getDatabase()
-                .collection(ChattingConstants.TB_CHAT_LIST)
-                .document(LoginHelper.getSingleInstance().getLoginUserId())
-                .collection(ChattingConstants.TEMP_COLLECTION_NAME);
-    }
-
-    public ChatRoomItem getChatRoomItem(String chatId) {
-        if (TextUtils.isEmpty(chatId) || chattingRoomList == null || chattingRoomList.size() <= 0) {
-            return null;
-        }
-
-        for (ChatRoomItem item : chattingRoomList) {
-            if (item.getChatId().equals(chatId)) {
-                return item;
-            }
-        }
-
-        return null;
-    }
-
-    private void addChatRoomItem(String chatId, Map<String, Object> data, boolean isAdded) {
-        DebugLogger.e("test", "TB_CHAT_LIST addChattingRoomItem chatId : " + chatId + " , data : " + data);
-        long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
-        String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
-
-        ChatRoomItem item = new ChatRoomItem();
-        item.setChatId(chatId);
-        item.setCustomRoomName(customName);
-
-        BadgeManager.getSingleInstance().setBadgeInfo(chatId, badgeCount);
-        chattingRoomList.add(item);
-
-        if (isAdded) {
-            sendChattingRoomAddedEvent(chatId,item);
-        }
-
-        getChattingRoomDetailInfo(item);
-    }
-
-    public void getChatRoomListInfo() {
-        BadgeManager.getSingleInstance().initBadgeInfo();
-        removeRegisteredChattingRoomDetailInfo();
-        removeRegisteredChattingMemberEventListener();
-        chattingRoomList = null;
-        chattingRoomMemberHashMap.clear();
-        chattingListLoadingCompleted = false;
-        if (chatRoomListEventListener != null) {
-            chatRoomListEventListener.remove();
-        }
-
-        getChatListCollectionRef().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() == false) {
-                    return;
-                }
-
-                if (chattingRoomList == null) {
-                    chattingRoomList = new ArrayList<>();
-                }
-
-                DebugLogger.e("test", "TB_CHAT_LIST getChattingRoomListInfo success");
-                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    String chatId = doc.getId();
-                    Map<String, Object> data = doc.getData();
-                    addChatRoomItem(chatId, data, false);
-                }
-                chattingListLoadingCompleted = true;
-                sendChattingRoomListLoadCompleteEvent();
-                chatRoomListEventListener = getChatListCollectionRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots == null) {
-                            return;
-                        }
-
-                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                            QueryDocumentSnapshot documentSnapshot = dc.getDocument();
-                            String chatId = documentSnapshot.getId();
-
-                            Map<String, Object> data = dc.getDocument().getData();
-                            DebugLogger.e("test", "TB_CHAT_LIST chatId : " + chatId + ", Type : " + dc.getType() + " , data : " + data);
-
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    if (chattingRoomList == null) {
-                                        chattingRoomList = new ArrayList<>();
-                                    }
-
-                                    for (ChatRoomItem chatRoomItem : chattingRoomList) {
-                                        if (chatId.equals(chatRoomItem.getChatId())) {
-                                            return;
-                                        }
-                                    }
-
-                                    addChatRoomItem(chatId, data, true);
-                                    break;
-                                case MODIFIED:
-                                    long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
-                                    String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
-
-                                    for (ChatRoomItem chattingItem : chattingRoomList) {
-                                        if (chattingItem.getChatId().equals(chatId)) {
-                                            chattingItem.setCustomRoomName(customName);
-                                            break;
-                                        }
-                                    }
-
-                                    // TODO
-//                                    if (chatId.equals(ChatRoomListHelper.getSingleInstance().getCurrentChattingId())) {
-//                                        badgeCount = 0;
-//                                        ChatRoomListHelper.getSingleInstance().updateChatListInfo(chatId, ChatRoomListHelper.FIELDNAME_BADGE_CNT, badgeCount);
-//                                    }
-
-                                    BadgeManager.getSingleInstance().updateBadgeInfo(chatId, badgeCount);
-                                    sendChattingRoomInfoChangeEvent(chatId);
-                                    break;
-                                case REMOVED:
-                                    for (ChatRoomItem chattingItem : chattingRoomList) {
-                                        if (chattingItem.getChatId().equals(chatId)) {
-                                            chattingRoomList.remove(chattingItem);
-                                            break;
-                                        }
-                                    }
-                                    removeChattingRoomDetailInfoListener(chatId);
-                                    chattingRoomMemberHashMap.remove(chatId);
-                                    removeRegisteredChattingMemberEventListener(chatId);
-                                    BadgeManager.getSingleInstance().deleteBadgeInfo(chatId);
-                                    sendChattingRoomRemoveEvent(chatId);
-
-                                    break;
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public CollectionReference getChatInfoDocuRef() {
-        return FireBaseHelper.getSingleInstance().getDatabase().collection(ChattingConstants.TB_CHAT_INFO);
-    }
-
-    private void getChattingRoomDetailInfo(final ChatRoomItem chattingItem) {
-        final String chatId = chattingItem.getChatId();
-        DebugLogger.e(TAG, "getChattingRoomDetailInfo chattingId : " + chatId);
-
-        CollectionReference docuRef = getChatInfoDocuRef();
-        getChattingRoomMemberInfo(chatId, docuRef);
-
-        ListenerRegistration listener = docuRef.document(chatId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapShot, @Nullable FirebaseFirestoreException e) {
-                DebugLogger.i(TAG, "getChattingRoomDetailInfo onComplete getResult chatId : " + chatId + ",  data : " + snapShot);
-                chattingItem.setLastMessage((String) snapShot.get("last_message"));
-                chattingItem.setMessageDate((String) snapShot.get("mdate"));
-                chattingItem.setRoomName((String) snapShot.get("room_name"));
-
-                try {
-                    synchronized (instance) {
-                        String lastMessageKey = (String) snapShot.get("last_message_key");
-                        chattingItem.setLastMessageKey(lastMessageKey);
-
-                        ArrayList<String> deleteInfoList = (ArrayList<String>) snapShot.get("last_message_delete");
-                        chattingItem.setDeleteInfoList(deleteInfoList);
-
-                        DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo lastMessageKey : " + lastMessageKey);
-                        DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo deleteInfoList : " + deleteInfoList);
-
-                        if (deleteInfoList != null && deleteInfoList.size() > 0) {
-                            String loginUserSeq = LoginHelper.getSingleInstance().getLoginUserId();
-                            for (String userSeq : deleteInfoList) {
-                                if (userSeq.equals(loginUserSeq)) {
-                                    DebugLogger.e("test", "lastMessageTest getChattingRoomDetailInfo deleteInfoList has mySeq");
-                                    // 삭제한 사용자 목록에 내 아이디가 있을 경우
-                                    chattingItem.setLastMessage("삭제한 메세지 입니다.");
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception e1) {
-                    DebugLogger.i("test", "lastMessageTest getChattingRoomDetailInfo lastMessageInfo Error : " + e.getMessage());
-                }
-
-                sendChattingRoomDetailInfoEvent(chatId,chattingItem);
-            }
-        });
-
-        chattingRoomDetailEventListener.put(chatId, listener);
-    }
-
-    public ArrayList<ChattingRoomMember> getChattingRoomMember(String chatId) {
-        return chattingRoomMemberHashMap.get(chatId);
-    }
-
-    private void getChattingRoomMemberInfo(final String chatId, CollectionReference docuRef) {
-        DebugLogger.i(TAG, "getChattingRoomMemberInfo chatId : " + chatId);
-        ListenerRegistration listener = docuRef.document(chatId)
-                .collection("room_member")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        try {
-                            ArrayList<ChattingRoomMember> hashedMemberList = getChattingRoomMember(chatId);
-                            if (hashedMemberList == null) {
-                                hashedMemberList = new ArrayList<>();
-                                chattingRoomMemberHashMap.put(chatId, hashedMemberList);
-                            }
-
-                            if (queryDocumentSnapshots != null) {
-                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                                    Map<String, Object> data = dc.getDocument().getData();
-                                    DebugLogger.i(TAG, "getChattingRoomMemberInfo chatId : " + chatId + " type : " + dc.getType() + ", userName : " + data);
-                                    String userId = (String) data.get(ChattingConstants.FIELDNAME_USER_ID);
-
-                                    if (dc.getType() == DocumentChange.Type.ADDED) {
-
-                                        boolean alreadyHasMember = false;
-                                        for (ChattingRoomMember hasMember : hashedMemberList) {
-                                            if (hasMember.getUserId().equals(userId)) {
-                                                hasMember.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
-                                                hasMember.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
-                                                alreadyHasMember = true;
-                                                break;
-                                            }
-                                        }
-                                        if (alreadyHasMember == false) {
-                                            ChattingRoomMember member = new ChattingRoomMember();
-                                            member.setUserId(userId);
-                                            member.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
-                                            member.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
-                                            hashedMemberList.add(member);
-                                        }
-                                    } else if (dc.getType() == DocumentChange.Type.REMOVED) {
-                                        for (ChattingRoomMember member : hashedMemberList) {
-                                            if (member.getUserId().equals(userId)) {
-                                                hashedMemberList.remove(member);
-                                                break;
-                                            }
-                                        }
-                                    } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
-                                        for (ChattingRoomMember member : hashedMemberList) {
-                                            if (member.getUserId().equals(userId)) {
-                                                member.setUserNickName((String) data.get(ChattingConstants.FIELDNAME_USER_NAME));
-                                                member.setUserPhoto((String) data.get(ChattingConstants.FIELDNAME_USER_PHOTO));
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            sendChattingMemberUpdateEvent(chatId);
-                        } catch (Exception exception) {
-                        }
-                    }
-                });
-
-        chattingRoomMemberEventListener.put(chatId, listener);
-    }
-
-    // TODO 채팅방 시작
-//    public void createChatRoom(final Activity activity, CoverStarUser userData, String friendsNames, final RetroCallback<ChatCreate> callback) {
-//        if (userData == null) {
-//            return;
-//        }
-//        ArrayList<CoverStarUser> selectedUserList = new ArrayList<>();
-//        selectedUserList.add(userData);
-//
-//        String myUserId = LoginHelper.getSingleInstance().getLoginUserId();
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(myUserId);
-//        sb.append(",");
-//
-//        for (int i = 0; i < selectedUserList.size(); i++) {
-//            CoverStarUser user = selectedUserList.get(i);
-//            sb.append(user.userId);
-//
-//            if (i < selectedUserList.size() - 1) {
-//                sb.append(",");
-//            }
-//        }
-//
-//        createChatRoom(activity, sb.toString(), friendsNames, callback);
-//    }
-
-    // TODO 채팅방 시작
-//    public void createChatRoom(final Activity activity, String userSeq, final String friendsNames, final RetroCallback<ChatCreate> callback) {
-//        HashMap<String, String> bodyProperty = new HashMap<String, String>();
-//        bodyProperty.put("users", userSeq);
-//
-//        DebugLogger.i("test", "startChat users : " + userSeq);
-//
-//        ProgressDialogHelper.show(activity);
-//        RetroClient.getApiInterface().createChattingRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
-//            @Override
-//            public void onSuccess(BaseResponse receivedData) {
-//                ProgressDialogHelper.dismiss();
-//                ChatCreate result = (ChatCreate) receivedData;
-//                String chattingRoomId = result.getChattingRoomId();
-//                startChatActivity(activity, chattingRoomId);
-//
-//                String resultMessage = receivedData.getMessage();
-//                String alreadyMessage = "이미 있는 방입니다.";
-//                if (alreadyMessage.equals(resultMessage) == false) {
-//                    String message = String.format(activity.getString(R.string.invite_message), LoginHelper.getSingleInstance().getLoginUser().getUserName(), friendsNames);
-//                    sendMemberChangeMessage(chattingRoomId, message, ChattingHelper.MSG_TYPE_MEMBER_ENTER);
-//                }
-//
-//                if (callback != null) {
-//                    callback.onSuccess(receivedData);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(BaseResponse response) {
-//                ProgressDialogHelper.dismiss();
-//                if (callback != null) {
-//                    callback.onFailure(response);
-//                }
-//            }
-//        });
-//    }
-
-    // TODO 채팅방 시작
-//    public void startChatActivity(Activity activity, String chattingId) {
-//        Intent intent = new Intent(activity, ChatActivity.class);
-//        intent.putExtra(AppConstants.EXTRA.CHAT_ID, chattingId);
-//        activity.startActivity(intent);
-//    }
-
-    public void updateLastMessageDeleteText(final String chattingId, String messageKey, boolean force) {
-        DebugLogger.i("test", "lastMessageTest updateLastMessageDeleteText chattingId : " + chattingId + ", messageKey : " + messageKey);
-        // 삭제하는 메세지와 chat_info의 채팅방 정보에 있는 last_message_key값을 비교해서 같은 키값이면 delete에 내 아이디 추가
-        if (TextUtils.isEmpty(chattingId)) {
-            return;
-        }
-
-        if (force == false && TextUtils.isEmpty(messageKey)) {
-            return;
-        }
-
-        for (ChatRoomItem item : chattingRoomList) {
-            if (item.getChatId().equals(chattingId) == false) {
-                continue;
-            }
-
-            if (force || (TextUtils.isEmpty(item.getLastMessageKey()) == false && item.getLastMessageKey().equals(messageKey))) {
-                final DocumentReference sfDocRef = getChatInfoDocuRef().document(chattingId);
-                FireBaseHelper.getSingleInstance().getDatabase().runTransaction(new Transaction.Function<Void>() {
-                    @Override
-                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                        DocumentSnapshot snapShot = transaction.get(sfDocRef);
-                        try {
-                            if (force == false) {
-                                String lastMessageKey = (String) snapShot.get("last_message_key");
-                                if (lastMessageKey.equals(messageKey) == false) {
-                                    return null;
-                                }
-                            }
-
-                            DebugLogger.i("test", "lastMessageTest updateLastMessageDeleteText add myId");
-                            ArrayList<String> isDelete = (ArrayList<String>) snapShot.get("last_message_delete");
-                            if (isDelete == null) {
-                                isDelete = new ArrayList<>();
-                            }
-                            String loginUserSeq = LoginHelper.getSingleInstance().getLoginUserId();
-                            if (isDelete.contains(loginUserSeq) == false) {
-                                isDelete.add(LoginHelper.getSingleInstance().getLoginUserId());
-                                sfDocRef.update("last_message_delete", isDelete);
-                            }
-                        } catch (Exception e1) {
-                            DebugLogger.i("test", "lastMessageTest updateLastMessageDeleteText add myId error : " + e1.getMessage());
-                        }
-                        return null;
-                    }
-                });
-                break;
             }
         }
     }

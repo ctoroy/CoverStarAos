@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.chatting.ChatRoomListHelper;
 import com.shinleeholdings.coverstar.databinding.FragmentSettingBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
 import com.shinleeholdings.coverstar.profile.ProfileSettingActivity;
@@ -73,6 +74,8 @@ public class SettingFragment extends BaseFragment {
         binding.logoutLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ChatRoomListHelper.getSingleInstance().initChattingListListener();
+
                 Intent intent = new Intent(getActivity(), LaunchActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

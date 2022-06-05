@@ -28,6 +28,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<BaseResponse<CurCoinItem>> useCoin(@FieldMap(encoded = true) HashMap<String, String> body);
 
+    @POST("sendChattingMessage")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> sendChattingMessage(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("getCurCoin")
     @FormUrlEncoded
     Call<BaseResponse<CurCoinItem>> getCurCoin(@FieldMap(encoded = true) HashMap<String, String> body);

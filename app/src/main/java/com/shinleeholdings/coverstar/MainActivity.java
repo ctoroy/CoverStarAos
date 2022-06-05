@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.tabs.TabLayout;
+import com.shinleeholdings.coverstar.chatting.ChatRoomListHelper;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.ActivityMainBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
@@ -435,5 +436,11 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
     protected void assignCurrentFragment(BaseFragment current) {
         currentFragment = current;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ChatRoomListHelper.getSingleInstance().initChattingListListener();
     }
 }

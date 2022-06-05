@@ -101,5 +101,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/noChatRoomResultView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchTextLayout"
+            android:gravity="center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingTop="200dp"
+            android:paddingRight="30dp"
+            android:text="@string/no_chatroom_result"
+            android:textColor="@color/subTextColor_6a6a6a"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
     </FrameLayout>
 </LinearLayout>

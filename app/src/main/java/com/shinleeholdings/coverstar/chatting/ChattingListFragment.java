@@ -5,24 +5,28 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.databinding.FragmentChattingListBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class ChattingListFragment extends BaseFragment {
 
     private FragmentChattingListBinding binding;
+
+    private ChatRoomListAdapter listAdapter;
 
     private final Handler searchHandler = new Handler();
 
@@ -31,13 +35,20 @@ public class ChattingListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentChattingListBinding.inflate(inflater, container, false);
         initView();
-        requestData();
+
+        if (ChatRoomListHelper.getSingleInstance().isChattingListLoadingCompleted()) {
+            updateChattingList();
+        } else {
+            ProgressDialogHelper.show(getActivity());
+        }
+        ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ChatRoomListHelper.getSingleInstance().removeChattingRoomListListener(chattingRoomListListener);
         binding = null;
     }
 
@@ -71,7 +82,8 @@ public class ChattingListFragment extends BaseFragment {
         });
 
         binding.chattingRoomListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO 채팅 리스트 아답터 설정
+        listAdapter = new ChatRoomListAdapter((MainActivity) getActivity());
+        binding.chattingRoomListRecyclerView.setAdapter(listAdapter);
     }
 
     private Runnable searchRunnable;
@@ -88,13 +100,73 @@ public class ChattingListFragment extends BaseFragment {
         // TODO 채팅방 검색
     }
 
-    private void requestData() {
-        ProgressDialogHelper.show(getActivity());
-        // TODO 채팅 목록 불러오기
-        // TODO 빈화면 설정
-//        mAdapter.setData();
-        ProgressDialogHelper.dismiss();
-    }
+    private ChatRoomListHelper.IChattingRoomEventListener chattingRoomListListener = new ChatRoomListHelper.IChattingRoomEventListener() {
+        @Override
+        public void onChattingRoomLoadCompleted() {
+            updateChattingList();
+        }
 
-    // 채팅 방 리스트 구조
+        @Override
+        public void onChattingRoomDetailInfoChange(String chatId, ChatRoomItem item) {
+            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomDetailInfoChange chatId : " + chatId);
+            updateChattingList();
+        }
+
+        @Override
+        public void onChattingRoomAdded(String chatId, ChatRoomItem item) {
+            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomAdded chatId : " + chatId);
+            if (listAdapter != null) {
+                listAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChattingRoomInfoChanged(String chatId) {
+            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomInfoChanged chatId : " + chatId);
+            if (listAdapter != null) {
+                listAdapter.notifyDataChanged(chatId);
+            }
+        }
+
+        @Override
+        public void onChattingRoomRemoved(String chatId) {
+            if (listAdapter != null) {
+                listAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onMemberUpdate(String chatId) {
+            DebugLogger.i("chattingRoomList", "setChattingRoomListListener onMemberUpdate chatId : " + chatId);
+            if (listAdapter != null) {
+                listAdapter.notifyDataChanged(chatId);
+            }
+        }
+    };
+
+    private Handler uiUpdateHandler = new Handler();
+
+    private Runnable listUpdateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            DebugLogger.i("chattingRoomList", "updateChattingRoomList");
+            ArrayList<ChatRoomItem> chattingRoomList = ChatRoomListHelper.getSingleInstance().getChattingRoomList();
+            if (chattingRoomList == null || chattingRoomList.size() <= 0) {
+                binding.noChatRoomResultView.setVisibility(View.VISIBLE);
+                binding.chattingRoomListRecyclerView.setVisibility(View.GONE);
+            } else {
+                binding.noChatRoomResultView.setVisibility(View.GONE);
+                binding.chattingRoomListRecyclerView.setVisibility(View.VISIBLE);
+                Collections.sort(chattingRoomList);
+                listAdapter.setData(chattingRoomList);
+            }
+            ProgressDialogHelper.dismiss();
+        }
+    };
+
+    private void updateChattingList() {
+        DebugLogger.i("chattingRoomList", "updateChattingList");
+        uiUpdateHandler.removeCallbacks(listUpdateRunnable);
+        uiUpdateHandler.postDelayed(listUpdateRunnable, 150);
+    }
 }

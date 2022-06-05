@@ -17,13 +17,6 @@ public class ChatItem {
     public String user_id;
     public String user_name;
     public String user_photo;
-    public String fileSize;
-    public String expireDate;
-    public String width;
-    public String height;
-    public String filePath;
-    public String filename;
-    public String uploadType;
 
     public static final String KEY = "key";
     public static final String MESSAGE = "message";
@@ -31,17 +24,12 @@ public class ChatItem {
     public static final String SENDUID = "send_uid";
     public static final String USER_NAME = "userName";
     public static final String USER_PHOTO = "userPhoto";
-    public static final String FILESIZE = "fileSize";
-    public static final String WIDTH = "width";
-    public static final String HEIGHT = "height";
-    public static final String FILE_PATH = "filePath";
-    public static final String UPLOADTYPE = "uploadType";
 
     public ChatItem() {
         // Default constructor required for calls to DataSnapshot.getValue(ChatItem.class)
     }
 
-    public ChatItem(String itemKey, String message, String msgType, ArrayList<String> notReadMember, String sendUid, String userName, String userPhoto, String fileSize, String expireDate, String width, String height) {
+    public ChatItem(String itemKey, String message, String msgType, ArrayList<String> notReadMember, String sendUid, String userName, String userPhoto) {
         key = itemKey;
         msg = message;
         msg_type = msgType;
@@ -49,10 +37,6 @@ public class ChatItem {
         user_id = sendUid;
         user_name = userName;
         user_photo = userPhoto;
-        this.fileSize = fileSize;
-        this.expireDate = expireDate;
-        this.width = width;
-        this.height = height;
     }
 
     public ChatItem(JSONObject chatData) throws Exception {
@@ -63,12 +47,6 @@ public class ChatItem {
         user_id = chatData.getString(SENDUID);
         user_name = chatData.getString(USER_NAME);
         user_photo = chatData.getString(USER_PHOTO);
-        fileSize = chatData.getString(FILESIZE);
-        expireDate = "";
-        width = chatData.getString(WIDTH);
-        height = chatData.getString(HEIGHT);
-        filePath = chatData.getString(FILE_PATH);
-        uploadType = chatData.getString(UPLOADTYPE);
     }
 
     @Exclude
@@ -82,11 +60,6 @@ public class ChatItem {
             json.put(SENDUID, user_id);
             json.put(USER_NAME, user_name);
             json.put(USER_PHOTO, user_photo);
-            json.put(FILESIZE, fileSize);
-            json.put(WIDTH, width);
-            json.put(HEIGHT, height);
-            json.put(FILE_PATH, filePath);
-            json.put(UPLOADTYPE, uploadType);
             data = json.toString();
         } catch (Exception e) {
         }

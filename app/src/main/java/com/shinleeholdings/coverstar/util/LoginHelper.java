@@ -3,6 +3,8 @@ package com.shinleeholdings.coverstar.util;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.shinleeholdings.coverstar.chatting.ChatRoomListHelper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -182,6 +184,8 @@ public class LoginHelper {
 					SharedPreferenceHelper.getInstance().setSharedPreference(SharedPreferenceHelper.LOGIN_PW, pw);
 				}
 				saveLoginUserData(mLoginUserData);
+				ChatRoomListHelper.getSingleInstance().getChatRoomListInfo();
+
 				listener.onComplete(true);
 			}
 

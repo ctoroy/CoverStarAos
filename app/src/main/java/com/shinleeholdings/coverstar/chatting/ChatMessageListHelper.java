@@ -24,6 +24,7 @@ import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.FireBaseHelper;
 import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 import org.json.JSONObject;
 
@@ -33,6 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import network.model.BaseResponse;
+import network.model.DefaultResult;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class ChatMessageListHelper {
     private static final String TAG = "ChatMessageListHelper";
@@ -77,10 +83,6 @@ public class ChatMessageListHelper {
 
     private ChatMessageListHelper() {
         dbHelper = DataBaseHelper.getSingleton(MyApplication.getContext());
-        createMessageQueueTable();
-    }
-
-    private void createMessageQueueTable() {
         dbHelper.createTable(ChattingConstants.CREATE_TABLE_QUERY);
     }
 
@@ -136,7 +138,6 @@ public class ChatMessageListHelper {
         values.put(ChattingConstants.FIELD_CHATTING_ID, chattingId);
         values.put(ChattingConstants.FIELD_DATA, item.getJsonStringData());
 
-        // DB에 저장 - 있으면 업데이트하고 없으면 add한다.
         return dbHelper.insertQuery(ChattingConstants.MESSAGE_QUEUE_TABLE_NAME, hasItemQuery, selection, values);
     }
 
@@ -157,47 +158,39 @@ public class ChatMessageListHelper {
         return currentChattingId;
     }
 
-    // TODO 채팅 메세지 보내기
-//    public void sendChattingMessageToServer(final String chattingId, final ChattingItem item, final RetroCallback<BaseResponse> callbackListener) {
-//        ChatItem chatItem = item.getChatItem();
-//        HashMap<String, String> bodyProperty = new HashMap<String, String>();
-//        bodyProperty.put("chat_id", chattingId);
-//        bodyProperty.put("msg", chatItem.msg);
-//        bodyProperty.put("msg_type", chatItem.msg_type);
-//        bodyProperty.put("user_id", LoginHelper.getSingleInstance().getLoginUserId());
-//        bodyProperty.put("keyx", item.getTimeStampKey() + "");
-//        bodyProperty.put("fileSize", chatItem.fileSize + "");
-//        bodyProperty.put("expireDate", chatItem.expireDate + "");
-//        bodyProperty.put("width", chatItem.width);
-//        bodyProperty.put("height", chatItem.height);
-//        if (TextUtils.isEmpty(chatItem.filename) == false) {
-//            bodyProperty.put("filename", chatItem.filename);
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        for (String userId : item.getChatItem().not_read) {
-//            sb.append(userId);
-//            sb.append(",");
-//        }
-//        bodyProperty.put("users", sb.toString().substring(0, sb.length() - 1));
-//
-//        RetroClient.getApiInterface().sendChattingMessage(bodyProperty).enqueue(new RetroCallback<BaseResponse>() {
-//            @Override
-//            public void onSuccess(BaseResponse receivedData) {
-//                sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "", Util.getCurrentTimeToCommonFormat());
-//                if (callbackListener != null) {
-//                    callbackListener.onSuccess(receivedData);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(BaseResponse response) {
-//                if (callbackListener != null) {
-//                    callbackListener.onFailure(response);
-//                }
-//            }
-//        });
-//    }
+    public void sendChattingMessageToServer(final String chattingId, final ChattingItem item, final RetroCallback<BaseResponse> callbackListener) {
+        ChatItem chatItem = item.getChatItem();
+        HashMap<String, String> bodyProperty = new HashMap<String, String>();
+        bodyProperty.put("chat_id", chattingId);
+        bodyProperty.put("msg", chatItem.msg);
+        bodyProperty.put("msg_type", chatItem.msg_type);
+        bodyProperty.put("user_id", LoginHelper.getSingleInstance().getLoginUserId());
+        bodyProperty.put("keyx", item.getTimeStampKey() + "");
+
+        StringBuilder sb = new StringBuilder();
+        for (String userId : item.getChatItem().not_read) {
+            sb.append(userId);
+            sb.append(",");
+        }
+        bodyProperty.put("users", sb.toString().substring(0, sb.length() - 1));
+
+        RetroClient.getApiInterface().sendChattingMessage(bodyProperty).enqueue(new RetroCallback<DefaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse receivedData) {
+                sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "", Util.getCurrentTimeToCommonFormat());
+                if (callbackListener != null) {
+                    callbackListener.onSuccess(receivedData);
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse response) {
+                if (callbackListener != null) {
+                    callbackListener.onFailure(response);
+                }
+            }
+        });
+    }
 
     private void sendLastMessage(String chattingId, String message, String messageKey, String date) {
         HashMap<String, Object> valueMap = new HashMap<>();
@@ -230,23 +223,6 @@ public class ChatMessageListHelper {
 
     private Query getMessageQuery() {
         return getMessageCollectionReference(currentChattingId).orderBy("key", Query.Direction.DESCENDING);
-    }
-
-    private boolean isAvailableMessage(ChatItem item) {
-        if (TextUtils.isEmpty(item.key)) {
-            return false;
-        }
-
-        long itemMessageTime = Long.parseLong(item.key);
-        long chattingRoomJoinTime = getChattingRoomJoinTime();
-        if (chattingRoomJoinTime > 0 && itemMessageTime <= chattingRoomJoinTime) {
-            DebugLogger.e("test", "getPrevMessage 참여전 메세지");
-            return false;
-        } else if (item.isDeletedMessage()) {
-            return false;
-        }
-
-        return true;
     }
 
     private Query prevChatMessageLoadQuery = null;
@@ -304,9 +280,6 @@ public class ChatMessageListHelper {
                         }
 
                         ChatItem item = document.toObject(ChatItem.class);
-                        if (isAvailableMessage(item) == false) {
-                            continue;
-                        }
 
                         ChattingItem chattingItem = new ChattingItem(msgKey, item, chattingId, ChattingItem.SENDSTATE.SUCCESS);
                         itemList.add(chattingItem);
@@ -324,19 +297,6 @@ public class ChatMessageListHelper {
                 }
             }
         });
-    }
-
-    private long getChattingRoomJoinTime() {
-        long chattingRoomJoinTime = 0;
-        if (currentChatRoomItem == null) {
-            currentChatRoomItem = ChatRoomListHelper.getSingleInstance().getChatRoomItem(currentChattingId);
-        }
-
-        if (currentChatRoomItem != null) {
-            chattingRoomJoinTime = currentChatRoomItem.getJoinTime();
-        }
-
-        return chattingRoomJoinTime;
     }
 
     public void addChattingEventListener(final ChattingItem lastMessageItem, IChattingItemEventListener listener) {
@@ -360,9 +320,6 @@ public class ChatMessageListHelper {
                                 QueryDocumentSnapshot eventItem = dc.getDocument();
                                 DebugLogger.i("test", "chattingItem onSnapshots type : " + dc.getType() + " , data : " + eventItem.getData());
                                 ChatItem item = eventItem.toObject(ChatItem.class);
-                                if (isAvailableMessage(item) == false) {
-                                    continue;
-                                }
 
                                 switch (dc.getType()) {
                                     case ADDED:
@@ -394,12 +351,6 @@ public class ChatMessageListHelper {
                         }
                     }
                 });
-    }
-
-    public void sendChattingMessageDeletedEvent(ChattingItem item) {
-        if (onChattingMessageReceiveEventListener != null) {
-            onChattingMessageReceiveEventListener.onItemRemoved(item);
-        }
     }
 
     public void updateMessageRead(ArrayList<ChattingItem> itemList) {

@@ -46,6 +46,32 @@ public class DialogHelper {
         dialog.show();
     }
 
+    public static void showTwoButtonMessagePopup(Activity activity, String title, String message,
+                                                 String positiveText, String negativeText,
+                                                 View.OnClickListener positiveListener,
+                                                 View.OnClickListener negativeListener) {
+        AlertDialog dialog = new AlertDialog.Builder(activity).create();
+        dialog.setTitle(title);
+        dialog.setMessage(message);
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, positiveText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+                positiveListener.onClick(null);
+            }
+        });
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, negativeText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+                negativeListener.onClick(null);
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
     public static void showCertNumSendCompletePopup(Activity activity) {
         final Dialog dialog = new Dialog(activity, R.style.Theme_TransparentBackground);
         ViewGroup view = (ViewGroup) LayoutInflater.from(activity).inflate(R.layout.popup_phone_cert_send_complete, null);

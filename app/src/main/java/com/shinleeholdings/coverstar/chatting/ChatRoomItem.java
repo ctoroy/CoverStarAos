@@ -11,9 +11,7 @@ import java.util.ArrayList;
 
 public class ChatRoomItem implements Comparable<ChatRoomItem> {
     private String chatId;
-    private boolean alarmSetting;
     private String customRoomName;
-    private long joinTime;
 
     private String roomName;
     private String messageDate;
@@ -54,14 +52,6 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
         return BadgeManager.getSingleInstance().getChattingRoomBadge(chatId);
     }
 
-    public boolean isAlarmSetting() {
-        return alarmSetting;
-    }
-
-    public void setAlarmSetting(boolean alarmSetting) {
-        this.alarmSetting = alarmSetting;
-    }
-
     public String getDisplayRoomName() {
         if (TextUtils.isEmpty(customRoomName) == false) {
             return  customRoomName;
@@ -76,7 +66,7 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
                     sb.append(",");
                 }
             }
-            // TODO 마지막 , 제거하기
+
             String value = sb.toString();
             if (TextUtils.isEmpty(value) == false) {
                 roomName = value.substring(0, value.length() - 1);
@@ -174,13 +164,5 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
             return 1;
         }
         return 0;
-    }
-
-    public long getJoinTime() {
-        return joinTime;
-    }
-
-    public void setJoinTime(long joinTime) {
-        this.joinTime = joinTime;
     }
 }
