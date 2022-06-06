@@ -79,7 +79,7 @@ public class PrevMediaFragment extends BaseFragment {
         ProgressDialogHelper.show(getActivity());
         HashMap<String, String> param = new HashMap<>();
         param.put("temp", "1");
-        RetroClient.getApiInterface().getContestList(param).enqueue(new RetroCallback<ContestGroupDataList>() {
+        RetroClient.getApiInterface().getContestLastList(param).enqueue(new RetroCallback<ContestGroupDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestGroupDataList> receivedData) {
 
@@ -141,7 +141,7 @@ public class PrevMediaFragment extends BaseFragment {
 
     private void requestData() {
         HashMap<String, String> param = new HashMap<>();
-        param.put("castStartDate", selectedContestInfoItem.contestStartDate);
+        param.put("contestId", selectedContestInfoItem.contestId + "");
         RetroClient.getApiInterface().getLastList(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {

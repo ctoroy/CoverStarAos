@@ -92,6 +92,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<BaseResponse<ContestGroupDataList>> getContestList(@FieldMap(encoded = true) HashMap<String, String> body);
 
+    @POST("getContestLastList")
+    @FormUrlEncoded
+    Call<BaseResponse<ContestGroupDataList>> getContestLastList(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("getLastList")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getLastList(@FieldMap(encoded = true) HashMap<String, String> body);
