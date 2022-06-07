@@ -34,7 +34,7 @@ public class ChatRoomListHelper {
     private final static Object lockObject = new Object();
 
     private ListenerRegistration chatRoomListEventListener;
-    private ArrayList<ChatRoomItem> chattingRoomList = null;
+    private final ArrayList<ChatRoomItem> chattingRoomList = new ArrayList<>();
 
     private HashMap<String, ArrayList<ChattingRoomMember>> chattingRoomMemberHashMap = new HashMap<>();
 
@@ -83,6 +83,7 @@ public class ChatRoomListHelper {
     }
 
     public ArrayList<ChatRoomItem> getChattingRoomList() {
+
         return chattingRoomList;
     }
 
@@ -91,7 +92,7 @@ public class ChatRoomListHelper {
     }
 
     public ChatRoomItem getChatRoomItem(String chatId) {
-        if (TextUtils.isEmpty(chatId) || chattingRoomList == null || chattingRoomList.size() <= 0) {
+        if (TextUtils.isEmpty(chatId) || chattingRoomList.size() <= 0) {
             return null;
         }
 
@@ -105,7 +106,7 @@ public class ChatRoomListHelper {
     }
 
     private void addChatRoomItem(String chatId, Map<String, Object> data, boolean isAdded) {
-        DebugLogger.e("test", "TB_CHAT_LIST addChattingRoomItem chatId : " + chatId + " , data : " + data);
+        DebugLogger.i(TAG, "chatRoomListHelper addChattingRoomItem chatId : " + chatId + " , data : " + data);
         long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
         String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
 
@@ -134,7 +135,7 @@ public class ChatRoomListHelper {
         BadgeManager.getSingleInstance().initBadgeInfo();
         removeRegisteredChattingRoomDetailInfo();
         removeRegisteredChattingMemberEventListener();
-        chattingRoomList = null;
+        chattingRoomList.clear();
         chattingRoomMemberHashMap.clear();
         chattingListLoadingCompleted = false;
         if (chatRoomListEventListener != null) {
@@ -144,15 +145,12 @@ public class ChatRoomListHelper {
         getChatListCollectionRef().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                DebugLogger.i(TAG, "chatRoomListHelper onComplete task.isSuccessful() : " + task.isSuccessful());
                 if (task.isSuccessful() == false) {
                     return;
                 }
 
-                if (chattingRoomList == null) {
-                    chattingRoomList = new ArrayList<>();
-                }
-
-                DebugLogger.e("test", "TB_CHAT_LIST getChattingRoomListInfo success");
+                DebugLogger.i(TAG, "chatRoomListHelper onComplete chatRoomCount : " + task.getResult().getDocuments().size());
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     String chatId = doc.getId();
                     Map<String, Object> data = doc.getData();
@@ -172,14 +170,10 @@ public class ChatRoomListHelper {
                             String chatId = documentSnapshot.getId();
 
                             Map<String, Object> data = dc.getDocument().getData();
-                            DebugLogger.e("test", "TB_CHAT_LIST chatId : " + chatId + ", Type : " + dc.getType() + " , data : " + data);
+                            DebugLogger.i(TAG, "chatRoomListHelper chatRoomChanged chatId : " + chatId + ", Type : " + dc.getType() + " , data : " + data);
 
                             switch (dc.getType()) {
                                 case ADDED:
-                                    if (chattingRoomList == null) {
-                                        chattingRoomList = new ArrayList<>();
-                                    }
-
                                     for (ChatRoomItem chatRoomItem : chattingRoomList) {
                                         if (chatId.equals(chatRoomItem.getChatId())) {
                                             return;
@@ -426,7 +420,6 @@ public class ChatRoomListHelper {
         intent.putExtra(AppConstants.EXTRA.CHAT_ID, chattingId);
         activity.startActivity(intent);
     }
-
 
     // 리스너 부분
 

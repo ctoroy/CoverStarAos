@@ -276,7 +276,7 @@ public class ContestDetailFragment extends BaseFragment {
 
         binding.starCountTextView.setText(mContestItem.getTotalLikeCount() + "");
 
-        ImageLoader.loadImage(binding.singerImageView, userImagePath);
+        ImageLoader.loadUserImage(binding.singerImageView, userImagePath);
 
         binding.singerNameTextview.setText(mContestItem.getNickName());
 
@@ -288,7 +288,7 @@ public class ContestDetailFragment extends BaseFragment {
 
         updateVote(mContestItem.episode);
 
-        if (AppConstants.CHATTING_ENABLE) {
+        if (LoginHelper.getSingleInstance().isChattingEnable()) {
             binding.followTextView.setVisibility(View.VISIBLE);
             updateFollow();
         } else {

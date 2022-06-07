@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.databinding.FragmentFollowBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -23,6 +24,8 @@ import network.retrofit.RetroClient;
 public class FollowListFragment extends BaseFragment {
 
     private FragmentFollowBinding binding;
+
+    private FollowListAdapter listAdapter;
 
     @Nullable
     @Override
@@ -43,9 +46,8 @@ public class FollowListFragment extends BaseFragment {
         binding.titleBackLayout.setOnClickListener(view -> finish());
 
         binding.followListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO 팔로우 아답터 설정
-
-        // TODO 클릭시 채팅방 오픈
+        listAdapter = new FollowListAdapter((MainActivity) getActivity());
+        binding.followListRecyclerView.setAdapter(listAdapter);
     }
 
     private void requestData() {
@@ -59,17 +61,20 @@ public class FollowListFragment extends BaseFragment {
 
                 CoverStarUserList userList = receivedData.data;
                 if (userList == null || userList.size() <= 0) {
-                    // TODO 빈화면
+                    binding.noFollowResultView.setVisibility(View.VISIBLE);
+                    binding.followListRecyclerView.setVisibility(View.GONE);
                 } else {
-                    // TODO 아답터 설정
-//        mAdapter.setData();
+                    listAdapter.setData(userList);
+                    binding.noFollowResultView.setVisibility(View.GONE);
+                    binding.followListRecyclerView.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(BaseResponse<CoverStarUserList> response) {
                 ProgressDialogHelper.dismiss();
-                // TODO 빈화면
+                binding.noFollowResultView.setVisibility(View.VISIBLE);
+                binding.followListRecyclerView.setVisibility(View.GONE);
             }
         });
     }

@@ -15,26 +15,47 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp">
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/icons_24_px_back"/>
+                android:src="@drawable/icons_24_px_back" />
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_gravity="center"
             android:text="@string/follow"
             android:textColor="@color/black"
-            android:layout_gravity="center"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/followListRecyclerView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/followListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/noFollowResultView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingTop="200dp"
+            android:paddingRight="30dp"
+            android:text="@string/no_follow_result"
+            android:textColor="@color/subTextColor_6a6a6a"
+            android:textSize="18sp"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>

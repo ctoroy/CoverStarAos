@@ -83,9 +83,13 @@
         android:layout_height="2dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
         android:background="#ff7a9a" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd" />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

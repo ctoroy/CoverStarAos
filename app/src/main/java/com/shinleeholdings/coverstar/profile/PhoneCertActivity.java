@@ -182,7 +182,7 @@ public class PhoneCertActivity extends BaseActivity {
             binding.phoneNumEditText.setText(phoneNum);
             binding.loginHintTextView.setVisibility(View.VISIBLE);
             binding.userPhotoLayout.setVisibility(View.VISIBLE);
-            ImageLoader.loadImage(binding.userImageView, loginData.userProfileImage);
+            ImageLoader.loadUserImage(binding.userImageView, loginData.userProfileImage);
             binding.nextButton.setText(getString(R.string.next));
         } else {
             binding.titleLayout.titleTextView.setText(R.string.phone_cert);

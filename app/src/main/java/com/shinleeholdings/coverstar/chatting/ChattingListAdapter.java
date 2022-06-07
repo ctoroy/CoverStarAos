@@ -156,7 +156,7 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
             chattingItemViewHolder.userNickNameTextView.setVisibility(View.VISIBLE);
             chattingItemViewHolder.userNickNameTextView.setText(currentChatItem.getChatItem().user_name);
             chattingItemViewHolder.otherProfileImageView.setVisibility(View.VISIBLE);
-            ImageLoader.loadImage(chattingItemViewHolder.otherProfileImageView, currentChatItem.getImagePath());
+            ImageLoader.loadUserImage(chattingItemViewHolder.otherProfileImageView, currentChatItem.getImagePath());
         }
 
         if (isNextMessageSameTime) {

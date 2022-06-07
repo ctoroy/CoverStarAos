@@ -74,12 +74,12 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
         binding.myPageSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         binding.myPageSwipeRefreshLayout.setOnRefreshListener(this::requestData);
 
-        ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+        ImageLoader.loadUserImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
         binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
 
         binding.settingImageView.setOnClickListener(view -> addFragment(new SettingFragment()));
 
-        if (AppConstants.CHATTING_ENABLE) {
+        if (LoginHelper.getSingleInstance().isChattingEnable()) {
             binding.messageImageView.setVisibility(View.VISIBLE);
         } else {
             binding.messageImageView.setVisibility(View.GONE);
@@ -195,7 +195,7 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
 
     @Override
     public void onUserInfoUpdated() {
-        ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+        ImageLoader.loadUserImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
         binding.userNicknameTextView.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
     }
 

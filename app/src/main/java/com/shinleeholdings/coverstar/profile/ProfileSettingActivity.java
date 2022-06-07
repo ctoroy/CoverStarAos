@@ -65,7 +65,7 @@ public class ProfileSettingActivity extends BaseActivity {
             binding.nextButton.setText(getString(R.string.next));
         } else {
             binding.nextButton.setText(getString(R.string.change));
-            ImageLoader.loadImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
+            ImageLoader.loadUserImage(binding.userImageView, LoginHelper.getSingleInstance().getLoginUserImagePath());
             binding.nickNameEditText.setText(LoginHelper.getSingleInstance().getLoginUserNickName());
         }
 

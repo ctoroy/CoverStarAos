@@ -18,6 +18,7 @@ import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,9 +150,20 @@ public class ChattingListFragment extends BaseFragment {
     private Runnable listUpdateRunnable = new Runnable() {
         @Override
         public void run() {
-            DebugLogger.i("chattingRoomList", "updateChattingRoomList");
             ArrayList<ChatRoomItem> chattingRoomList = ChatRoomListHelper.getSingleInstance().getChattingRoomList();
-            if (chattingRoomList == null || chattingRoomList.size() <= 0) {
+            DebugLogger.i("chattingRoomList", "updateChattingRoomList : " + chattingRoomList.size());
+
+            // TODO test
+            ChatRoomItem item = new ChatRoomItem();
+            item.setChatId("123");
+            item.setCustomRoomName("setCustomRoomName");
+            item.setRoomName("setRoomName");
+            item.setMessageDate(Util.getCurrentTimeToCommonFormat());
+            item.setLastMessage("setLastMessage");
+            item.setLastMessageKey("setLastMessageKey");
+            chattingRoomList.add(item);
+
+            if (chattingRoomList.size() <= 0) {
                 binding.noChatRoomResultView.setVisibility(View.VISIBLE);
                 binding.chattingRoomListRecyclerView.setVisibility(View.GONE);
             } else {

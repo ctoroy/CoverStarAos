@@ -119,6 +119,50 @@ public class Util {
         return new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).format(new Date());
     }
 
+    public static String getMessageTimeStringValue(String time) {
+        SimpleDateFormat fromFormat = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT);
+        Date fromDate = null;
+        try {
+            fromDate = fromFormat.parse(time);
+        } catch (Exception e) {
+            fromDate = new Date();
+        }
+
+        Calendar currentCalendar = Calendar.getInstance();
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.setTime(fromDate);
+
+        if (currentCalendar.get(Calendar.YEAR) == timeCalendar.get(Calendar.YEAR)) {
+            if (currentCalendar.get(Calendar.MONTH) == timeCalendar.get(Calendar.MONTH)) {
+                if (currentCalendar.get(Calendar.DAY_OF_MONTH) == timeCalendar.get(Calendar.DAY_OF_MONTH)) {
+                    //        - 당일 : 오전/오후 h:mm
+                    int hour_of_day = timeCalendar.get(Calendar.HOUR_OF_DAY);
+                    String ampm;
+                    if (hour_of_day >= 12 ){
+                        if (hour_of_day > 12) {
+                            hour_of_day = hour_of_day - 12;
+                        }
+                        ampm = "오후";
+                    }else{
+                        ampm = "오전";
+                    }
+                    return ampm + " " + String.format("%02d", hour_of_day) + ":" + String.format("%02d", timeCalendar.get(Calendar.MINUTE));
+                } else if (currentCalendar.get(Calendar.DAY_OF_MONTH) - 1 == timeCalendar.get(Calendar.DAY_OF_MONTH)) {
+                    return "어제";
+                } else {
+                    SimpleDateFormat toFormat = new SimpleDateFormat("MM월 dd일");
+                    return toFormat.format(fromDate);
+                }
+            } else {
+                SimpleDateFormat toFormat = new SimpleDateFormat("MM월 dd일");
+                return toFormat.format(fromDate);
+            }
+        }
+
+        SimpleDateFormat toFormat = new SimpleDateFormat("yyyy.MM.dd");
+        return toFormat.format(fromDate);
+    }
+
     public static String changeFormattedDate(String date) {
         SimpleDateFormat fromFormat = new SimpleDateFormat("yyyyMMddHHmm");
         SimpleDateFormat toFormat = new SimpleDateFormat("yyyy.MM.dd");

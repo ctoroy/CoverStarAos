@@ -39,9 +39,6 @@ public class ChatActivity extends BaseActivity {
 
     private LinearLayoutManager linearLayoutManager;
 
-    private EditText chattingEditText;
-    private TextView sendButton;
-
     private ChatMessageListHelper chattingHelper;
 
     private String lastLoadMoreMessageKey = "";
@@ -55,13 +52,14 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         chattingId = getIntent().getStringExtra(AppConstants.EXTRA.CHAT_ID);
         fromNoti = getIntent().getBooleanExtra(AppConstants.EXTRA.FROM_NOTI, false);
         chattingHelper = ChatMessageListHelper.getSingleInstance();
         initView();
 
-        startChatting();
+//        startChatting();
     }
 
     @Override
@@ -85,8 +83,7 @@ public class ChatActivity extends BaseActivity {
             }
         });
 
-        ChattingRoomLayout chattingRoomLayout = findViewById(R.id.layout_chattingroom);
-        chattingRoomLayout.setOnResizeEventListener(new ChattingRoomLayout.ViewResizeEventListener() {
+        binding.layoutChattingroom.setOnResizeEventListener(new ChattingRoomLayout.ViewResizeEventListener() {
 
             @Override
             public void onResized() {
@@ -106,7 +103,7 @@ public class ChatActivity extends BaseActivity {
             }
         });
 
-        chattingListView = findViewById(R.id.chatting_listview);
+        chattingListView = binding.layoutChattingroom.findViewById(R.id.chatting_listview);
         ((SimpleItemAnimator) chattingListView.getItemAnimator()).setSupportsChangeAnimations(false);
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -128,8 +125,7 @@ public class ChatActivity extends BaseActivity {
             }
         });
 
-        chattingEditText = findViewById(R.id.chatting_edittext);
-        chattingEditText.addTextChangedListener(new TextWatcher() {
+        binding.chattingEdittext.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -144,13 +140,12 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String editTextString = s.toString();
-                sendButton.setEnabled(TextUtils.isEmpty(editTextString) == false);
+                binding.sendTextView.setEnabled(TextUtils.isEmpty(editTextString) == false);
             }
         });
 
-        sendButton = findViewById(R.id.sendTextView);
-        sendButton.setEnabled(false);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        binding.sendTextView.setEnabled(false);
+        binding.sendTextView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -159,7 +154,7 @@ public class ChatActivity extends BaseActivity {
                     return;
                 }
 
-                ChatItem item = getChatItem(chattingEditText.getText().toString());
+                ChatItem item = getChatItem(binding.chattingEdittext.getText().toString());
                 ChattingItem chattingItem = new ChattingItem(item, chattingId, ChattingItem.SENDSTATE.SENDING);
                 sendMessage(chattingItem);
             }
@@ -193,7 +188,7 @@ public class ChatActivity extends BaseActivity {
     private void sendMessage(final ChattingItem item) {
         // 채팅창에 표시
         chattingListAdapter.addItem(item);
-        chattingEditText.setText("");
+        binding.chattingEdittext.setText("");
 
         chattingHelper.saveChattingMessageToDataBase(item);
         chattingHelper.sendChattingMessageToServer(chattingId, item, new RetroCallback<BaseResponse>() {

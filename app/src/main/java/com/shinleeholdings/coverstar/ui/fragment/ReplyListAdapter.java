@@ -112,7 +112,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter {
 
             ReplyItemViewHolder viewHolder = (ReplyItemViewHolder) holder;
 
-            ImageLoader.loadImage(viewHolder.userImageView, item.userImagePath);
+            ImageLoader.loadUserImage(viewHolder.userImageView, item.userImagePath);
             viewHolder.userNicknameTextView.setText(item.userNickName);
             viewHolder.commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, AppConstants.COMMON_TIME_FORMAT));
             viewHolder.commentTextView.setText(item.message);

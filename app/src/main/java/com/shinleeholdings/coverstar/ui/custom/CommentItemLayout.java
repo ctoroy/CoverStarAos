@@ -86,7 +86,7 @@ public class CommentItemLayout extends LinearLayout implements View.OnClickListe
 		likeLayout.setOnClickListener(this);
 		unLikeLayout.setOnClickListener(this);
 		commentLayout.setOnClickListener(this);
-		ImageLoader.loadImage(userImageView, item.userImagePath);
+		ImageLoader.loadUserImage(userImageView, item.userImagePath);
 		userNicknameTextView.setText(item.userNickName);
 		commentTimeTextView.setText(Util.changeFormattedDate(item.messageDate, AppConstants.COMMON_TIME_FORMAT));
 		commentTextView.setText(item.message);

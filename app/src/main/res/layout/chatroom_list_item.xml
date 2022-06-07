@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:background="#f8f8f8"
+        android:paddingRight="20dp">
+
+        <com.shinleeholdings.coverstar.ui.CircleImageView
+            android:id="@+id/userImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/avator_woman" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="21dp"
+            android:paddingRight="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/roomNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                tools:text="CoverStar" />
+
+            <TextView
+                android:id="@+id/messageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                tools:text="Message" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/messageDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="35dp"
+            tools:text="4월 13일"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd" />
+</LinearLayout>
