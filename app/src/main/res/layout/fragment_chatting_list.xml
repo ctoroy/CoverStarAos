@@ -110,7 +110,6 @@
             android:id="@+id/noChatRoomResultView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/searchTextLayout"
             android:gravity="center_horizontal"
             android:paddingLeft="30dp"
             android:paddingTop="200dp"

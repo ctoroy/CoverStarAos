@@ -13,12 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.FragmentChattingListBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
 import com.shinleeholdings.coverstar.util.DebugLogger;
-import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
-import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +27,8 @@ public class ChattingListFragment extends BaseFragment {
     private FragmentChattingListBinding binding;
 
     private ChatRoomListAdapter listAdapter;
+    private ChatRoomListAdapter searchResultListAdapter;
+    private boolean isSearchMode = false;
 
     private final Handler searchHandler = new Handler();
 
@@ -84,6 +85,7 @@ public class ChattingListFragment extends BaseFragment {
 
         binding.chattingRoomListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listAdapter = new ChatRoomListAdapter((MainActivity) getActivity());
+        searchResultListAdapter = new ChatRoomListAdapter((MainActivity) getActivity());
         binding.chattingRoomListRecyclerView.setAdapter(listAdapter);
     }
 
@@ -91,17 +93,38 @@ public class ChattingListFragment extends BaseFragment {
 
     private void requestSearch(String searchText) {
         if (TextUtils.isEmpty(searchText)) {
+            if (isSearchMode) {
+                onBackPressed();
+            }
             return;
         }
 
-        if (NetworkHelper.isNetworkConnected() == false) {
-            return;
-        }
+        isSearchMode = true;
+        ArrayList<ChatRoomItem> searchList = new ArrayList<>();
 
-        // TODO 채팅방 검색
+        ArrayList<ChatRoomItem> chattingRoomList = ChatRoomListHelper.getSingleInstance().getChattingRoomList();
+        synchronized (chattingRoomList) {
+            for(int i= 0; i < chattingRoomList.size(); i++) {
+                ChatRoomItem item = chattingRoomList.get(0);
+                String roomName = item.getDisplayRoomName();
+                if (roomName.startsWith(searchText) || roomName.endsWith(searchText) || roomName.contains(searchText)) {
+                    searchList.add(item);
+                }
+            }
+        }
+        if (searchList.isEmpty()) {
+            binding.noChatRoomResultView.setVisibility(View.VISIBLE);
+            binding.noChatRoomResultView.setText(getString(R.string.no_chatroom_search_result));
+            binding.chattingRoomListRecyclerView.setVisibility(View.GONE);
+        } else {
+            binding.noChatRoomResultView.setVisibility(View.GONE);
+            binding.chattingRoomListRecyclerView.setVisibility(View.VISIBLE);
+            binding.chattingRoomListRecyclerView.setAdapter(searchResultListAdapter);
+            searchResultListAdapter.setData(searchList);
+        }
     }
 
-    private ChatRoomListHelper.IChattingRoomEventListener chattingRoomListListener = new ChatRoomListHelper.IChattingRoomEventListener() {
+    private final ChatRoomListHelper.IChattingRoomEventListener chattingRoomListListener = new ChatRoomListHelper.IChattingRoomEventListener() {
         @Override
         public void onChattingRoomLoadCompleted() {
             updateChattingList();
@@ -170,5 +193,17 @@ public class ChattingListFragment extends BaseFragment {
         DebugLogger.i("chattingRoomList", "updateChattingList");
         uiUpdateHandler.removeCallbacks(listUpdateRunnable);
         uiUpdateHandler.postDelayed(listUpdateRunnable, 150);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSearchMode) {
+            isSearchMode = false;
+            binding.noChatRoomResultView.setText(getString(R.string.no_chatroom_result));
+            updateChattingList();
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

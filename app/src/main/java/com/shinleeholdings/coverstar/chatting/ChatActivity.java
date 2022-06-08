@@ -1,5 +1,6 @@
 package com.shinleeholdings.coverstar.chatting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.shinleeholdings.coverstar.AppConstants;
+import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityChatBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
@@ -397,10 +399,10 @@ public class ChatActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (fromNoti) {
-            // TODO
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
             return;
         }
 
