@@ -14,8 +14,10 @@ import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.shinleeholdings.coverstar.chatting.ChatActivity;
 import com.shinleeholdings.coverstar.databinding.ActivitySplashBinding;
 import com.shinleeholdings.coverstar.profile.LaunchActivity;
+import com.shinleeholdings.coverstar.service.MessagingService;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -76,7 +78,15 @@ public class SplashActivity extends BaseActivity {
     private void startAutoLogin() {
         LoginHelper.getSingleInstance().startAutoLogin(this, success -> {
             if (success) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent;
+                String pushType = getIntent().getStringExtra(AppConstants.EXTRA.PUSH_TYPE);
+                if (MessagingService.PUSHTYPE_CHAT_TEXT.equals(pushType) || MessagingService.PUSHTYPE_CHAT_FILE.equals(pushType)) {
+                    String pushKey = getIntent().getStringExtra(AppConstants.EXTRA.PUSH_KEY);
+                    intent = new Intent(this, ChatActivity.class);
+                    intent.putExtra(AppConstants.EXTRA.CHAT_ID, pushKey);
+                } else {
+                    intent = new Intent(this, MainActivity.class);
+                }
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {

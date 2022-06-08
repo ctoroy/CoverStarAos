@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.core.app.NotificationCompat;
@@ -12,14 +11,13 @@ import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.CoverStarSchemeActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.chatting.ChatMessageListHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
-
-import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -78,12 +76,10 @@ public class MessagingService extends FirebaseMessagingService {
             notiId = (int) (System.currentTimeMillis() / 1000);
         }
 
-        JSONObject json =  new JSONObject(messageData);
-        String pushDataString = json.toString();
+        Intent notificationIntent = getNotificationIntent(context, key, type);
+        showNotificationGroup(context, notificationIntent);
 
-        showNotificationGroup(context, pushDataString);
-
-        NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, pushDataString)
+        NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, notificationIntent)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(title)
@@ -95,8 +91,8 @@ public class MessagingService extends FirebaseMessagingService {
         ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID + "",  notiId, notiBuilder.build());
     }
 
-    private void showNotificationGroup(Context context, String pushDataString) {
-        NotificationCompat.Builder notificationBuilder = getNotificationBuilder(context, pushDataString)
+    private void showNotificationGroup(Context context, Intent notificationIntent) {
+        NotificationCompat.Builder notificationBuilder = getNotificationBuilder(context, notificationIntent)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(this.getString(R.string.app_name))
@@ -108,19 +104,20 @@ public class MessagingService extends FirebaseMessagingService {
         notificationManager.notify(PUSH_GROUP_ID, notificationBuilder.build());
     }
 
-    private NotificationCompat.Builder getNotificationBuilder(Context context, String pushDataString) {
+    private NotificationCompat.Builder getNotificationBuilder(Context context, Intent notificationIntent) {
         return new NotificationCompat.Builder(context, channelId)
                 .setColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .setContentIntent(PendingIntent.getActivity(context, 0, getNotificationIntent(context, pushDataString), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setLocalOnly(true)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE);
     }
 
-    private Intent getNotificationIntent(Context context, String pushDataString) {
+    private Intent getNotificationIntent(Context context, String pushKey, String pushType) {
         Intent intent = new Intent(context, CoverStarSchemeActivity.class);
-        intent.setData(Uri.parse(pushDataString));
+        intent.putExtra(AppConstants.EXTRA.PUSH_KEY, pushKey);
+        intent.putExtra(AppConstants.EXTRA.PUSH_TYPE, pushType);
         return intent;
     }
 }

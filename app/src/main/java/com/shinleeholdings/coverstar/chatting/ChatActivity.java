@@ -400,6 +400,7 @@ public class ChatActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (fromNoti) {
+            // TODO 푸시 test
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
