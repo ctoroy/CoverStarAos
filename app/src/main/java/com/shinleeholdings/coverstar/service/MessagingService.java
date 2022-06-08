@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -14,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.shinleeholdings.coverstar.CoverStarSchemeActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.chatting.ChatMessageListHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
@@ -25,6 +27,11 @@ public class MessagingService extends FirebaseMessagingService {
 
     public static final int PUSH_GROUP_ID = 1983;
     public static String channelId = "CoverStar";
+
+    public static final String PUSHTYPE_DEFAULT = "0";
+    public static final String PUSHTYPE_CHAT_TEXT = "1";
+    public static final String PUSHTYPE_CHAT_FILE = "2";
+    public static final String PUSHTYPE_NOTICE = "3";
 
     @Override
     public void onNewToken(String s) {
@@ -47,12 +54,31 @@ public class MessagingService extends FirebaseMessagingService {
     private void showNotification(RemoteMessage remoteMessage) {
         Context context = MyApplication.getContext();
 
-        Map<String, String> pushDataMap = remoteMessage.getData();
-        // TODO 푸시 : 타이틀과 메세지 처리
-        String title = pushDataMap.get("TITLE");
-        String message = pushDataMap.get("MESSAGE");
+        Map<String, String> messageData = remoteMessage.getData();
+        DebugLogger.i("onMessageReceived messageData : " + messageData);
 
-        JSONObject json =  new JSONObject(pushDataMap);
+        String type = messageData.get("type");
+        String key = messageData.get("key");
+        String message = messageData.get("value");
+        String title = messageData.get("title");
+        if (TextUtils.isEmpty(title)) {
+            title = getApplicationContext().getString(R.string.app_name);
+        }
+
+        int notiId = 0;
+
+        if (type.equals(PUSHTYPE_CHAT_TEXT) || type.equals(PUSHTYPE_CHAT_FILE)) {
+            String currentChattingRoomId = ChatMessageListHelper.getSingleInstance().getCurrentChattingId();
+            if (TextUtils.isEmpty(currentChattingRoomId) == false && currentChattingRoomId.equals(key)) {
+                // 현재 채팅방 내부에 있으면 푸시띄우지 않는다.
+                return;
+            }
+            notiId = key.hashCode();
+        } else {
+            notiId = (int) (System.currentTimeMillis() / 1000);
+        }
+
+        JSONObject json =  new JSONObject(messageData);
         String pushDataString = json.toString();
 
         showNotificationGroup(context, pushDataString);
@@ -66,7 +92,7 @@ public class MessagingService extends FirebaseMessagingService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setTicker(message);
 
-        ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID + "",  (int)(System.currentTimeMillis() / 1000), notiBuilder.build());
+        ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(PUSH_GROUP_ID + "",  notiId, notiBuilder.build());
     }
 
     private void showNotificationGroup(Context context, String pushDataString) {

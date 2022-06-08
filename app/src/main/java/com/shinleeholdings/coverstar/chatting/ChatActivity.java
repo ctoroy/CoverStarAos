@@ -1,5 +1,7 @@
 package com.shinleeholdings.coverstar.chatting;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,8 +17,10 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
+import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityChatBinding;
+import com.shinleeholdings.coverstar.service.MessagingService;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -208,11 +212,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void startChatting() {
-        String lastPushId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LAST_CHATTING_PUSH_ID);
-        if (TextUtils.isEmpty(lastPushId) == false && lastPushId.equals(chattingId)) {
-            // TODO
-//            MessagingService.resetNotification(MyApplication.getContext());
-        }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(MessagingService.PUSH_GROUP_ID + "", chattingId.hashCode());
 
         chattingHelper.setCurrentChattingId(chattingId);
 

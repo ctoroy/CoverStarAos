@@ -16,7 +16,6 @@ public class SharedPreferenceHelper {
     public static final String ALARM_IS_OFF = "ALARM_IS_OFF";
     public static final String LOGIN_USER_DATA = "LOGIN_USER_DATA";
     public static final String DISPLAY_WIDTH = "DISPLAY_WIDTH";
-    public static final String LAST_CHATTING_PUSH_ID = "pref.lastpushid";
 
     private static volatile SharedPreferenceHelper instance;
     private SharedPreferences mShared;
