@@ -5,8 +5,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,7 +57,7 @@ public class ChatActivity extends BaseActivity {
         chattingHelper = ChatMessageListHelper.getSingleInstance();
         initView();
 
-//        startChatting();
+        startChatting();
     }
 
     @Override
@@ -73,13 +71,11 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (fromNoti) {
-                    // TODO
-//                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-//                    startActivity(intent);
+                    onBackPressed();
+                } else {
+                    Util.hideKeyboard(ChatActivity.this);
+                    finish();
                 }
-
-                Util.hideKeyboard(ChatActivity.this);
-                finish();
             }
         });
 
@@ -155,7 +151,7 @@ public class ChatActivity extends BaseActivity {
                 }
 
                 ChatItem item = getChatItem(binding.chattingEdittext.getText().toString());
-                ChattingItem chattingItem = new ChattingItem(item, chattingId, ChattingItem.SENDSTATE.SENDING);
+                ChattingItem chattingItem = new ChattingItem("", item, chattingId, ChattingItem.SENDSTATE.SENDING);
                 sendMessage(chattingItem);
             }
         });

@@ -98,23 +98,18 @@ public class ChatMessageListHelper {
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-
                 String data = cursor.getString(ChattingConstants.INDEX_DATA);
                 if (TextUtils.isEmpty(data)) {
                     continue;
                 }
 
-                ChattingItem.SENDSTATE sendState = ChattingItem.SENDSTATE.FAIL;
-                ChatItem chatItem;
                 try {
-                    chatItem = new ChatItem(new JSONObject(data));
+                    ChatItem chatItem = new ChatItem(new JSONObject(data));
+                    ChattingItem item = new ChattingItem("", chatItem, currentChattingId, ChattingItem.SENDSTATE.FAIL);
+                    chattingList.add(item);
                 } catch (Exception e) {
                     DebugLogger.e("test", "loadChattingMessage error : " + e.getMessage());
-                    continue;
                 }
-
-                ChattingItem item = new ChattingItem(chatItem, currentChattingId, sendState);
-                chattingList.add(item);
             }
         }
 

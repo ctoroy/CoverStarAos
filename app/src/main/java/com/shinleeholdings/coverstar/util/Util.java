@@ -107,6 +107,20 @@ public class Util {
         return toFormat.format(fromDate);
     }
 
+    public static String formattedDate(String date, String fromFormatString, String toFormatString) {
+        SimpleDateFormat fromFormat = new SimpleDateFormat(fromFormatString);
+        SimpleDateFormat toFormat = new SimpleDateFormat(toFormatString);
+        Date fromDate = null;
+
+        try {
+            fromDate = fromFormat.parse(date);
+        } catch (Exception e) {
+            fromDate = new Date();
+        }
+
+        return toFormat.format(fromDate);
+    }
+
     public static int getCurrentMonth() {
         return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
@@ -119,11 +133,51 @@ public class Util {
         return new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).format(new Date());
     }
 
-    public static String getMessageTimeStringValue(String time) {
-        SimpleDateFormat fromFormat = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT);
+    /**
+     * 채팅 메세지 시간을 구한다.
+     *
+     * @param messageTime
+     * @return
+     */
+    public static String getChattingMessageTime(String messageTime) {
+        String dateString = "";
         Date fromDate = null;
         try {
-            fromDate = fromFormat.parse(time);
+            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(messageTime);
+        } catch (Exception e) {
+            fromDate = new Date();
+        }
+
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.setTime(fromDate);
+
+        try {
+            int hour_of_day = timeCalendar.get(Calendar.HOUR_OF_DAY);
+            String ampm;
+            if (hour_of_day >= 12 ){
+                if (hour_of_day > 12) {
+                    hour_of_day = hour_of_day - 12;
+                }
+                ampm = "오후";
+            }else{
+                ampm = "오전";
+            }
+
+            String hour = String.format("%02d", hour_of_day);
+            String minute = String.format("%02d", timeCalendar.get(Calendar.MINUTE));
+
+            dateString = String.format("%s %s:%s", ampm, hour, minute);
+        } catch (Exception e) {
+
+        }
+
+        return dateString;
+    }
+
+    public static String getMessageTimeStringValue(String time) {
+        Date fromDate = null;
+        try {
+            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(time);
         } catch (Exception e) {
             fromDate = new Date();
         }

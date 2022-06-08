@@ -8,18 +8,13 @@ import com.shinleeholdings.coverstar.MyApplication;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-// TODO 채팅 : 뱃지 관련 처리 정리 필요
 public class BadgeManager {
     private static final String TAG = "BadgeManager";
     private static volatile BadgeManager instance;
     private final static Object lockObject = new Object();
 
-    public enum BADGE_TYPE {
-        CHAT, ALARM;
-    }
-
     private long chattingBadgeCount;
-    private Hashtable<String, Long> chattingBadgeHashTable = new Hashtable<>();
+    private final Hashtable<String, Long> chattingBadgeHashTable = new Hashtable<>();
     private final ArrayList<IBadgeCountChangeEventListener> badgeCountEventListeners = new ArrayList<IBadgeCountChangeEventListener>();
 
     /**
@@ -29,7 +24,7 @@ public class BadgeManager {
      *
      */
     public interface IBadgeCountChangeEventListener {
-        public void onBadgeCountChanged(BADGE_TYPE type);
+        public void onBadgeCountChanged();
     }
 
     public void addBadgeCountChangeEventListener(IBadgeCountChangeEventListener listener) {
@@ -103,7 +98,7 @@ public class BadgeManager {
     public void setBadgeInfo(String chatId, long value) {
         chattingBadgeHashTable.put(chatId, value);
         chattingBadgeCount = chattingBadgeCount + value;
-        sendBadgeCountChangeEvent(BADGE_TYPE.CHAT);
+        sendBadgeCountChangeEvent();
     }
 
     public void updateBadgeInfo(String chatId, long value) {
@@ -112,7 +107,7 @@ public class BadgeManager {
             chattingBadgeHashTable.put(chatId, value);
 
             chattingBadgeCount = chattingBadgeCount - count + value;
-            sendBadgeCountChangeEvent(BADGE_TYPE.CHAT);
+            sendBadgeCountChangeEvent();
         }
     }
 
@@ -122,11 +117,11 @@ public class BadgeManager {
             chattingBadgeHashTable.remove(chatId);
 
             chattingBadgeCount = chattingBadgeCount - count;
-            sendBadgeCountChangeEvent(BADGE_TYPE.CHAT);
+            sendBadgeCountChangeEvent();
         }
     }
 
-    public void sendBadgeCountChangeEvent(final BADGE_TYPE type) {
+    public void sendBadgeCountChangeEvent() {
         synchronized (this) {
 
             try {
@@ -140,7 +135,7 @@ public class BadgeManager {
                     public void run() {
                         for (IBadgeCountChangeEventListener listener : badgeCountEventListeners) {
                             if (listener != null) {
-                                listener.onBadgeCountChanged(type);
+                                listener.onBadgeCountChanged();
                             }
                         }
                     }

@@ -81,13 +81,12 @@ public class FollowListAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             int position = getBindingAdapterPosition();
-            CoverStarUser info = itemList.get(position);
-            if (info == null) {
+            CoverStarUser user = itemList.get(position);
+            if (user == null) {
                 return;
             }
 
-            // TODO 채팅 시작
-//            ChatRoomListHelper.getSingleInstance().startChatActivity(mMainActivity, info.getChatId());
+            ChatRoomListHelper.getSingleInstance().startChat(mMainActivity, user, null);
         }
     }
 }

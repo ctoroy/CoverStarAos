@@ -168,14 +168,14 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
     }
 
     private void setTimeView(ItemViewHolder viewHolder, ChattingItem currentChatItem, int position) {
-        String currentMessageDate = currentChatItem.getMessageDateText();
+        String currentMessageDate = currentChatItem.getTimeLineDateText();
         if (position > 0) {
             ChattingItem prevItem = getItem(position - 1);
             if (prevItem == null) {
                 return;
             }
 
-            String prevMessageDate = prevItem.getMessageDateText();
+            String prevMessageDate = prevItem.getTimeLineDateText();
 
             if (currentMessageDate.equals(prevMessageDate)) {
                 return;

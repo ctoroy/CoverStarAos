@@ -1,6 +1,8 @@
 package com.shinleeholdings.coverstar.chatting;
 
+import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.Util;
 
 /**
  * 채팅 항목 아이템
@@ -9,18 +11,11 @@ import com.shinleeholdings.coverstar.util.LoginHelper;
  * 
  */
 public class ChattingItem {
-	private String msgKey; // 파이어베이스에 저장되어있는 메세지 키값
-	private ChatItem chatItem;
-	private String chattingId;
+	private final String msgKey; // 파이어베이스에 저장되어있는 메세지 키값
+	private final ChatItem chatItem;
+	private final String chattingId;
 
 	private SENDSTATE sendState;
-
-	public ChattingItem(ChatItem item, String chattingId, SENDSTATE state) {
-		msgKey = "";
-		chatItem = item;
-		this.chattingId = chattingId;
-		sendState = state;
-	}
 
 	public ChattingItem(String msgKey, ChatItem item, String chattingId, SENDSTATE state) {
 		this.msgKey = msgKey;
@@ -72,27 +67,15 @@ public class ChattingItem {
 	}
 
 	public String getMessageTimeDisplayText() {
-		// TODO
-		return "";
-//		return TimeHelper.getChattingMessageTime(chatItem.cdate);
+		return Util.getChattingMessageTime(chatItem.cdate);
 	}
 
-	public String getMessageDateText() {
-		// TODO
-		return "";
-//		return TimeHelper.formattedDate(chatItem.cdate, "yyyyMMddHHmmssSSS", "yyyy년 MM월 dd일");
-	}
-
-	public String getMessageDateText2() {
-		// TODO
-		return "";
-//		return TimeHelper.formattedDate(chatItem.cdate, "yyyyMMddHHmmssSSS", "yyyy년 M월 d일");
+	public String getTimeLineDateText() {
+		return Util.formattedDate(chatItem.cdate, AppConstants.COMMON_TIME_FORMAT, "yyyy년 MM월 dd일");
 	}
 
 	public String getImagePath() {
-		// TODO 사용자 이름
-		return "";
-//		return UserStatusHelper.getSingleInstance().getUserStatus(chatItem.user_id).getPhoto();
+		return chatItem.user_photo;
 	}
 
 	public String getJsonStringData() {

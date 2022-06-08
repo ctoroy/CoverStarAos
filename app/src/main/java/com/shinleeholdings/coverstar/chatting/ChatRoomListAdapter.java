@@ -45,6 +45,9 @@ public class ChatRoomListAdapter extends RecyclerView.Adapter {
         viewHolder.roomNameTextView.setText(item.getDisplayRoomName());
         viewHolder.messageTextView.setText(item.getLastMessage());
         viewHolder.timeTextView.setText(Util.getMessageTimeStringValue(item.getMessageDate()));
+
+        // 채팅방 뱃지 표시하려면 이 값 사용
+        long chattingRoomBadgeCount = item.getBadgeCount();
     }
 
     public void setData(ArrayList<ChatRoomItem> dataList) {

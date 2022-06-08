@@ -153,16 +153,6 @@ public class ChattingListFragment extends BaseFragment {
             ArrayList<ChatRoomItem> chattingRoomList = ChatRoomListHelper.getSingleInstance().getChattingRoomList();
             DebugLogger.i("chattingRoomList", "updateChattingRoomList : " + chattingRoomList.size());
 
-            // TODO test
-            ChatRoomItem item = new ChatRoomItem();
-            item.setChatId("123");
-            item.setCustomRoomName("setCustomRoomName");
-            item.setRoomName("setRoomName");
-            item.setMessageDate(Util.getCurrentTimeToCommonFormat());
-            item.setLastMessage("setLastMessage");
-            item.setLastMessageKey("setLastMessageKey");
-            chattingRoomList.add(item);
-
             if (chattingRoomList.size() <= 0) {
                 binding.noChatRoomResultView.setVisibility(View.VISIBLE);
                 binding.chattingRoomListRecyclerView.setVisibility(View.GONE);

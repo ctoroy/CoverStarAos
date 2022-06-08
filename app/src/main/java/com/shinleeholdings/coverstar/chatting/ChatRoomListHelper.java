@@ -18,15 +18,24 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MyApplication;
+import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.FireBaseHelper;
 import com.shinleeholdings.coverstar.util.LoginHelper;
+import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import network.model.BaseResponse;
+import network.model.ChatCreate;
+import network.model.ContestDataList;
+import network.model.CoverStarUser;
+import network.retrofit.RetroCallback;
+import network.retrofit.RetroClient;
 
 public class ChatRoomListHelper {
     private static final String TAG = "ChatRoomListHelper";
@@ -351,69 +360,55 @@ public class ChatRoomListHelper {
         getChatListCollectionRef().document(chatId).update(valueMap);
     }
 
-    // TODO 채팅방 시작
-//    public void createChatRoom(final Activity activity, CoverStarUser userData, String friendsNames, final RetroCallback<ChatCreate> callback) {
-//        if (userData == null) {
-//            return;
-//        }
-//        ArrayList<CoverStarUser> selectedUserList = new ArrayList<>();
-//        selectedUserList.add(userData);
-//
-//        String myUserId = LoginHelper.getSingleInstance().getLoginUserId();
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(myUserId);
-//        sb.append(",");
-//
-//        for (int i = 0; i < selectedUserList.size(); i++) {
-//            CoverStarUser user = selectedUserList.get(i);
-//            sb.append(user.userId);
-//
-//            if (i < selectedUserList.size() - 1) {
-//                sb.append(",");
-//            }
-//        }
-//
-//        createChatRoom(activity, sb.toString(), friendsNames, callback);
-//    }
+    public void startChat(final Activity activity, CoverStarUser userData, final RetroCallback<ChatCreate> callback) {
+        if (userData == null) {
+            return;
+        }
+        ArrayList<CoverStarUser> selectedUserList = new ArrayList<>();
+        selectedUserList.add(userData);
 
-    // TODO 채팅방 시작
-//    public void createChatRoom(final Activity activity, String userSeq, final String friendsNames, final RetroCallback<ChatCreate> callback) {
-//        HashMap<String, String> bodyProperty = new HashMap<String, String>();
-//        bodyProperty.put("users", userSeq);
-//
-//        DebugLogger.i("test", "startChat users : " + userSeq);
-//
-//        ProgressDialogHelper.show(activity);
-//        RetroClient.getApiInterface().createChattingRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
-//            @Override
-//            public void onSuccess(BaseResponse receivedData) {
-//                ProgressDialogHelper.dismiss();
-//                ChatCreate result = (ChatCreate) receivedData;
-//                String chattingRoomId = result.getChattingRoomId();
-//                startChatActivity(activity, chattingRoomId);
-//
-//                String resultMessage = receivedData.getMessage();
-//                String alreadyMessage = "이미 있는 방입니다.";
-//                if (alreadyMessage.equals(resultMessage) == false) {
-//                    String message = String.format(activity.getString(R.string.invite_message), LoginHelper.getSingleInstance().getLoginUser().getUserName(), friendsNames);
-//                    sendMemberChangeMessage(chattingRoomId, message, ChattingHelper.MSG_TYPE_MEMBER_ENTER);
-//                }
-//
-//                if (callback != null) {
-//                    callback.onSuccess(receivedData);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(BaseResponse response) {
-//                ProgressDialogHelper.dismiss();
-//                if (callback != null) {
-//                    callback.onFailure(response);
-//                }
-//            }
-//        });
-//    }
+        String myUserId = LoginHelper.getSingleInstance().getLoginUserId();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(myUserId);
+        sb.append(",");
+
+        for (int i = 0; i < selectedUserList.size(); i++) {
+            CoverStarUser user = selectedUserList.get(i);
+            sb.append(user.userId);
+
+            if (i < selectedUserList.size() - 1) {
+                sb.append(",");
+            }
+        }
+
+        HashMap<String, String> bodyProperty = new HashMap<String, String>();
+        bodyProperty.put("users", sb.toString());
+
+        ProgressDialogHelper.show(activity);
+        // TODO 채팅방 시작 API 적용 필요
+        RetroClient.getApiInterface().createChattingRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
+            @Override
+            public void onSuccess(BaseResponse<ChatCreate> receivedData) {
+                ProgressDialogHelper.dismiss();
+                ChatCreate result = (ChatCreate) receivedData.data;
+                String chattingRoomId = result.getChattingRoomId();
+                startChatActivity(activity, chattingRoomId);
+
+                if (callback != null) {
+                    callback.onSuccess(receivedData);
+                }
+            }
+
+            @Override
+            public void onFailure(BaseResponse<ChatCreate> response) {
+                ProgressDialogHelper.dismiss();
+                if (callback != null) {
+                    callback.onFailure(response);
+                }
+            }
+        });
+    }
 
     public void startChatActivity(Activity activity, String chattingId) {
         Intent intent = new Intent(activity, ChatActivity.class);
