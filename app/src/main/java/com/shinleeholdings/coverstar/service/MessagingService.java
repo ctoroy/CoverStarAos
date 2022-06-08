@@ -14,8 +14,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.shinleeholdings.coverstar.CoverStarSchemeActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.data.AlarmItem;
-import com.shinleeholdings.coverstar.util.AlarmHelper;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 
@@ -56,12 +54,6 @@ public class MessagingService extends FirebaseMessagingService {
 
         JSONObject json =  new JSONObject(pushDataMap);
         String pushDataString = json.toString();
-
-        // TODO 푸시 : 알림 데이터 세팅
-        AlarmItem alarmItem = new AlarmItem();
-        alarmItem.alarmTime = System.currentTimeMillis();
-        alarmItem.alarmData = pushDataString;
-        AlarmHelper.getSingleInstance().addAlarmItem(alarmItem);
 
         showNotificationGroup(context, pushDataString);
 
