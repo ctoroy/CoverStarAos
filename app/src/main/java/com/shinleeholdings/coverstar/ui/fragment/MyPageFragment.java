@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
@@ -79,11 +78,7 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
 
         binding.settingImageView.setOnClickListener(view -> addFragment(new SettingFragment()));
 
-        if (LoginHelper.getSingleInstance().isChattingEnable()) {
-            binding.messageImageView.setVisibility(View.VISIBLE);
-        } else {
-            binding.messageImageView.setVisibility(View.GONE);
-        }
+        binding.messageImageView.setVisibility(View.VISIBLE);
         binding.messageImageView.setOnClickListener(view -> addFragment(new ChattingListFragment()));
 
         binding.depositePointLayout.setOnClickListener(view -> addFragment(new PaymentItemListFragment()));

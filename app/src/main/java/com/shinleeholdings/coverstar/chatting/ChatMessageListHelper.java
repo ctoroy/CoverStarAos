@@ -167,9 +167,14 @@ public class ChatMessageListHelper {
             sb.append(userId);
             sb.append(",");
         }
-        bodyProperty.put("users", sb.toString().substring(0, sb.length() - 1));
+        bodyProperty.put("users", sb.substring(0, sb.length() - 1));
 
-        RetroClient.getApiInterface().sendChattingMessage(bodyProperty).enqueue(new RetroCallback<DefaultResult>() {
+        bodyProperty.put("fileSize", "0");
+        bodyProperty.put("expireDate", "");
+        bodyProperty.put("width", "");
+        bodyProperty.put("height", "");
+
+        RetroClient.getApiInterface().sendMessage(bodyProperty).enqueue(new RetroCallback<DefaultResult>() {
             @Override
             public void onSuccess(BaseResponse receivedData) {
                 sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "", Util.getCurrentTimeToCommonFormat());

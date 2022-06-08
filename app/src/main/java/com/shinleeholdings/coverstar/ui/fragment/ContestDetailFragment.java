@@ -288,7 +288,7 @@ public class ContestDetailFragment extends BaseFragment {
 
         updateVote(mContestItem.episode);
 
-        if (LoginHelper.getSingleInstance().isChattingEnable()) {
+        if (mContestItem.castId.equals(LoginHelper.getSingleInstance().getLoginUserId()) == false) {
             binding.followTextView.setVisibility(View.VISIBLE);
             updateFollow();
         } else {

@@ -102,11 +102,6 @@ public class LoginHelper {
 		sendCoinChangeEvent(coinValue);
 	}
 
-	public boolean isChattingEnable() {
-		// TODO test
-		return getLoginUserId().equals("8201031240677");
-	}
-
 	public void updateMyCoin(int updateValue) {
 		CoverStarUser userData = getSavedLoginUserData();
 		if (userData != null) {

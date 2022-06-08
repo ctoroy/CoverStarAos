@@ -386,8 +386,7 @@ public class ChatRoomListHelper {
         bodyProperty.put("users", sb.toString());
 
         ProgressDialogHelper.show(activity);
-        // TODO 채팅방 시작 API 적용 필요
-        RetroClient.getApiInterface().createChattingRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
+        RetroClient.getApiInterface().createChatRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
             @Override
             public void onSuccess(BaseResponse<ChatCreate> receivedData) {
                 ProgressDialogHelper.dismiss();

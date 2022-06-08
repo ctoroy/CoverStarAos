@@ -25,17 +25,17 @@ public interface ApiInterface {
     @POST("common/uploadImage")
     Call<BaseResponse<PhotoUploadResult>> uploadUserProfile(@Part MultipartBody.Part imgFile);
 
-    @POST("createChattingRoom")
+    @POST("createChatRoom")
     @FormUrlEncoded
-    Call<BaseResponse<ChatCreate>> createChattingRoom(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<ChatCreate>> createChatRoom(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("useCoin")
     @FormUrlEncoded
     Call<BaseResponse<CurCoinItem>> useCoin(@FieldMap(encoded = true) HashMap<String, String> body);
 
-    @POST("sendChattingMessage")
+    @POST("sendMessage")
     @FormUrlEncoded
-    Call<BaseResponse<DefaultResult>> sendChattingMessage(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<DefaultResult>> sendMessage(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getCurCoin")
     @FormUrlEncoded
