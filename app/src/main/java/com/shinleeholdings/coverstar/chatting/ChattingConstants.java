@@ -17,7 +17,6 @@ public final class ChattingConstants {
 	public static final String TEMP_COLLECTION_NAME = "a";
 
 	public static final String FIELDNAME_BADGE_CNT = "badge_cnt";
-	public static final String FIELDNAME_CUSTOM_ROOM_NAME = "custom_room_name";
 
 	public static final String FIELDNAME_USER_ID = "user_id";
 	public static final String FIELDNAME_USER_NAME = "user_name";

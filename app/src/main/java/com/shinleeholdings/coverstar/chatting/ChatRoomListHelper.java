@@ -114,11 +114,9 @@ public class ChatRoomListHelper {
     private void addChatRoomItem(String chatId, Map<String, Object> data, boolean isAdded) {
         DebugLogger.i(TAG, "chatRoomListHelper addChattingRoomItem chatId : " + chatId + " , data : " + data);
         long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
-        String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
 
         ChatRoomItem item = new ChatRoomItem();
         item.setChatId(chatId);
-        item.setCustomRoomName(customName);
 
         BadgeManager.getSingleInstance().setBadgeInfo(chatId, badgeCount);
         chattingRoomList.add(item);
@@ -197,14 +195,6 @@ public class ChatRoomListHelper {
                                     break;
                                 case MODIFIED:
                                     long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
-                                    String customName = (String) data.get(ChattingConstants.FIELDNAME_CUSTOM_ROOM_NAME);
-
-                                    for (ChatRoomItem chattingItem : chattingRoomList) {
-                                        if (chattingItem.getChatId().equals(chatId)) {
-                                            chattingItem.setCustomRoomName(customName);
-                                            break;
-                                        }
-                                    }
 
                                     if (chatId.equals(ChatMessageListHelper.getSingleInstance().getCurrentChattingId())) {
                                         badgeCount = 0;

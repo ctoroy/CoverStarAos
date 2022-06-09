@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class ChatRoomItem implements Comparable<ChatRoomItem> {
     private String chatId;
-    private String customRoomName;
 
     private String roomName;
     private String messageDate;
@@ -36,10 +35,6 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
         this.deleteInfoList = deleteInfoList;
     }
 
-    public void setCustomRoomName(String customRoomName) {
-        this.customRoomName = customRoomName;
-    }
-
     public String getChatId() {
         return chatId;
     }
@@ -53,10 +48,6 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
     }
 
     public String getDisplayRoomName() {
-        if (TextUtils.isEmpty(customRoomName) == false) {
-            return  customRoomName;
-        }
-
         ArrayList<ChattingRoomMember> memberList = ChatRoomListHelper.getSingleInstance().getChattingRoomMember(chatId);
         if (memberList != null) {
             StringBuilder sb = new StringBuilder();
