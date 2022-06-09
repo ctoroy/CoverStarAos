@@ -12,6 +12,10 @@ public class AppConstants {
     public static final String PAY_URL_REAL = "https://coverstar.tv/livepay/index.php";
     public static final String PAY_URL_DEV = "https://coverstar.tv/pay/index.php";
 
+    // TODO 약관들 URL 설정 필요
+    public static final String USE_RULE_URL = "https://coverstar.tv/pay/index.php";
+    public static final String PRIVATE_RULE_URL = "https://coverstar.tv/pay/index.php";
+
     public static final class EXTRA {
         public static final String USER_DATA = "USER_DATA";
         public static final String PHONE_CERT_MODE = "PHONE_CERT_MODE";

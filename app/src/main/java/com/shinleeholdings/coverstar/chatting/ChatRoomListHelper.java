@@ -42,14 +42,17 @@ public class ChatRoomListHelper {
     private ListenerRegistration chatRoomListEventListener;
     private final ArrayList<ChatRoomItem> chattingRoomList = new ArrayList<>();
 
-    private HashMap<String, ArrayList<ChattingRoomMember>> chattingRoomMemberHashMap = new HashMap<>();
+    private final HashMap<String, ArrayList<ChattingRoomMember>> chattingRoomMemberHashMap = new HashMap<>();
 
     private final ArrayList<IChattingRoomEventListener> chattingRoomInfoUpdateListeners = new ArrayList<>();
 
     private final HashMap<String, ListenerRegistration> chattingRoomDetailEventListener = new HashMap<>();
     private final HashMap<String, ListenerRegistration> chattingRoomMemberEventListener = new HashMap<>();
 
-    private boolean chattingListLoadingCompleted = false;
+    public enum LISTLOADSTATE {
+        NOT_STARTED, LOADING, COMPLETED, FAIL;
+    }
+    private LISTLOADSTATE chattingListLoadState = LISTLOADSTATE.NOT_STARTED;
 
     public interface IChattingRoomEventListener {
         void onChattingRoomLoadCompleted();
@@ -90,8 +93,8 @@ public class ChatRoomListHelper {
         return chattingRoomList;
     }
 
-    public boolean isChattingListLoadingCompleted() {
-        return chattingListLoadingCompleted;
+    public LISTLOADSTATE getListLoadState() {
+        return chattingListLoadState;
     }
 
     public ChatRoomItem getChatRoomItem(String chatId) {
@@ -135,12 +138,16 @@ public class ChatRoomListHelper {
     }
 
     public void getChatRoomListInfo() {
+        if (chattingListLoadState == LISTLOADSTATE.LOADING) {
+            return;
+        }
+
         BadgeManager.getSingleInstance().initBadgeInfo();
         removeRegisteredChattingRoomDetailInfo();
         removeRegisteredChattingMemberEventListener();
         chattingRoomList.clear();
         chattingRoomMemberHashMap.clear();
-        chattingListLoadingCompleted = false;
+        chattingListLoadState = LISTLOADSTATE.LOADING;
         if (chatRoomListEventListener != null) {
             chatRoomListEventListener.remove();
         }
@@ -150,8 +157,11 @@ public class ChatRoomListHelper {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 DebugLogger.i(TAG, "chatRoomListHelper onComplete task.isSuccessful() : " + task.isSuccessful());
                 if (task.isSuccessful() == false) {
+                    chattingListLoadState = LISTLOADSTATE.FAIL;
                     return;
                 }
+
+                chattingListLoadState = LISTLOADSTATE.COMPLETED;
 
                 DebugLogger.i(TAG, "chatRoomListHelper onComplete chatRoomCount : " + task.getResult().getDocuments().size());
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
@@ -159,7 +169,7 @@ public class ChatRoomListHelper {
                     Map<String, Object> data = doc.getData();
                     addChatRoomItem(chatId, data, false);
                 }
-                chattingListLoadingCompleted = true;
+
                 sendChattingRoomListLoadCompleteEvent();
                 chatRoomListEventListener = getChatListCollectionRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

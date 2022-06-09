@@ -17,16 +17,20 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
 
         Uri uri = getIntent().getData();
         if (uri != null) {
-            handleUri(uri);
+            if (isTaskRoot()) {
+                // 외부에서 들어옴
+                startActivity(new Intent(this, SplashActivity.class));
+            } else {
+                // 내부에서 들어옴
+            }
         } else {
-            Intent intent;
             String pushType = getIntent().getStringExtra(AppConstants.EXTRA.PUSH_TYPE);
             String pushKey = getIntent().getStringExtra(AppConstants.EXTRA.PUSH_KEY);
 
             if (isTaskRoot()) {
                 // 외부에서 들어옴
                 // TODO 푸시 test
-                intent = new Intent(this, SplashActivity.class);
+                Intent intent = new Intent(this, SplashActivity.class);
                 intent.putExtra(AppConstants.EXTRA.PUSH_KEY, pushKey);
                 intent.putExtra(AppConstants.EXTRA.PUSH_TYPE, pushType);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -35,7 +39,7 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
                 // 내부에서 들어옴
                 if (MessagingService.PUSHTYPE_CHAT_TEXT.equals(pushType) || MessagingService.PUSHTYPE_CHAT_FILE.equals(pushType)) {
                     // TODO 푸시 test
-                    intent = new Intent(this, ChatActivity.class);
+                    Intent intent = new Intent(this, ChatActivity.class);
                     intent.putExtra(AppConstants.EXTRA.CHAT_ID, pushKey);
                     startActivity(intent);
                 }
@@ -43,14 +47,5 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
         }
 
         finish();
-    }
-
-    private void handleUri(Uri data) {
-        if (isTaskRoot()) {
-            // 외부에서 들어옴
-            startActivity(new Intent(this, SplashActivity.class));
-        } else {
-            // 내부에서 들어옴
-        }
     }
 }

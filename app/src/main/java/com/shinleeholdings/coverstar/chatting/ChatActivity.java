@@ -73,12 +73,13 @@ public class ChatActivity extends BaseActivity {
         binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Util.hideKeyboard(ChatActivity.this);
                 if (isTaskRoot()) {
-                    onBackPressed();
-                } else {
-                    Util.hideKeyboard(ChatActivity.this);
-                    finish();
+                    Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
+                finish();
             }
         });
 
@@ -213,12 +214,16 @@ public class ChatActivity extends BaseActivity {
 
         chattingHelper.setCurrentChattingId(chattingId);
 
-        if (ChatRoomListHelper.getSingleInstance().isChattingListLoadingCompleted()) {
+        ChatRoomListHelper.LISTLOADSTATE loadingState = ChatRoomListHelper.getSingleInstance().getListLoadState();
+        if (loadingState == ChatRoomListHelper.LISTLOADSTATE.COMPLETED) {
             updateChattingRoomInfo();
             loadPrevMessage(false);
         } else {
-            ProgressDialogHelper.show(this);
             ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
+            if (loadingState != ChatRoomListHelper.LISTLOADSTATE.LOADING) {
+                ProgressDialogHelper.show(this);
+                ChatRoomListHelper.getSingleInstance().getChatRoomListInfo();
+            }
         }
     }
 

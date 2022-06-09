@@ -38,12 +38,17 @@ public class ChattingListFragment extends BaseFragment {
         binding = FragmentChattingListBinding.inflate(inflater, container, false);
         initView();
 
-        if (ChatRoomListHelper.getSingleInstance().isChattingListLoadingCompleted()) {
+        ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
+
+        ChatRoomListHelper.LISTLOADSTATE loadingState = ChatRoomListHelper.getSingleInstance().getListLoadState();
+        if (loadingState == ChatRoomListHelper.LISTLOADSTATE.COMPLETED) {
             updateChattingList();
         } else {
-            ProgressDialogHelper.show(getActivity());
+            if (loadingState != ChatRoomListHelper.LISTLOADSTATE.LOADING) {
+                ProgressDialogHelper.show(getActivity());
+                ChatRoomListHelper.getSingleInstance().getChatRoomListInfo();
+            }
         }
-        ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
         return binding.getRoot();
     }
 

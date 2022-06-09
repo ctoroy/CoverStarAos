@@ -46,19 +46,14 @@ public class RulesAgreeActivity extends BaseActivity {
         });
 
         binding.userRuleLayout.setOnClickListener(view -> {
-
-            // TODO URL 설정 필요 : 이용 약관
-            String ruleUrl = "https://www.naver.com";
             Intent intent = new Intent(this, RuleDetailActivity.class);
-            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, AppConstants.USE_RULE_URL);
             startActivityForResult(intent, AppConstants.REQUEST_CODE.RULE_DETAIL_USE_RULE);
         });
 
         binding.privateRuleLayout.setOnClickListener(view -> {
-            // TODO URL 설정 필요 : 개인정보 처리방침 약관
-            String ruleUrl = "https://www.naver.com";
             Intent intent = new Intent(this, RuleDetailActivity.class);
-            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, ruleUrl);
+            intent.putExtra(AppConstants.EXTRA.WEBVIEW_URL, AppConstants.PRIVATE_RULE_URL);
             startActivityForResult(intent, AppConstants.REQUEST_CODE.RULE_DETAIL_PRIVATE_RULE);
         });
 
