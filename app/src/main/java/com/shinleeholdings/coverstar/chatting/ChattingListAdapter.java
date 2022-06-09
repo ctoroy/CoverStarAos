@@ -346,6 +346,7 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
                 }
             }
         }
+        notifyDataSetChanged();
     }
 
     public void changeListItem(ChattingItem target) {

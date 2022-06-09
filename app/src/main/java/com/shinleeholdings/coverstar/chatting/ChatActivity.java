@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MainActivity;
-import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityChatBinding;
 import com.shinleeholdings.coverstar.service.MessagingService;
@@ -26,12 +25,12 @@ import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.NetworkHelper;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
-import com.shinleeholdings.coverstar.util.SharedPreferenceHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.ArrayList;
 
 import network.model.BaseResponse;
+import network.model.DefaultResult;
 import network.retrofit.RetroCallback;
 
 public class ChatActivity extends BaseActivity {
@@ -49,7 +48,6 @@ public class ChatActivity extends BaseActivity {
 
     ChatRoomItem chattingRoomInfo;
 
-    boolean fromNoti = false;
 
     private ActivityChatBinding binding;
     @Override
@@ -59,7 +57,6 @@ public class ChatActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         chattingId = getIntent().getStringExtra(AppConstants.EXTRA.CHAT_ID);
-        fromNoti = getIntent().getBooleanExtra(AppConstants.EXTRA.FROM_NOTI, false);
         chattingHelper = ChatMessageListHelper.getSingleInstance();
         initView();
 
@@ -76,7 +73,7 @@ public class ChatActivity extends BaseActivity {
         binding.titleLayout.titleBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fromNoti) {
+                if (isTaskRoot()) {
                     onBackPressed();
                 } else {
                     Util.hideKeyboard(ChatActivity.this);
@@ -156,8 +153,7 @@ public class ChatActivity extends BaseActivity {
                     return;
                 }
 
-                ChatItem item = getChatItem(binding.chattingEdittext.getText().toString());
-                ChattingItem chattingItem = new ChattingItem("", item, chattingId, ChattingItem.SENDSTATE.SENDING);
+                ChattingItem chattingItem = new ChattingItem("", getChatItem(binding.chattingEdittext.getText().toString()), chattingId, ChattingItem.SENDSTATE.SENDING);
                 sendMessage(chattingItem);
             }
         });
@@ -193,9 +189,9 @@ public class ChatActivity extends BaseActivity {
         binding.chattingEdittext.setText("");
 
         chattingHelper.saveChattingMessageToDataBase(item);
-        chattingHelper.sendChattingMessageToServer(chattingId, item, new RetroCallback<BaseResponse>() {
+        chattingHelper.sendChattingMessageToServer(chattingId, item, new RetroCallback<DefaultResult>() {
             @Override
-            public void onSuccess(BaseResponse receivedData) {
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 if (isFinishing()) {
                     DebugLogger.e("test", "onMessage sended but chattingRoom is not showing");
                     ChatMessageListHelper.getSingleInstance().deleteChattingItem(item);
@@ -203,7 +199,7 @@ public class ChatActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(BaseResponse response) {
+            public void onFailure(BaseResponse<DefaultResult> response) {
                 setMessageSendFail(item);
             }
         });
@@ -342,7 +338,6 @@ public class ChatActivity extends BaseActivity {
                 }
 
                 chattingListAdapter.addListItem(item, getItemIndex);
-                chattingListAdapter.notifyDataSetChanged();
 
                 if (chattingListView.isComputingLayout() == false) {
                     if (isLastItemCompletelyVisible()) {
@@ -350,11 +345,9 @@ public class ChatActivity extends BaseActivity {
                     }
                 }
 
-                if (item.isMemberChangeMessage() == false) {
-                    ArrayList<ChattingItem> itemList = new ArrayList<>();
-                    itemList.add(item);
-                    chattingHelper.updateMessageRead(itemList);
-                }
+                ArrayList<ChattingItem> itemList = new ArrayList<>();
+                itemList.add(item);
+                chattingHelper.updateMessageRead(itemList);
             }
 
             @Override
@@ -385,7 +378,7 @@ public class ChatActivity extends BaseActivity {
 
             @Override
             public void onError(String message) {
-                DebugLogger.e("test", "onChattingItemonError : " + message);
+                DebugLogger.e("test", "onChattingItem onError : " + message);
             }
         });
     }
@@ -399,7 +392,7 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (fromNoti) {
+        if (isTaskRoot()) {
             // TODO 푸시 test
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

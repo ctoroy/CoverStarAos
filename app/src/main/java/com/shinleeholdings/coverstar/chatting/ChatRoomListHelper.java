@@ -18,7 +18,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.MyApplication;
-import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.util.DebugLogger;
 import com.shinleeholdings.coverstar.util.FireBaseHelper;
 import com.shinleeholdings.coverstar.util.LoginHelper;
@@ -32,7 +31,6 @@ import javax.annotation.Nullable;
 
 import network.model.BaseResponse;
 import network.model.ChatCreate;
-import network.model.ContestDataList;
 import network.model.CoverStarUser;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -78,9 +76,6 @@ public class ChatRoomListHelper {
         }
 
         return instance;
-    }
-
-    private ChatRoomListHelper() {
     }
 
     public void initChattingListListener() {

@@ -50,10 +50,6 @@ public class ChattingItem {
 		return chatItem;
 	}
 
-	public boolean isMemberChangeMessage() {
-		return false;
-	}
-
 	public String getMsgKey() {
 		return msgKey;
 	}

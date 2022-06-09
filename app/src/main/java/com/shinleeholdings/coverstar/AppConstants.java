@@ -24,7 +24,6 @@ public class AppConstants {
         public static final String WEBVIEW_URL = "WEBVIEW_URL";
         public static final String HINT_TEXT = "HINT_TEXT";
         public static final String CHAT_ID= "CHAT_ID";
-        public static final String FROM_NOTI= "FROM_NOTI";
 
         public static final String PUSH_KEY = "PUSH_KEY";
         public static final String PUSH_TYPE = "PUSH_TYPE";
