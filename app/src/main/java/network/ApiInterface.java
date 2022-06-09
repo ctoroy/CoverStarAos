@@ -3,7 +3,6 @@ package network;
 import java.util.HashMap;
 
 import network.model.BaseResponse;
-import network.model.ChatCreate;
 import network.model.ContestGroupDataList;
 import network.model.ContestDataList;
 import network.model.CoverStarUser;
@@ -27,7 +26,7 @@ public interface ApiInterface {
 
     @POST("createChatRoom")
     @FormUrlEncoded
-    Call<BaseResponse<ChatCreate>> createChatRoom(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<String>> createChatRoom(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("useCoin")
     @FormUrlEncoded

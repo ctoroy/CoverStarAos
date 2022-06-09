@@ -86,7 +86,7 @@ public class FollowListAdapter extends RecyclerView.Adapter {
                 return;
             }
 
-            ChatRoomListHelper.getSingleInstance().startChat(mMainActivity, user, null);
+            ChatRoomListHelper.getSingleInstance().startChat(mMainActivity, user);
         }
     }
 }

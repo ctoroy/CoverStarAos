@@ -29,17 +29,17 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
                 intent = new Intent(this, SplashActivity.class);
                 intent.putExtra(AppConstants.EXTRA.PUSH_KEY, pushKey);
                 intent.putExtra(AppConstants.EXTRA.PUSH_TYPE, pushType);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             } else {
                 // 내부에서 들어옴
                 if (MessagingService.PUSHTYPE_CHAT_TEXT.equals(pushType) || MessagingService.PUSHTYPE_CHAT_FILE.equals(pushType)) {
                     // TODO 푸시 test
                     intent = new Intent(this, ChatActivity.class);
                     intent.putExtra(AppConstants.EXTRA.CHAT_ID, pushKey);
-                } else {
-                    intent = new Intent(this, SplashActivity.class);
+                    startActivity(intent);
                 }
             }
-            startActivity(intent);
         }
 
         finish();

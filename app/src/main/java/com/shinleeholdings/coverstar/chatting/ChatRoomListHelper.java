@@ -30,7 +30,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import network.model.BaseResponse;
-import network.model.ChatCreate;
 import network.model.CoverStarUser;
 import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
@@ -355,7 +354,7 @@ public class ChatRoomListHelper {
         getChatListCollectionRef().document(chatId).update(valueMap);
     }
 
-    public void startChat(final Activity activity, CoverStarUser userData, final RetroCallback<ChatCreate> callback) {
+    public void startChat(final Activity activity, CoverStarUser userData) {
         if (userData == null) {
             return;
         }
@@ -381,25 +380,16 @@ public class ChatRoomListHelper {
         bodyProperty.put("users", sb.toString());
 
         ProgressDialogHelper.show(activity);
-        RetroClient.getApiInterface().createChatRoom(bodyProperty).enqueue(new RetroCallback<ChatCreate>() {
+        RetroClient.getApiInterface().createChatRoom(bodyProperty).enqueue(new RetroCallback<String>() {
             @Override
-            public void onSuccess(BaseResponse<ChatCreate> receivedData) {
+            public void onSuccess(BaseResponse<String> receivedData) {
                 ProgressDialogHelper.dismiss();
-                ChatCreate result = (ChatCreate) receivedData.data;
-                String chattingRoomId = result.getChattingRoomId();
-                startChatActivity(activity, chattingRoomId);
-
-                if (callback != null) {
-                    callback.onSuccess(receivedData);
-                }
+                startChatActivity(activity, receivedData.data);
             }
 
             @Override
-            public void onFailure(BaseResponse<ChatCreate> response) {
+            public void onFailure(BaseResponse<String> response) {
                 ProgressDialogHelper.dismiss();
-                if (callback != null) {
-                    callback.onFailure(response);
-                }
             }
         });
     }
