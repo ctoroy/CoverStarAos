@@ -29,7 +29,6 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
 
             if (isTaskRoot()) {
                 // 외부에서 들어옴
-                // TODO 푸시 test
                 Intent intent = new Intent(this, SplashActivity.class);
                 intent.putExtra(AppConstants.EXTRA.PUSH_KEY, pushKey);
                 intent.putExtra(AppConstants.EXTRA.PUSH_TYPE, pushType);
@@ -38,7 +37,6 @@ public class CoverStarSchemeActivity extends AppCompatActivity {
             } else {
                 // 내부에서 들어옴
                 if (MessagingService.PUSHTYPE_CHAT_TEXT.equals(pushType) || MessagingService.PUSHTYPE_CHAT_FILE.equals(pushType)) {
-                    // TODO 푸시 test
                     Intent intent = new Intent(this, ChatActivity.class);
                     intent.putExtra(AppConstants.EXTRA.CHAT_ID, pushKey);
                     startActivity(intent);
