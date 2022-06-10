@@ -34,7 +34,7 @@ public interface ApiInterface {
 
     @POST("sendMessage")
     @FormUrlEncoded
-    Call<BaseResponse<DefaultResult>> sendMessage(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<String>> sendMessage(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getCurCoin")
     @FormUrlEncoded

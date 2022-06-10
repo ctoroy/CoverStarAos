@@ -190,9 +190,9 @@ public class ChatActivity extends BaseActivity {
         binding.chattingEdittext.setText("");
 
         chattingHelper.saveChattingMessageToDataBase(item);
-        chattingHelper.sendChattingMessageToServer(chattingId, item, new RetroCallback<DefaultResult>() {
+        chattingHelper.sendChattingMessageToServer(chattingId, item, new RetroCallback<String>() {
             @Override
-            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+            public void onSuccess(BaseResponse<String> receivedData) {
                 if (isFinishing()) {
                     DebugLogger.e("test", "onMessage sended but chattingRoom is not showing");
                     ChatMessageListHelper.getSingleInstance().deleteChattingItem(item);
@@ -200,7 +200,7 @@ public class ChatActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(BaseResponse<DefaultResult> response) {
+            public void onFailure(BaseResponse<String> response) {
                 setMessageSendFail(item);
             }
         });

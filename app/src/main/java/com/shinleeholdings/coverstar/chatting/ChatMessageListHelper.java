@@ -153,7 +153,7 @@ public class ChatMessageListHelper {
         return currentChattingId;
     }
 
-    public void sendChattingMessageToServer(final String chattingId, final ChattingItem item, final RetroCallback<DefaultResult> callbackListener) {
+    public void sendChattingMessageToServer(final String chattingId, final ChattingItem item, final RetroCallback<String> callbackListener) {
         ChatItem chatItem = item.getChatItem();
         HashMap<String, String> bodyProperty = new HashMap<String, String>();
         bodyProperty.put("chat_id", chattingId);
@@ -174,9 +174,9 @@ public class ChatMessageListHelper {
         bodyProperty.put("width", "");
         bodyProperty.put("height", "");
 
-        RetroClient.getApiInterface().sendMessage(bodyProperty).enqueue(new RetroCallback<DefaultResult>() {
+        RetroClient.getApiInterface().sendMessage(bodyProperty).enqueue(new RetroCallback<String>() {
             @Override
-            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+            public void onSuccess(BaseResponse<String> receivedData) {
                 sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "", Util.getCurrentTimeToCommonFormat());
                 if (callbackListener != null) {
                     callbackListener.onSuccess(receivedData);
@@ -184,7 +184,7 @@ public class ChatMessageListHelper {
             }
 
             @Override
-            public void onFailure(BaseResponse<DefaultResult> response) {
+            public void onFailure(BaseResponse<String> response) {
                 if (callbackListener != null) {
                     callbackListener.onFailure(response);
                 }
