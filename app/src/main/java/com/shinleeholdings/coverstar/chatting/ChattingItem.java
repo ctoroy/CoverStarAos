@@ -1,6 +1,5 @@
 package com.shinleeholdings.coverstar.chatting;
 
-import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.util.LoginHelper;
 import com.shinleeholdings.coverstar.util.Util;
 
@@ -67,7 +66,7 @@ public class ChattingItem {
 	}
 
 	public String getTimeLineDateText() {
-		return Util.formattedDate(chatItem.cdate, AppConstants.CHATTING_TIME_FORMAT, "yyyy년 MM월 dd일");
+		return Util.getChattingTimeLineDateValue(chatItem.cdate, "yyyy년 MM월 dd일");
 	}
 
 	public String getImagePath() {

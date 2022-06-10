@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -107,13 +108,13 @@ public class Util {
         return toFormat.format(fromDate);
     }
 
-    public static String formattedDate(String date, String fromFormatString, String toFormatString) {
+    public static String formattedDate(String timeValue, String fromFormatString, String toFormatString) {
         SimpleDateFormat fromFormat = new SimpleDateFormat(fromFormatString);
         SimpleDateFormat toFormat = new SimpleDateFormat(toFormatString);
         Date fromDate = null;
 
         try {
-            fromDate = fromFormat.parse(date);
+            fromDate = fromFormat.parse(timeValue);
         } catch (Exception e) {
             fromDate = new Date();
         }
@@ -133,21 +134,30 @@ public class Util {
         return new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).format(new Date());
     }
 
-    /**
-     * 채팅 메세지 시간을 구한다.
-     *
-     * @param messageTime
-     * @return
-     */
-    public static String getChattingMessageTime(String messageTime) {
-        String dateString = "";
-        Date fromDate = null;
+    public static Date getChattingMessageTimeDate(String timeValue) {
+        Date date = null;
         try {
             // 2022 06 10 06 08 48 034
-            fromDate = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT).parse(messageTime);
+            // yyyyMMddHHmmssSSS
+            SimpleDateFormat inputFormat = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT);
+            inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+            date = inputFormat.parse(timeValue);
         } catch (Exception e) {
-            fromDate = new Date();
+            date = new Date();
         }
+
+        return date;
+    }
+
+    public static String getChattingTimeLineDateValue(String messageTime, String toFormatString) {
+        Date fromDate = getChattingMessageTimeDate(messageTime);
+        SimpleDateFormat toFormat = new SimpleDateFormat(toFormatString);
+        return toFormat.format(fromDate);
+    }
+
+    public static String getChattingMessageTime(String messageTime) {
+        String dateString = "";
+        Date fromDate = getChattingMessageTimeDate(messageTime);
 
         Calendar timeCalendar = Calendar.getInstance();
         timeCalendar.setTime(fromDate);
@@ -175,10 +185,10 @@ public class Util {
         return dateString;
     }
 
-    public static String getMessageTimeStringValue(String time) {
+    public static String getLastChattingMessageTime(String time) {
         Date fromDate = null;
         try {
-            fromDate = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT).parse(time);
+            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(time);
         } catch (Exception e) {
             fromDate = new Date();
         }
