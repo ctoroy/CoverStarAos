@@ -80,7 +80,7 @@ public class MessagingService extends FirebaseMessagingService {
         showNotificationGroup(context, notificationIntent);
 
         NotificationCompat.Builder notiBuilder = getNotificationBuilder(context, notificationIntent)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.app_icon)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -93,7 +93,7 @@ public class MessagingService extends FirebaseMessagingService {
 
     private void showNotificationGroup(Context context, Intent notificationIntent) {
         NotificationCompat.Builder notificationBuilder = getNotificationBuilder(context, notificationIntent)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.app_icon)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(this.getString(R.string.app_name))
                 .setGroupSummary(true)

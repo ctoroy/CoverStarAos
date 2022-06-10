@@ -22,6 +22,7 @@ public class ImageLoader {
 
     public static void loadUserImage(ImageView target, String path) {
         if (TextUtils.isEmpty(path)) {
+            target.setImageResource(R.drawable.avator_woman);
             return;
         }
 
