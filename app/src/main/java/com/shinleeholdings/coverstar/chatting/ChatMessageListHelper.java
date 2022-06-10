@@ -177,7 +177,7 @@ public class ChatMessageListHelper {
         RetroClient.getApiInterface().sendMessage(bodyProperty).enqueue(new RetroCallback<String>() {
             @Override
             public void onSuccess(BaseResponse<String> receivedData) {
-                sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "", Util.getCurrentTimeToCommonFormat());
+                sendLastMessage(chattingId, chatItem.msg, item.getTimeStampKey() + "");
                 if (callbackListener != null) {
                     callbackListener.onSuccess(receivedData);
                 }
@@ -192,12 +192,12 @@ public class ChatMessageListHelper {
         });
     }
 
-    private void sendLastMessage(String chattingId, String message, String messageKey, String date) {
+    private void sendLastMessage(String chattingId, String message, String messageKey) {
         HashMap<String, Object> valueMap = new HashMap<>();
         valueMap.put("last_message", message);
         valueMap.put("last_message_key", messageKey);
         valueMap.put("last_message_delete", new ArrayList<String>());
-        valueMap.put("mdate", date);
+        valueMap.put("mdate", Util.getCurrentTimeToCommonFormat());
         ChatRoomListHelper.getSingleInstance().getChatInfoDocuRef().document(chattingId).update(valueMap);
     }
 
