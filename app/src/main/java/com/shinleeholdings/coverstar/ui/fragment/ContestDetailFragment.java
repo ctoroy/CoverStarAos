@@ -283,7 +283,7 @@ public class ContestDetailFragment extends BaseFragment {
         binding.songEtcTextview.setText(String.format(getString(R.string.original_singer_format), mContestItem.logoImage));
 
         binding.songPlayCountTextview.setText(mContestItem.watchCnt + "");
-        binding.dateTextview.setText(Util.changeFormattedDate(mContestItem.getUploadDate(), "yyyymmddhhmmss"));
+        binding.dateTextview.setText(Util.changeFormattedDate(mContestItem.getUploadDate(), AppConstants.COMMON_TIME_FORMAT));
         binding.contestDescriptionTextview.setText(mContestItem.sortBig);
 
         updateVote(mContestItem.episode);

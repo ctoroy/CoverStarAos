@@ -67,7 +67,7 @@ public class ChattingItem {
 	}
 
 	public String getTimeLineDateText() {
-		return Util.formattedDate(chatItem.cdate, AppConstants.COMMON_TIME_FORMAT, "yyyy년 MM월 dd일");
+		return Util.formattedDate(chatItem.cdate, AppConstants.CHATTING_TIME_FORMAT, "yyyy년 MM월 dd일");
 	}
 
 	public String getImagePath() {

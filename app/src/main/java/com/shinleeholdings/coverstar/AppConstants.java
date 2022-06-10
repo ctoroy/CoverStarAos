@@ -8,6 +8,8 @@ package com.shinleeholdings.coverstar;
 public class AppConstants {
 
     public static final String COMMON_TIME_FORMAT = "yyyyMMddHHmmss";
+    public static final String CHATTING_TIME_FORMAT = "yyyyMMddHHmmssSSS";
+//    2022 06 10 06 15 56 671
     public static final String APP_NAME = "CoverStar";
     public static final String PAY_URL_REAL = "https://coverstar.tv/livepay/index.php";
     public static final String PAY_URL_DEV = "https://coverstar.tv/pay/index.php";

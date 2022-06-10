@@ -79,7 +79,7 @@ public class PaymentItemListFragment extends BaseFragment {
         String amount = item.payAmount + "";
         String order = String.format(MyApplication.getContext().getString(R.string.coin_count_format), (item.itemCount + ""));
         String name = LoginHelper.getSingleInstance().getLoginUserId();
-        requestOrderId = order + name + Util.getCurrentTimeToFormat("yyyyMMddHHmmss");
+        requestOrderId = order + name + Util.getCurrentTimeToCommonFormat();
         String payUrl = "";
         if (DebugLogger.IS_DEBUG) {
             payUrl = AppConstants.PAY_URL_DEV;

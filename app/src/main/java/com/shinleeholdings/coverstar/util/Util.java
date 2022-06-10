@@ -143,7 +143,8 @@ public class Util {
         String dateString = "";
         Date fromDate = null;
         try {
-            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(messageTime);
+            // 2022 06 10 06 08 48 034
+            fromDate = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT).parse(messageTime);
         } catch (Exception e) {
             fromDate = new Date();
         }
@@ -177,7 +178,7 @@ public class Util {
     public static String getMessageTimeStringValue(String time) {
         Date fromDate = null;
         try {
-            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(time);
+            fromDate = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT).parse(time);
         } catch (Exception e) {
             fromDate = new Date();
         }

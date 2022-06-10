@@ -151,7 +151,7 @@ public class ParticipateFragment extends BaseFragment implements LoginHelper.ILo
 
                 HashMap<String, String> param = new HashMap<>();
                 param.put("castId", userData.userId + "");
-                param.put("castCode", userData.userId + Util.dateToFormatString(new Date(), "yyyymmddhhmmss"));
+                param.put("castCode", userData.userId + Util.dateToFormatString(new Date(), AppConstants.COMMON_TIME_FORMAT));
                 param.put("nickName", userData.nickName);
                 param.put("profileImage", userData.userProfileImage);
 
