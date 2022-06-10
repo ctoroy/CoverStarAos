@@ -197,7 +197,7 @@ public class ChatMessageListHelper {
         valueMap.put("last_message", message);
         valueMap.put("last_message_key", messageKey);
         valueMap.put("last_message_delete", new ArrayList<String>());
-        valueMap.put("mdate", Util.getCurrentTimeToCommonFormat());
+        valueMap.put("mdate", Util.getCurrentTimeToGMTChattingFormat());
         ChatRoomListHelper.getSingleInstance().getChatInfoDocuRef().document(chattingId).update(valueMap);
     }
 

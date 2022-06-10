@@ -134,7 +134,15 @@ public class Util {
         return new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).format(new Date());
     }
 
-    public static Date getChattingMessageTimeDate(String timeValue) {
+    public static String getCurrentTimeToGMTChattingFormat() {
+        SimpleDateFormat inputFormat = new SimpleDateFormat(AppConstants.CHATTING_TIME_FORMAT);
+        inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+        String gmtformatCurrentTime = inputFormat.format(new Date());
+        DebugLogger.i("lastMessageTime local : " + gmtformatCurrentTime);
+        return gmtformatCurrentTime;
+    }
+
+    public static Date getChattingMessageTimeGMTDate(String timeValue) {
         Date date = null;
         try {
             // 2022 06 10 06 08 48 034
@@ -150,14 +158,14 @@ public class Util {
     }
 
     public static String getChattingTimeLineDateValue(String messageTime, String toFormatString) {
-        Date fromDate = getChattingMessageTimeDate(messageTime);
+        Date fromDate = getChattingMessageTimeGMTDate(messageTime);
         SimpleDateFormat toFormat = new SimpleDateFormat(toFormatString);
         return toFormat.format(fromDate);
     }
 
     public static String getChattingMessageTime(String messageTime) {
         String dateString = "";
-        Date fromDate = getChattingMessageTimeDate(messageTime);
+        Date fromDate = getChattingMessageTimeGMTDate(messageTime);
 
         Calendar timeCalendar = Calendar.getInstance();
         timeCalendar.setTime(fromDate);
@@ -186,12 +194,7 @@ public class Util {
     }
 
     public static String getLastChattingMessageTime(String time) {
-        Date fromDate = null;
-        try {
-            fromDate = new SimpleDateFormat(AppConstants.COMMON_TIME_FORMAT).parse(time);
-        } catch (Exception e) {
-            fromDate = new Date();
-        }
+        Date fromDate = getChattingMessageTimeGMTDate(time);
 
         Calendar currentCalendar = Calendar.getInstance();
         Calendar timeCalendar = Calendar.getInstance();
