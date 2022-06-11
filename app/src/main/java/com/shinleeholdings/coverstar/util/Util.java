@@ -41,6 +41,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -49,6 +51,18 @@ import okhttp3.RequestBody;
 public class Util {
     private static final SimpleDateFormat castTimeFormat = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);
     private static final DecimalFormatSymbols decimalFormatSimbol = new DecimalFormatSymbols(Locale.KOREA);
+
+    public static String getVideoId(String url) {
+        //String url = "https://www.youtube.com/watch?v=fMJMsWvOQb4";
+        String pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(url);
+        if(matcher.find()){
+            return matcher.group();
+        } else {
+            return "";
+        }
+    }
 
     public static void sortList(SortFilterDialog.SortType selectedSortType, ArrayList<ContestData> targetList) {
         if (targetList != null && targetList.size() > 0) {

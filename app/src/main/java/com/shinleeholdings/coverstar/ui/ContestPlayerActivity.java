@@ -13,6 +13,7 @@ import com.shinleeholdings.coverstar.AppConstants;
 import com.shinleeholdings.coverstar.databinding.ActivityContestPlayerBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
 import com.shinleeholdings.coverstar.util.DebugLogger;
+import com.shinleeholdings.coverstar.util.Util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +38,7 @@ public class ContestPlayerActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         String contestUrl = getIntent().getStringExtra(AppConstants.EXTRA.CONTEST_URL);
-        String videoId = getVideoId(contestUrl);
+        String videoId = Util.getVideoId(contestUrl);
 
         DebugLogger.i("ContestPlayerActivity videoId : " + videoId + ", contestUrl : " + contestUrl);
 
@@ -89,17 +90,5 @@ public class ContestPlayerActivity extends BaseActivity {
                 DebugLogger.i("ContestPlayerActivity onInitializationFailure");
             }
         });
-    }
-
-    private String getVideoId(String url) {
-        //String url = "https://www.youtube.com/watch?v=fMJMsWvOQb4";
-        String pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
-        Pattern compiledPattern = Pattern.compile(pattern);
-        Matcher matcher = compiledPattern.matcher(url);
-        if(matcher.find()){
-            return matcher.group();
-        } else {
-            return "";
-        }
     }
 }

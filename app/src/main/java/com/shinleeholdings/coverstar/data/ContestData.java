@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
+import com.shinleeholdings.coverstar.util.Util;
 
 public class ContestData implements Parcelable {
     //+:경연 *:이벤트
@@ -55,7 +56,11 @@ public class ContestData implements Parcelable {
     @SerializedName("accumWatchCnt") public String accumWatchCnt; // 사용자 이미지, getRoom에서는 방장아이디가있으면 팔로우한상태, 아니면 언팔로우
 
     public String getBgImagePath() {
-        return profileImage;
+//        return profileImage;
+        if (TextUtils.isEmpty(location)) {
+            return "";
+        }
+        return "https://img.youtube.com/vi/" + Util.getVideoId(location) + "/hqdefault.jpg";
     }
 
     public String getUserImagePath() {
