@@ -50,19 +50,11 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(RemoteMessage remoteMessage) {
-        Context context = MyApplication.getContext();
-
         Map<String, String> messageData = remoteMessage.getData();
         DebugLogger.i("onMessageReceived messageData : " + messageData);
 
         String type = messageData.get("type");
         String key = messageData.get("key");
-        String message = messageData.get("value");
-        String title = messageData.get("title");
-        if (TextUtils.isEmpty(title)) {
-            title = getApplicationContext().getString(R.string.app_name);
-        }
-
         int notiId = 0;
 
         if (type.equals(PUSHTYPE_CHAT_TEXT) || type.equals(PUSHTYPE_CHAT_FILE)) {
@@ -71,9 +63,23 @@ public class MessagingService extends FirebaseMessagingService {
                 // 현재 채팅방 내부에 있으면 푸시띄우지 않는다.
                 return;
             }
+
+            String loginId = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_ID);
+            String loginPw = SharedPreferenceHelper.getInstance().getStringPreference(SharedPreferenceHelper.LOGIN_PW);
+            if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(loginPw)) {
+                return;
+            }
+
             notiId = key.hashCode();
         } else {
             notiId = (int) (System.currentTimeMillis() / 1000);
+        }
+
+        Context context = MyApplication.getContext();
+        String message = messageData.get("value");
+        String title = messageData.get("title");
+        if (TextUtils.isEmpty(title)) {
+            title = getApplicationContext().getString(R.string.app_name);
         }
 
         Intent notificationIntent = getNotificationIntent(context, key, type);
