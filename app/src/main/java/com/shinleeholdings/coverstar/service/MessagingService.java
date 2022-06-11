@@ -24,7 +24,6 @@ import java.util.Map;
 public class MessagingService extends FirebaseMessagingService {
 
     public static final int PUSH_GROUP_ID = 1983;
-    public static String channelId = "CoverStar";
 
     public static final String PUSHTYPE_DEFAULT = "0";
     public static final String PUSHTYPE_CHAT_TEXT = "1";
@@ -53,8 +52,8 @@ public class MessagingService extends FirebaseMessagingService {
         Map<String, String> messageData = remoteMessage.getData();
         DebugLogger.i("onMessageReceived messageData : " + messageData);
 
-        String type = messageData.get("type");
-        String key = messageData.get("key");
+        String type = messageData.get(AppConstants.EXTRA.PUSH_TYPE);
+        String key = messageData.get(AppConstants.EXTRA.PUSH_KEY);
         int notiId = 0;
 
         if (type.equals(PUSHTYPE_CHAT_TEXT) || type.equals(PUSHTYPE_CHAT_FILE)) {
@@ -111,7 +110,7 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     private NotificationCompat.Builder getNotificationBuilder(Context context, Intent notificationIntent) {
-        return new NotificationCompat.Builder(context, channelId)
+        return new NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
                 .setColor(ContextCompat.getColor(context, R.color.colorAccent))
                 .setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setLocalOnly(true)

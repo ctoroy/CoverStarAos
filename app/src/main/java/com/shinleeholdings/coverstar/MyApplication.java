@@ -38,7 +38,7 @@ public class MyApplication extends Application {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(MessagingService.channelId,
+            NotificationChannel channel = new NotificationChannel(getString(R.string.notification_channel_id),
                     appContext.getString(R.string.channel_name),
                     NotificationManager.IMPORTANCE_HIGH);
             channel.enableLights(true);
