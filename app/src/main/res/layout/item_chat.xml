@@ -8,11 +8,9 @@
         android:id="@+id/layout_date_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:visibility="gone">
 
         <View
@@ -48,7 +46,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
         android:paddingRight="30dp"
         android:visibility="gone">
 
@@ -125,7 +122,6 @@
         android:gravity="right"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
-        android:paddingRight="15dp"
         android:visibility="gone">
 
         <LinearLayout
