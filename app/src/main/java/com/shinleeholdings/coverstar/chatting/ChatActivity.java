@@ -214,12 +214,13 @@ public class ChatActivity extends BaseActivity {
 
         chattingHelper.setCurrentChattingId(chattingId);
 
+        ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
+
         ChatRoomListHelper.LISTLOADSTATE loadingState = ChatRoomListHelper.getSingleInstance().getListLoadState();
         if (loadingState == ChatRoomListHelper.LISTLOADSTATE.COMPLETED) {
             updateChattingRoomInfo();
             loadPrevMessage(false);
         } else {
-            ChatRoomListHelper.getSingleInstance().addChattingRoomListListener(chattingRoomListListener);
             if (loadingState != ChatRoomListHelper.LISTLOADSTATE.LOADING) {
                 ProgressDialogHelper.show(this);
                 ChatRoomListHelper.getSingleInstance().getChatRoomListInfo();
@@ -231,7 +232,6 @@ public class ChatActivity extends BaseActivity {
         @Override
         public void onChattingRoomLoadCompleted() {
             ProgressDialogHelper.dismiss();
-            ChatRoomListHelper.getSingleInstance().removeChattingRoomListListener(chattingRoomListListener);
             updateChattingRoomInfo();
             loadPrevMessage(false);
         }
@@ -254,6 +254,7 @@ public class ChatActivity extends BaseActivity {
 
         @Override
         public void onMemberUpdate(String chatId) {
+            updateChattingRoomInfo();
         }
     };
 
