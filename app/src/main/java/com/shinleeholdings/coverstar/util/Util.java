@@ -177,9 +177,9 @@ public class Util {
                 if (hour_of_day > 12) {
                     hour_of_day = hour_of_day - 12;
                 }
-                ampm = "오후";
+                ampm = "PM";
             }else{
-                ampm = "오전";
+                ampm = "AM";
             }
 
             String hour = String.format("%02d", hour_of_day);
@@ -210,19 +210,17 @@ public class Util {
                         if (hour_of_day > 12) {
                             hour_of_day = hour_of_day - 12;
                         }
-                        ampm = "오후";
+                        ampm = "PM";
                     }else{
-                        ampm = "오전";
+                        ampm = "AM";
                     }
                     return ampm + " " + String.format("%02d", hour_of_day) + ":" + String.format("%02d", timeCalendar.get(Calendar.MINUTE));
-                } else if (currentCalendar.get(Calendar.DAY_OF_MONTH) - 1 == timeCalendar.get(Calendar.DAY_OF_MONTH)) {
-                    return "어제";
                 } else {
-                    SimpleDateFormat toFormat = new SimpleDateFormat("MM월 dd일");
+                    SimpleDateFormat toFormat = new SimpleDateFormat("MM. dd");
                     return toFormat.format(fromDate);
                 }
             } else {
-                SimpleDateFormat toFormat = new SimpleDateFormat("MM월 dd일");
+                SimpleDateFormat toFormat = new SimpleDateFormat("MM. dd");
                 return toFormat.format(fromDate);
             }
         }

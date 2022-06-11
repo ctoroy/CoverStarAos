@@ -154,6 +154,11 @@ public class ChatActivity extends BaseActivity {
                     return;
                 }
 
+                if (chattingRoomInfo.getMemberList().size() > 1) {
+                    Toast.makeText(ChatActivity.this, getString(R.string.try_later), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ChattingItem chattingItem = new ChattingItem("", getChatItem(binding.chattingEdittext.getText().toString()), chattingId, ChattingItem.SENDSTATE.SENDING);
                 sendMessage(chattingItem);
             }

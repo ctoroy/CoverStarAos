@@ -9,6 +9,7 @@
     <string name="information">안내</string>
     <string name="change">변경</string>
     <string name="network_not_connected">네트워크 연결 상태를 확인해주세요.</string>
+    <string name="try_later">잠시 후 다시 시도해 주세요</string>
     <string name="report_done">신고 되었습니다.</string>
     <string name="delete_done">삭제 되었습니다.</string>
     <string name="find_best_cover_star">최고의 커버스타를\n찾아라</string>
