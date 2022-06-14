@@ -113,8 +113,6 @@ public class UserPasswordActivity extends BaseActivity {
             binding.passwordInputLayout.setVisibility(View.GONE);
             binding.resetPwTextView.setVisibility(View.GONE);
             binding.agreeLayout.setVisibility(View.VISIBLE);
-            binding.rememberTextView.setText(getString(R.string.password_need_remember));
-            binding.pwDescriptionTextView.setText(getString(R.string.password_warning));
             binding.nextButton.setText(getString(R.string.next));
         } else {
             binding.titleTextView.setText(getString(R.string.login));
@@ -136,10 +134,6 @@ public class UserPasswordActivity extends BaseActivity {
                 });
                 binding.passwordSubTextView.setText(getString(R.string.password_login_first));
             }
-
-            binding.rememberTextView.setText(getString(R.string.password_forgot));
-
-            binding.pwDescriptionTextView.setText(getString(R.string.password_forgot_description));
 
             binding.nextButton.setText(getString(R.string.login));
 
