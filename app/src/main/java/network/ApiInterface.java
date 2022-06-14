@@ -80,6 +80,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<BaseResponse<DefaultResult>> updateUserProfile(@FieldMap(encoded = true) HashMap<String, String> body);
 
+    @POST("updateUser")
+    @FormUrlEncoded
+    Call<BaseResponse<DefaultResult>> updateUser(@FieldMap(encoded = true) HashMap<String, String> body);
+
     @POST("getList")
     @FormUrlEncoded
     Call<BaseResponse<ContestDataList>> getHomeList(@FieldMap(encoded = true) HashMap<String, String> body);

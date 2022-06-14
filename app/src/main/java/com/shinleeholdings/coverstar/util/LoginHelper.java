@@ -14,9 +14,10 @@ import network.retrofit.RetroCallback;
 import network.retrofit.RetroClient;
 
 public class LoginHelper {
-	public static final String PHONE_CERT_MODE_JOIN = "JOIN";
-	public static final String PHONE_CERT_MODE_LOGIN = "LOGIN";
-	public static final String PHONE_CERT_MODE_RECERT = "RECERT";
+	public static final String PHONE_CERT_MODE_JOIN = "PHONE_CERT_MODE_JOIN";
+	public static final String PHONE_CERT_MODE_LOGIN = "PHONE_CERT_MODE_LOGIN";
+	public static final String PHONE_CERT_MODE_RECERT = "PHONE_CERT_MODE_RECERT";
+	public static final String PHONE_CERT_MODE_PW_RESET = "PHONE_CERT_MODE_PW_RESET";
 
 	public interface ILoginResultListener {
 		void onComplete(boolean success);

@@ -2,6 +2,7 @@ package com.shinleeholdings.coverstar.profile;
 
 import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_JOIN;
 import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_LOGIN;
+import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_PW_RESET;
 import static com.shinleeholdings.coverstar.util.LoginHelper.PHONE_CERT_MODE_RECERT;
 
 import android.app.Dialog;
@@ -108,7 +109,7 @@ public class PhoneCertActivity extends BaseActivity {
         binding.selectCountryLayout.setOnClickListener(view -> showCCP());
 
         binding.nextButton.setOnClickListener(view -> {
-            if (certMode.equals(PHONE_CERT_MODE_JOIN)) {
+            if (certMode.equals(PHONE_CERT_MODE_JOIN) || certMode.equals(PHONE_CERT_MODE_PW_RESET)) {
                 sendPhoneAuth();
             } else {
                 checkUserValid();
@@ -160,7 +161,13 @@ public class PhoneCertActivity extends BaseActivity {
     private void setModeUi() {
         binding.phoneNumInputLayout.setVisibility(View.VISIBLE);
         binding.certNumInputLayout.setVisibility(View.GONE);
-        if (certMode.equals(PHONE_CERT_MODE_RECERT)){
+        if (certMode.equals(PHONE_CERT_MODE_PW_RESET)) {
+            binding.titleLayout.titleTextView.setText(R.string.reset_password);
+            binding.phoneCertNeed.setText(Util.getSectionOfTextBold(getString(R.string.insert_registered_num), getString(R.string.registered_num)));
+            binding.loginHintTextView.setVisibility(View.GONE);
+            binding.userPhotoLayout.setVisibility(View.GONE);
+            binding.nextButton.setText(getString(R.string.send_phone_auth));
+        } else if (certMode.equals(PHONE_CERT_MODE_RECERT)){
             binding.titleLayout.titleTextView.setText(R.string.login);
             binding.phoneCertNeed.setText(Util.getSectionOfTextBold(getString(R.string.insert_registered_num), getString(R.string.registered_num)));
             binding.loginHintTextView.setVisibility(View.GONE);
@@ -322,24 +329,30 @@ public class PhoneCertActivity extends BaseActivity {
     }
 
     private void userAuthComplete() {
-        String phoneNum = binding.phoneNumEditText.getText().toString();
-        if (TextUtils.isEmpty(phoneNum)) {
-            Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
-            return;
+        if (certMode.equals(PHONE_CERT_MODE_PW_RESET)) {
+            Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
+            intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_PW_RESET);
+            startActivity(intent);
+        } else {
+            String phoneNum = binding.phoneNumEditText.getText().toString();
+            if (TextUtils.isEmpty(phoneNum)) {
+                Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String countryCode = binding.ccp.getSelectedCountryCode();
+            String userId = countryCode + phoneNum;
+
+            CoverStarUser loginUserData = new CoverStarUser();
+            loginUserData.userId = userId;
+            loginUserData.phoneNumber = userId;
+            loginUserData.userDialCode = countryCode;
+            loginUserData.userNation = binding.ccp.getSelectedCountryNameCode();
+
+            Intent intent = new Intent(this, ProfileSettingActivity.class);
+            intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
+            intent.putExtra(AppConstants.EXTRA.IS_JOIN, true);
+            startActivity(intent);
         }
-        String countryCode = binding.ccp.getSelectedCountryCode();
-        String userId = countryCode + phoneNum;
-
-        CoverStarUser loginUserData = new CoverStarUser();
-        loginUserData.userId = userId;
-        loginUserData.phoneNumber = userId;
-        loginUserData.userDialCode = countryCode;
-        loginUserData.userNation = binding.ccp.getSelectedCountryNameCode();
-
-        Intent intent = new Intent(this, ProfileSettingActivity.class);
-        intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
-        intent.putExtra(AppConstants.EXTRA.IS_JOIN, true);
-        startActivity(intent);
     }
 
     private void startCertificationTimer() {

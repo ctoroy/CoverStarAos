@@ -31,6 +31,8 @@ public class UserPasswordActivity extends BaseActivity {
 
     public static final String MODE_JOIN = "MODE_JOIN";
     public static final String MODE_LOGIN = "MODE_LOGIN";
+    // TODO 작업 필요
+    public static final String MODE_PW_RESET = "MODE_PW_RESET";
 
     private ActivityUserPasswordBinding binding;
 
@@ -61,7 +63,7 @@ public class UserPasswordActivity extends BaseActivity {
     }
 
     private void initUi() {
-        binding.titleLayout.titleBackLayout.setOnClickListener(view -> {
+        binding.titleBackLayout.setOnClickListener(view -> {
             Util.hideKeyboard(UserPasswordActivity.this);
             onBackPressed();
         });
@@ -109,15 +111,29 @@ public class UserPasswordActivity extends BaseActivity {
         if (pwMode.equals(MODE_JOIN)) {
             binding.starChainIntroLayout.setVisibility(View.VISIBLE);
             binding.passwordInputLayout.setVisibility(View.GONE);
+            binding.resetPwTextView.setVisibility(View.GONE);
             binding.agreeLayout.setVisibility(View.VISIBLE);
             binding.rememberTextView.setText(getString(R.string.password_need_remember));
             binding.pwDescriptionTextView.setText(getString(R.string.password_warning));
             binding.nextButton.setText(getString(R.string.next));
         } else {
-            binding.titleLayout.titleTextView.setText(getString(R.string.login));
+            binding.titleTextView.setText(getString(R.string.login));
 
             binding.starChainIntroLayout.setVisibility(View.GONE);
             binding.passwordInputLayout.setVisibility(View.VISIBLE);
+            if (pwMode.equals(MODE_LOGIN)) {
+                binding.resetPwTextView.setVisibility(View.VISIBLE);
+                binding.resetPwTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent phoneCertIntent = new Intent(UserPasswordActivity.this, PhoneCertActivity.class);
+                        phoneCertIntent.putExtra(AppConstants.EXTRA.PHONE_CERT_MODE, LoginHelper.PHONE_CERT_MODE_PW_RESET);
+                        startActivity(phoneCertIntent);
+                    }
+                });
+            } else {
+                binding.resetPwTextView.setVisibility(View.GONE);
+            }
 
             binding.rememberTextView.setText(getString(R.string.password_forgot));
             binding.pwDescriptionTextView.setText(getString(R.string.password_forgot_description));
