@@ -60,6 +60,7 @@
     <string name="password_input">비밀번호를 입력해주세요.</string>
     <string name="reset_password">비밀번호 재설정</string>
 
+    <string name="password_reset_first">재설정할 비밀번호 6자리를 입력해 주세요.</string>
     <string name="password_login_first">회원가입 시 스타체인 지갑 생성을 위해 설정한\n비밀번호 6자리를 입력해 주세요.</string>
     <string name="password_login_second">비밀번호를 다시 입력해 주세요.</string>
 

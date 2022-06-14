@@ -121,7 +121,10 @@ public class UserPasswordActivity extends BaseActivity {
 
             binding.starChainIntroLayout.setVisibility(View.GONE);
             binding.passwordInputLayout.setVisibility(View.VISIBLE);
-            if (pwMode.equals(MODE_LOGIN)) {
+            if (pwMode.equals(MODE_PW_RESET)) {
+                binding.passwordSubTextView.setText(getString(R.string.password_reset_first));
+                binding.resetPwTextView.setVisibility(View.GONE);
+            } else {
                 binding.resetPwTextView.setVisibility(View.VISIBLE);
                 binding.resetPwTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,17 +134,17 @@ public class UserPasswordActivity extends BaseActivity {
                         startActivity(phoneCertIntent);
                     }
                 });
-            } else {
-                binding.resetPwTextView.setVisibility(View.GONE);
+                binding.passwordSubTextView.setText(getString(R.string.password_login_first));
             }
 
             binding.rememberTextView.setText(getString(R.string.password_forgot));
+
             binding.pwDescriptionTextView.setText(getString(R.string.password_forgot_description));
+
             binding.nextButton.setText(getString(R.string.login));
 
             binding.passwordSettingTopLayout.setVisibility(View.GONE);
             binding.passwordLoginTopTextView.setVisibility(View.VISIBLE);
-            binding.passwordSubTextView.setText(getString(R.string.password_login_first));
             binding.agreeLayout.setVisibility(View.INVISIBLE);
         }
 
@@ -183,13 +186,38 @@ public class UserPasswordActivity extends BaseActivity {
                             return;
                         }
 
-                        startJoin();
+                        if (pwMode.equals(MODE_PW_RESET)) {
+                            updatePassword();
+                        } else {
+                            startJoin();
+                        }
                     }
                 }
             }
         });
 
         binding.agreeLayout.setOnClickListener(view -> view.setSelected(!view.isSelected()));
+    }
+
+    private void updatePassword() {
+        // TODO test 필요
+        HashMap<String, String> param = new HashMap<>();
+        param.put("userId", loginUserData.userId);
+        param.put("userPwd", firstPassword);
+
+        ProgressDialogHelper.show(this);
+        RetroClient.getApiInterface().updateUser(param).enqueue(new RetroCallback<DefaultResult>() {
+            @Override
+            public void onSuccess(BaseResponse<DefaultResult> receivedData) {
+                ProgressDialogHelper.dismiss();
+                startLogin();
+            }
+
+            @Override
+            public void onFailure(BaseResponse<DefaultResult> response) {
+                ProgressDialogHelper.dismiss();
+            }
+        });
     }
 
     private void startJoin() {

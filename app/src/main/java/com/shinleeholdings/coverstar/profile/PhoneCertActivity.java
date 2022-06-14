@@ -329,21 +329,24 @@ public class PhoneCertActivity extends BaseActivity {
     }
 
     private void userAuthComplete() {
+        String phoneNum = binding.phoneNumEditText.getText().toString();
+        if (TextUtils.isEmpty(phoneNum)) {
+            Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String countryCode = binding.ccp.getSelectedCountryCode();
+        String userId = countryCode + phoneNum;
+        CoverStarUser loginUserData = new CoverStarUser();
+        loginUserData.userId = userId;
+
         if (certMode.equals(PHONE_CERT_MODE_PW_RESET)) {
             Intent intent = new Intent(PhoneCertActivity.this, UserPasswordActivity.class);
+            intent.putExtra(AppConstants.EXTRA.USER_DATA, loginUserData);
             intent.putExtra(AppConstants.EXTRA.MODE, UserPasswordActivity.MODE_PW_RESET);
             startActivity(intent);
         } else {
-            String phoneNum = binding.phoneNumEditText.getText().toString();
-            if (TextUtils.isEmpty(phoneNum)) {
-                Toast.makeText(this, getString(R.string.phone_input_hint), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            String countryCode = binding.ccp.getSelectedCountryCode();
-            String userId = countryCode + phoneNum;
 
-            CoverStarUser loginUserData = new CoverStarUser();
-            loginUserData.userId = userId;
             loginUserData.phoneNumber = userId;
             loginUserData.userDialCode = countryCode;
             loginUserData.userNation = binding.ccp.getSelectedCountryNameCode();
