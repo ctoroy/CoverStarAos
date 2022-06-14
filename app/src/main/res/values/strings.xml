@@ -45,6 +45,7 @@
     <string name="insert_six_number">인증번호 6자리를 입력하세요.</string>
     <string name="resend">재전송</string>
     <string name="cert_complete">인증완료</string>
+    <string name="complete">완료</string>
     <string name="remain_time_format" formatted="false">%02d:%02d 남음</string>
 
     <string name="profile_image_nickname_setting">프로필 이미지와 닉네임을 설정해 주세요.</string>

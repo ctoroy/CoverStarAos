@@ -115,14 +115,15 @@ public class UserPasswordActivity extends BaseActivity {
             binding.agreeLayout.setVisibility(View.VISIBLE);
             binding.nextButton.setText(getString(R.string.next));
         } else {
-            binding.titleTextView.setText(getString(R.string.login));
-
             binding.starChainIntroLayout.setVisibility(View.GONE);
             binding.passwordInputLayout.setVisibility(View.VISIBLE);
             if (pwMode.equals(MODE_PW_RESET)) {
+                binding.titleTextView.setText(getString(R.string.reset_password));
                 binding.passwordSubTextView.setText(getString(R.string.password_reset_first));
                 binding.resetPwTextView.setVisibility(View.GONE);
+                binding.nextButton.setText(getString(R.string.next));
             } else {
+                binding.titleTextView.setText(getString(R.string.login));
                 binding.resetPwTextView.setVisibility(View.VISIBLE);
                 binding.resetPwTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,9 +134,8 @@ public class UserPasswordActivity extends BaseActivity {
                     }
                 });
                 binding.passwordSubTextView.setText(getString(R.string.password_login_first));
+                binding.nextButton.setText(getString(R.string.login));
             }
-
-            binding.nextButton.setText(getString(R.string.login));
 
             binding.passwordSettingTopLayout.setVisibility(View.GONE);
             binding.passwordLoginTopTextView.setVisibility(View.VISIBLE);
@@ -175,14 +175,15 @@ public class UserPasswordActivity extends BaseActivity {
                             return;
                         }
 
-                        if (binding.agreeLayout.isSelected() == false) {
-                            Toast.makeText(UserPasswordActivity.this, getString(R.string.agree_password_use), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
                         if (pwMode.equals(MODE_PW_RESET)) {
                             updatePassword();
                         } else {
+
+                            if (binding.agreeLayout.isSelected() == false) {
+                                Toast.makeText(UserPasswordActivity.this, getString(R.string.agree_password_use), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             startJoin();
                         }
                     }
@@ -194,7 +195,6 @@ public class UserPasswordActivity extends BaseActivity {
     }
 
     private void updatePassword() {
-        // TODO test 필요
         HashMap<String, String> param = new HashMap<>();
         param.put("userId", loginUserData.userId);
         param.put("userPwd", firstPassword);
@@ -204,7 +204,10 @@ public class UserPasswordActivity extends BaseActivity {
             @Override
             public void onSuccess(BaseResponse<DefaultResult> receivedData) {
                 ProgressDialogHelper.dismiss();
-                startLogin();
+
+                Intent intent = new Intent(UserPasswordActivity.this, LaunchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
 
             @Override
@@ -331,12 +334,17 @@ public class UserPasswordActivity extends BaseActivity {
         binding.passwordTitleTextView.setText(getString(R.string.password_setting));
         binding.passwordSubTextView.setText(getString(R.string.password_use));
         updatePasswordLayout();
+
+        binding.nextButton.setText(getString(R.string.next));
     }
 
     private void setPasswordSecondMode() {
         binding.passwordTitleTextView.setText(getString(R.string.password_confirm));
         binding.passwordSubTextView.setText(getString(R.string.password_reinput));
         updatePasswordLayout();
+        if (pwMode.equals(MODE_PW_RESET)) {
+            binding.nextButton.setText(getString(R.string.complete));
+        }
     }
 
     @Override
