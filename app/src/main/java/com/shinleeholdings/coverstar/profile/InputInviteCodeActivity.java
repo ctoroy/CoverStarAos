@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.shinleeholdings.coverstar.AppConstants;
+import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.databinding.ActivityInputInviteCodeBinding;
 import com.shinleeholdings.coverstar.util.BaseActivity;
@@ -38,7 +39,10 @@ public class InputInviteCodeActivity extends BaseActivity {
     private void initUi() {
         binding.titleLayout.titleBackLayout.setOnClickListener(view -> onBackPressed());
 
-        binding.inviteCodeRewardTextView.setText(Util.getSectionOfTextBold(getString(R.string.input_invite_code_reward), getString(R.string.input_invite_code_reward_3star)));
+        String reward= String.format(MyApplication.getContext().getString(R.string.coin_count_format), "3");
+        String rewardDesc = String.format(getString(R.string.input_invite_code_reward), reward);
+
+        binding.inviteCodeRewardTextView.setText(Util.getSectionOfTextBold(rewardDesc, reward));
 
         binding.nextButton.setOnClickListener(view -> {
             // 추천인 코드

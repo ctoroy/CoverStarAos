@@ -82,8 +82,6 @@
     <string name="login_hint">다른 사용자로 로그인 할 경우\n해당 사용자의 휴대폰 번호를 입력해 주세요.</string>
 
     <string name="input_invite_code">추천코드를 입력해 주세요.</string>
-    <string name="input_invite_code_reward">커버스타를 추천한 친구의 추천코드를 입력하면\n3P를 선물로 드립니다</string>
-    <string name="input_invite_code_reward_3star">3P</string>
 
     <string name="backpressed_finish">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="next">다음</string>
@@ -132,7 +130,8 @@
     <string name="mention">한마디</string>
     <string name="mention_hint">감사합니다.</string>
     <string name="participate_count">※ 참가 신청을 위해 %s가 사용됩니다.</string>
-    <string name="coin_count_format">%sP</string>
+    <string name="coin_count_format">%sSTAR</string>
+    <string name="input_invite_code_reward">커버스타를 추천한 친구의 추천코드를 입력하면\n%s를 선물로 드립니다</string>
 
     <string name="select_season_round">참가신청할 시즌 라운드를 선택해 주세요</string>
     <string name="input_song_title">노래 제목을 입력해 주세요</string>
@@ -142,8 +141,8 @@
 
     <string name="regist_confirm">신청하기 확인</string>
     <string name="participate_count_confirm">%s를 사용해서 참여 하시겠습니까?</string>
-    <string name="point_check_message">포인트가 없습니다. 포인트 충전 후 신청해주세요</string>
-    <string name="point_check">포인트 확인</string>
+    <string name="point_check_message">스타체인이 없습니다. 스타체인 충전 후 신청해주세요</string>
+    <string name="point_check">스타체인 확인</string>
     <string name="regist_complete">%s에 참가 신청 되었습니다</string>
 
     <string name="epilogue">에필로그</string>
@@ -158,7 +157,7 @@
     <string name="buy">구매</string>
     <string name="deposite">입금</string>
     <string name="withdraw">출금</string>
-    <string name="charge_point">포인트 충전</string>
+    <string name="charge_point">스타체인 충전</string>
     <string name="playlist">재생목록</string>
     <string name="participate_media">참가영상</string>
 
@@ -185,7 +184,7 @@
     <string name="contest_final_date">입상자발표 : %s</string>
     <string name="price_display_format">%s원</string>
     <string name="discount_display_format">%s할인</string>
-    <string name="has_point">보유 포인트</string>
+    <string name="has_point">보유 스타체인</string>
     <string name="exchange">충전하기</string>
 
     <string name="message">메세지</string>
