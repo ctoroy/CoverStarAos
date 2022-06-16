@@ -12,11 +12,6 @@
         android:scaleType="fitXY"
         android:src="@drawable/visual_bg1"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/homeNoticeMainImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
     <RelativeLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -97,6 +92,12 @@
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/homeNoticeMainImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:scaleType="fitXY"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_event_contents_height"
