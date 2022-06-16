@@ -10,9 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:background="@color/black"
         android:src="@drawable/visual_bg1"/>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/homeNoticeMainImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
     <RelativeLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
