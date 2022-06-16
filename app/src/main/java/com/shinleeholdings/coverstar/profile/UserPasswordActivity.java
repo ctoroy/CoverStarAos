@@ -31,7 +31,6 @@ public class UserPasswordActivity extends BaseActivity {
 
     public static final String MODE_JOIN = "MODE_JOIN";
     public static final String MODE_LOGIN = "MODE_LOGIN";
-    // TODO 작업 필요
     public static final String MODE_PW_RESET = "MODE_PW_RESET";
 
     private ActivityUserPasswordBinding binding;

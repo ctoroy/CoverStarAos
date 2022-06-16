@@ -16,4 +16,5 @@
     <dimen name="home_event_contents_height">532dp</dimen>
     <dimen name="home_event_height">604dp</dimen>
     <dimen name="spinner_height">40dp</dimen>
+    <dimen name="contest_item_side_margin">20dp</dimen>
 </resources>

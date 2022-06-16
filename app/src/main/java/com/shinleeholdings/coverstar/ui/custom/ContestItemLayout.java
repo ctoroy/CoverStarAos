@@ -2,11 +2,13 @@ package com.shinleeholdings.coverstar.ui.custom;
 
 import static com.shinleeholdings.coverstar.util.Util.getDisplayCountString;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,5 +86,14 @@ public class ContestItemLayout extends CardView {
 		songTitleTextView.setText(mContestItem.getTitle());
 		singerNameTextView.setText(mContestItem.getNickName());
 		originalSingerNameTextView.setText(mContestItem.logoImage);
+	}
+
+	public void updateLayout(Activity mMainActivity) {
+		FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) contestImageView.getLayoutParams();
+		int sideMargin = Util.convertDimenResIdToPixel(mMainActivity, R.dimen.contest_item_side_margin) *2;
+
+		int width = Util.getDisplayWidth(mMainActivity) - sideMargin;
+		param.height = (3 * width) / 4;
+		contestImageView.setLayoutParams(param);
 	}
 }

@@ -221,12 +221,12 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
-
         ContestItemLayout contestItemLayout;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             contestItemLayout = itemView.findViewById(R.id.contestItemLayout);
+            contestItemLayout.updateLayout(mMainActivity);
         }
     }
 }

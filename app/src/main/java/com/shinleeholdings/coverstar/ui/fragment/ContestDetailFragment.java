@@ -89,6 +89,12 @@ public class ContestDetailFragment extends BaseFragment {
     private void initView(String castCode) {
         binding.titleBackLayout.setOnClickListener(view -> onBackPressed());
 
+        LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) binding.mediaLayout.getLayoutParams();
+
+        int width = Util.getDisplayWidth(getActivity());
+        param.height = (3 * width) / 4;
+        binding.mediaLayout.setLayoutParams(param);
+
         binding.mediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -393,6 +399,7 @@ public class ContestDetailFragment extends BaseFragment {
 
                 for (int i = 0; i < result.size(); i++) {
                     ContestItemLayout layout = new ContestItemLayout(getActivity());
+                    layout.updateLayout(getActivity());
                     layout.setData((MainActivity) getActivity(), result.get(i));
                     binding.relatedMediaListLayout.addView(layout);
 

@@ -17,7 +17,6 @@ import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.MyApplication;
 import com.shinleeholdings.coverstar.R;
 import com.shinleeholdings.coverstar.data.ContestData;
-import com.shinleeholdings.coverstar.ui.custom.ContestItemLayout;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ImageLoader;
 import com.shinleeholdings.coverstar.util.Util;
@@ -219,6 +218,13 @@ public class PrevMediaListAdapter extends RecyclerView.Adapter {
         public ItemViewHolder(View itemView) {
             super(itemView);
             contestImageView = itemView.findViewById(R.id.contestImageView);
+
+            RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) contestImageView.getLayoutParams();
+            int sideMargin = Util.convertDimenResIdToPixel(mMainActivity, R.dimen.contest_item_side_margin) *2;
+            int width = (Util.getDisplayWidth(mMainActivity) - sideMargin) / 2;
+            param.height =  (3 * width) / 4;
+            contestImageView.setLayoutParams(param);
+
             songTitleTextView = itemView.findViewById(R.id.songTitleTextView);
             singerNameTextView = itemView.findViewById(R.id.singerNameTextView);
             itemView.setOnClickListener(this);
