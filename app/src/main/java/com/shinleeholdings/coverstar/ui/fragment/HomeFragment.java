@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
+import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
 import com.shinleeholdings.coverstar.databinding.FragmentHomeBinding;
 import com.shinleeholdings.coverstar.ui.dialog.SortFilterDialog;
 import com.shinleeholdings.coverstar.util.ProgressDialogHelper;
@@ -55,6 +56,7 @@ public class HomeFragment extends BaseFragment {
 
         binding.searchImageView.setOnClickListener(view -> addFragment(new SearchFragment()));
         binding.noticeImageView.setOnClickListener(view -> addFragment(new NoticeListFragment()));
+        binding.messageImageView.setOnClickListener(view -> addFragment(new ChattingListFragment()));
 
         binding.homeFilterLayout.setOnClickListener(new View.OnClickListener() {
             @Override

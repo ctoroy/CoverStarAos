@@ -35,6 +35,13 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/noticeImageView"
                 android:src="@drawable/search_icon"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/messageImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/searchImageView"
+                android:src="@drawable/ico_message" />
         </RelativeLayout>
 
         <RelativeLayout

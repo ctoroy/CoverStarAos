@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
-import com.shinleeholdings.coverstar.chatting.ChattingListFragment;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.FragmentMypageBinding;
 import com.shinleeholdings.coverstar.payment.PaymentItemListFragment;
@@ -78,8 +77,8 @@ public class MyPageFragment extends BaseFragment implements LoginHelper.ILoginUs
 
         binding.settingImageView.setOnClickListener(view -> addFragment(new SettingFragment()));
 
-        binding.messageImageView.setVisibility(View.VISIBLE);
-        binding.messageImageView.setOnClickListener(view -> addFragment(new ChattingListFragment()));
+//        binding.messageImageView.setVisibility(View.VISIBLE);
+//        binding.messageImageView.setOnClickListener(view -> addFragment(new ChattingListFragment()));
 
         binding.depositePointLayout.setOnClickListener(view -> addFragment(new PaymentItemListFragment()));
 
