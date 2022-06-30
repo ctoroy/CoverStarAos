@@ -20,6 +20,7 @@ import com.shinleeholdings.coverstar.chatting.ChatRoomListHelper;
 import com.shinleeholdings.coverstar.data.ContestData;
 import com.shinleeholdings.coverstar.databinding.ActivityMainBinding;
 import com.shinleeholdings.coverstar.ui.fragment.BaseFragment;
+import com.shinleeholdings.coverstar.ui.fragment.CoverStarListFragment;
 import com.shinleeholdings.coverstar.ui.fragment.HomeFragment;
 import com.shinleeholdings.coverstar.ui.fragment.MyPageFragment;
 import com.shinleeholdings.coverstar.ui.fragment.ParticipateFragment;
@@ -47,14 +48,16 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
     private ActivityMainBinding binding;
 
-    public static final int TAB_INDEX_HOME = 0;
-    public static final int TAB_INDEX_PREV_MEDIA = 1;
-    public static final int TAB_INDEX_PARTICIPATE = 2;
-    public static final int TAB_INDEX_MYPAGE = 3;
+    private static final int TAB_INDEX_HOME = 0;
+    private static final int TAB_INDEX_PREV_MEDIA = 1;
+    private static final int TAB_INDEX_COVERSTAR = 2;
+    private static final int TAB_INDEX_PARTICIPATE = 3;
+    private static final int TAB_INDEX_MYPAGE = 4;
 
     private enum TabMenuType {
         HOME(R.drawable.tab_menu_home_bg, R.string.tab_name_home),
         PREV_MEDIA(R.drawable.tab_menu_prev_media_bg, R.string.tab_name_prev_media),
+        COVERSTAR(R.drawable.icon_coverstar, 0),
         PARTICIPATE(R.drawable.tab_menu_participate_bg, R.string.tab_name_participate),
         MY_PAGE(R.drawable.tab_menu_mypage_bg, R.string.tab_name_mypage);
 
@@ -76,6 +79,7 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
 
     private final HomeFragment homeFragment = new HomeFragment();
     private final PrevMediaFragment prevMediaFragment = new PrevMediaFragment();
+    private final CoverStarListFragment coverStarFragment = new CoverStarListFragment();
     private final ParticipateFragment participateFragment = new ParticipateFragment();
     public final MyPageFragment myPageFragment = new MyPageFragment();
 
@@ -127,11 +131,13 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
     private void initFragmentTabStackInfo() {
         tagStacks.put(TabMenuType.HOME.toString(), new Stack<>());
         tagStacks.put(TabMenuType.PREV_MEDIA.toString(), new Stack<>());
+        tagStacks.put(TabMenuType.COVERSTAR.toString(), new Stack<>());
         tagStacks.put(TabMenuType.PARTICIPATE.toString(), new Stack<>());
         tagStacks.put(TabMenuType.MY_PAGE.toString(), new Stack<>());
 
         stackList.add(TabMenuType.HOME.toString());
         stackList.add(TabMenuType.PREV_MEDIA.toString());
+        stackList.add(TabMenuType.COVERSTAR.toString());
         stackList.add(TabMenuType.PARTICIPATE.toString());
         stackList.add(TabMenuType.MY_PAGE.toString());
 
@@ -148,7 +154,12 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
             iconImageView.setImageResource(tabInfo.iconResId);
 
             TextView tabTitleTextView = tabMenuLayout.findViewById(R.id.tab_menu_title);
-            tabTitleTextView.setText(getString(tabInfo.textResId));
+            if (tabInfo.textResId == 0) {
+                tabTitleTextView.setVisibility(View.GONE);
+            } else {
+                tabTitleTextView.setVisibility(View.VISIBLE);
+                tabTitleTextView.setText(getString(tabInfo.textResId));
+            }
 
             tabMenuLayout.setLayoutParams(new TableLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -222,6 +233,8 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
                 initTab(tabId, participateFragment, false);
             } else if (tabId.equals(TabMenuType.MY_PAGE.toString())) {
                 initTab(tabId, myPageFragment, false);
+            } else if (tabId.equals(TabMenuType.COVERSTAR.toString())) {
+                initTab(tabId, coverStarFragment, false);
             }
         } else {
             BaseFragment targetFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tagStacks.get(tabId).lastElement());
@@ -230,7 +243,6 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
             resolveStackLists(tabId);
             assignCurrentFragment(targetFragment);
         }
-
     }
 
     private void resolveStackLists(String tabId) {
@@ -277,6 +289,8 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
                 return TabMenuType.PARTICIPATE.toString();
             case TAB_INDEX_MYPAGE:
                 return TabMenuType.MY_PAGE.toString();
+            case TAB_INDEX_COVERSTAR:
+                return TabMenuType.COVERSTAR.toString();
             default:
                 return "";
         }
@@ -310,7 +324,9 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
             return TAB_INDEX_PARTICIPATE;
         } else if (currentTab.equals(TabMenuType.MY_PAGE.toString())) {
             return TAB_INDEX_MYPAGE;
-        } else {
+        } else if (currentTab.equals(TabMenuType.COVERSTAR.toString())) {
+            return TAB_INDEX_COVERSTAR;
+        }  else {
             return -1;
         }
     }
