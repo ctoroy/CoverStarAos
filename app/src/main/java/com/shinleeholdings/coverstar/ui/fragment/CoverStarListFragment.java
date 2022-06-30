@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.shinleeholdings.coverstar.MainActivity;
 import com.shinleeholdings.coverstar.R;
@@ -46,20 +46,8 @@ public class CoverStarListFragment extends BaseFragment {
         binding.coverStarSwipeRefreshLayout.setOnRefreshListener(this::requestData);
 
         mListAdapter = new CoverStarMediaListAdapter((MainActivity) getActivity());
-        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                switch (mListAdapter.getItemViewType(position)) {
-                    case CoverStarMediaListAdapter.ITEM_TYPE_MEDIA_HEADER:
-                        return 2;
-                }
-
-                return 1;
-            }
-        });
         binding.coverStarRecyclerView.setItemViewCacheSize(200);
-        binding.coverStarRecyclerView.setLayoutManager(mLayoutManager);
+        binding.coverStarRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.coverStarRecyclerView.setAdapter(mListAdapter);
     }
 
@@ -67,10 +55,12 @@ public class CoverStarListFragment extends BaseFragment {
         // TODO API 연동 필요
         HashMap<String, String> param = new HashMap<>();
         param.put("contestId", "3");
+//        param.put("temp", "a");
         RetroClient.getApiInterface().getLastList(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
+                binding.coverStarSwipeRefreshLayout.setRefreshing(false);
                 ContestDataList itemList = receivedData.data;
                 Util.sortList(mListAdapter.mSelectedSortType, itemList);
                 mListAdapter.setData(itemList);
@@ -78,6 +68,7 @@ public class CoverStarListFragment extends BaseFragment {
 
             @Override
             public void onFailure(BaseResponse<ContestDataList> response) {
+                binding.coverStarSwipeRefreshLayout.setRefreshing(false);
                 ProgressDialogHelper.dismiss();
 
             }

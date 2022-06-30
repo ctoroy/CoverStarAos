@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity implements FragmentInteractionCal
     private enum TabMenuType {
         HOME(R.drawable.tab_menu_home_bg, R.string.tab_name_home),
         PREV_MEDIA(R.drawable.tab_menu_prev_media_bg, R.string.tab_name_prev_media),
-        COVERSTAR(R.drawable.icon_coverstar, 0),
+        COVERSTAR(R.drawable.icon_center, 0),
         PARTICIPATE(R.drawable.tab_menu_participate_bg, R.string.tab_name_participate),
         MY_PAGE(R.drawable.tab_menu_mypage_bg, R.string.tab_name_mypage);
 
