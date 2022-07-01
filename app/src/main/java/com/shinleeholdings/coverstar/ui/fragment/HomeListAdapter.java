@@ -122,19 +122,25 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
     private void setEventLayout(ContestRegistItemViewHolder viewHolder) {
         if (mIsCoverStarTab) {
-//            viewHolder.titleTextView.setText(contestRegistItem.castTitle); // 경연참가 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg1);
             viewHolder.topCoverStarImageView.setVisibility(View.VISIBLE);
             viewHolder.topDanceStarImageView.setVisibility(View.INVISIBLE);
             viewHolder.homeLeftTriangleView.setVisibility(View.VISIBLE);
             viewHolder.homeRightTriangleView.setVisibility(View.GONE);
+            viewHolder.homeLeftTitleUnSelectedLayout.setOnClickListener(null);
+            if (mHasEventTab) {
+                viewHolder.homeRightTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(1));
+            } else {
+                viewHolder.homeRightTitleUnSelectedLayout.setOnClickListener(null);
+            }
         } else {
-//            viewHolder.titleTextView.setText(contestRegistItem.sortSmall); // 이벤트 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg2);
             viewHolder.topDanceStarImageView.setVisibility(View.VISIBLE);
             viewHolder.topCoverStarImageView.setVisibility(View.INVISIBLE);
             viewHolder.homeRightTriangleView.setVisibility(View.VISIBLE);
             viewHolder.homeLeftTriangleView.setVisibility(View.GONE);
+            viewHolder.homeRightTitleUnSelectedLayout.setOnClickListener(null);
+            viewHolder.homeLeftTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(0));
         }
         ImageLoader.loadImage(viewHolder.homeNoticeMainImageView, contestRegistItem.product);
 
@@ -168,6 +174,9 @@ public class HomeListAdapter extends RecyclerView.Adapter {
 
         TextView registTextView;
 
+        View homeRightTitleUnSelectedLayout;
+        View homeLeftTitleUnSelectedLayout;
+
         View homeLeftTriangleView;
         View homeRightTriangleView;
 
@@ -177,6 +186,9 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             homeNoticeMainImageView = itemView.findViewById(R.id.homeNoticeMainImageView);
             topCoverStarImageView = itemView.findViewById(R.id.topCoverStarImageView);
             topDanceStarImageView = itemView.findViewById(R.id.topDanceStarImageView);
+
+            homeLeftTitleUnSelectedLayout = itemView.findViewById(R.id.homeLeftTitleUnSelectedLayout);
+            homeRightTitleUnSelectedLayout = itemView.findViewById(R.id.homeRightTitleUnSelectedLayout);
 
             homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
             homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);

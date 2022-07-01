@@ -25,6 +25,16 @@
             android:visibility="invisible"
             android:scaleType="fitXY"
             android:src="@drawable/top_dancestar"/>
+        <View
+            android:id="@+id/homeRightTitleUnSelectedLayout"
+            android:layout_width="100dp"
+            android:layout_gravity="right"
+            android:layout_height="match_parent"/>
+
+        <View
+            android:id="@+id/homeLeftTitleUnSelectedLayout"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"/>
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
