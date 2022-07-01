@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -125,40 +124,20 @@ public class HomeListAdapter extends RecyclerView.Adapter {
         if (mIsCoverStarTab) {
 //            viewHolder.titleTextView.setText(contestRegistItem.castTitle); // 경연참가 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg1);
-            viewHolder.homeLeftTitleSelectedTextView.setVisibility(View.VISIBLE);
+            viewHolder.topCoverStarImageView.setVisibility(View.VISIBLE);
+            viewHolder.topDanceStarImageView.setVisibility(View.INVISIBLE);
             viewHolder.homeLeftTriangleView.setVisibility(View.VISIBLE);
-            viewHolder.homeRightTitleSelectedTextView.setVisibility(View.GONE);
-            viewHolder.homeLeftTitleUnSelectedLayout.setVisibility(View.GONE);
             viewHolder.homeRightTriangleView.setVisibility(View.GONE);
-            if (mHasEventTab) {
-                viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.VISIBLE);
-                viewHolder.homeRightTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(1));
-            } else {
-                viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
-            }
         } else {
 //            viewHolder.titleTextView.setText(contestRegistItem.sortSmall); // 이벤트 타이틀
             viewHolder.homeNoticeBgImageView.setImageResource(R.drawable.visual_bg2);
-            viewHolder.homeRightTitleSelectedTextView.setVisibility(View.VISIBLE);
-            viewHolder.homeLeftTitleUnSelectedLayout.setVisibility(View.VISIBLE);
+            viewHolder.topDanceStarImageView.setVisibility(View.VISIBLE);
+            viewHolder.topCoverStarImageView.setVisibility(View.INVISIBLE);
             viewHolder.homeRightTriangleView.setVisibility(View.VISIBLE);
-            viewHolder.homeLeftTitleUnSelectedLayout.setOnClickListener(view -> moveEventListener.onPageMove(0));
             viewHolder.homeLeftTriangleView.setVisibility(View.GONE);
-            viewHolder.homeLeftTitleSelectedTextView.setVisibility(View.GONE);
-            viewHolder.homeRightTitleUnSelectedLayout.setVisibility(View.GONE);
         }
         ImageLoader.loadImage(viewHolder.homeNoticeMainImageView, contestRegistItem.product);
 
-        // 현재 달
-//        viewHolder.contestInfoTextView.setText(String.format(mMainActivity.getString(R.string.round_info), Util.getCurrentMonth()));
-//        ImageLoader.loadImage(viewHolder.eventImageView, contestRegistItem.product);
-//        viewHolder.registTermTextView.setText(String.format(mMainActivity.getString(R.string.contest_term),
-//                Util.changeFormattedDate(contestRegistItem.castStartDate),
-//                Util.changeFormattedDate(contestRegistItem.castEndDate)));
-//        viewHolder.totalPriceTextView.setText(String.format(mMainActivity.getString(R.string.contest_total_price),
-//                String.format(mMainActivity.getString(R.string.price_display_format), Util.numberToDisplayFormat(contestRegistItem.sortMid))));
-//        viewHolder.finalDateTextView.setText(String.format(mMainActivity.getString(R.string.contest_final_date),
-//                Util.changeFormattedDate(contestRegistItem.store)));
         viewHolder.registTextView.setOnClickListener(view -> mMainActivity.registContest(contestRegistItem));
     }
 
@@ -184,17 +163,9 @@ public class HomeListAdapter extends RecyclerView.Adapter {
     private class ContestRegistItemViewHolder extends RecyclerView.ViewHolder {
         ImageView homeNoticeBgImageView;
         ImageView homeNoticeMainImageView;
-        TextView homeLeftTitleSelectedTextView;
-        LinearLayout homeRightTitleUnSelectedLayout;
-        TextView homeRightTitleSelectedTextView;
-        LinearLayout homeLeftTitleUnSelectedLayout;
+        ImageView topCoverStarImageView;
+        ImageView topDanceStarImageView;
 
-//        TextView titleTextView;
-//        TextView contestInfoTextView;
-//        ImageView eventImageView;
-//        TextView registTermTextView;
-//        TextView totalPriceTextView;
-//        TextView finalDateTextView;
         TextView registTextView;
 
         View homeLeftTriangleView;
@@ -204,20 +175,12 @@ public class HomeListAdapter extends RecyclerView.Adapter {
             super(itemView);
             homeNoticeBgImageView = itemView.findViewById(R.id.homeNoticeBgImageView);
             homeNoticeMainImageView = itemView.findViewById(R.id.homeNoticeMainImageView);
-            homeLeftTitleSelectedTextView = itemView.findViewById(R.id.homeLeftTitleSelectedTextView);
-            homeRightTitleUnSelectedLayout = itemView.findViewById(R.id.homeRightTitleUnSelectedLayout);
-            homeRightTitleSelectedTextView = itemView.findViewById(R.id.homeRightTitleSelectedTextView);
-            homeLeftTitleUnSelectedLayout = itemView.findViewById(R.id.homeLeftTitleUnSelectedLayout);
+            topCoverStarImageView = itemView.findViewById(R.id.topCoverStarImageView);
+            topDanceStarImageView = itemView.findViewById(R.id.topDanceStarImageView);
 
             homeLeftTriangleView = itemView.findViewById(R.id.homeLeftTriangleView);
             homeRightTriangleView = itemView.findViewById(R.id.homeRightTriangleView);
 
-//            titleTextView = itemView.findViewById(R.id.titleTextView);
-//            contestInfoTextView = itemView.findViewById(R.id.contestInfoTextView);
-//            eventImageView = itemView.findViewById(R.id.eventImageView);
-//            registTermTextView = itemView.findViewById(R.id.registTermTextView);
-//            totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
-//            finalDateTextView = itemView.findViewById(R.id.finalDateTextView);
             registTextView = itemView.findViewById(R.id.registTextView);
         }
     }

@@ -70,7 +70,6 @@ public class CoverStarListFragment extends BaseFragment {
             public void onFailure(BaseResponse<ContestDataList> response) {
                 binding.coverStarSwipeRefreshLayout.setRefreshing(false);
                 ProgressDialogHelper.dismiss();
-
             }
         });
 

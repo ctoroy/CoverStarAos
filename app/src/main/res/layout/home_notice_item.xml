@@ -5,92 +5,35 @@
     android:layout_marginBottom="20dp"
     android:layout_height="@dimen/home_event_height">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/homeNoticeBgImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/visual_bg1"/>
-
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_event_tab_height">
 
-        <TextView
-            android:id="@+id/homeLeftTitleSelectedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="27sp"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:text="@string/home_coverstar"/>
-
-        <LinearLayout
-            android:id="@+id/homeRightTitleUnSelectedLayout"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/topCoverStarImageView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_alignParentEnd="true">
+            android:visibility="invisible"
+            android:scaleType="fitXY"
+            android:src="@drawable/top_coverstar"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:text="@string/home_event"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/homeLeftTitleUnSelectedLayout"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/topDanceStarImageView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:visibility="gone"
-            android:gravity="center">
+            android:visibility="invisible"
+            android:scaleType="fitXY"
+            android:src="@drawable/top_dancestar"/>
+    </FrameLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:text="@string/home_coverstar"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/homeRightTitleSelectedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="27sp"
-            android:visibility="gone"
-            android:layout_marginEnd="20dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:text="@string/home_event"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/homeNoticeBgImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:scaleType="fitXY"
+        android:src="@drawable/visual_bg1"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/homeNoticeMainImageView"
@@ -98,6 +41,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/tabLayout"
         android:scaleType="fitXY"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_event_contents_height"
@@ -117,111 +61,6 @@
             android:background="@drawable/rounded_corner_box_white"
             android:text="@string/tab_name_participate"/>
     </FrameLayout>
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/home_event_contents_height"-->
-<!--        android:visibility="invisible"-->
-<!--        android:layout_below="@id/tabLayout"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/titleTextView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:includeFontPadding="false"-->
-<!--            android:padding="20dp"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="34sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:singleLine="true"-->
-<!--            tools:text="1등 상금 1000만원" />-->
-
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="2dp"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:background="@drawable/dashed_line"-->
-<!--            android:layerType="software"/>-->
-<!--        <TextView-->
-<!--            android:id="@+id/contestInfoTextView"-->
-<!--            android:textSize="34sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:gravity="center_horizontal"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:includeFontPadding="false"-->
-<!--            android:singleLine="true"-->
-<!--            tools:text="월 라운드"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"/>-->
-
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:id="@+id/eventImageView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="167dp"-->
-<!--            android:layout_gravity="center_horizontal"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:paddingTop="15dp"-->
-<!--            android:paddingBottom="15dp"-->
-<!--            android:paddingLeft="25dp"-->
-<!--            android:paddingRight="25dp"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:background="@drawable/rounded_corner_box_bg_white_border_fd95ae">-->
-<!--            <TextView-->
-<!--                android:id="@+id/registTermTextView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textSize="18sp"-->
-<!--                android:singleLine="true"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:includeFontPadding="false"-->
-<!--                tools:text="참여기간 : 2022."/>-->
-<!--            <TextView-->
-<!--                android:id="@+id/totalPriceTextView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textSize="18sp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:singleLine="true"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:includeFontPadding="false"-->
-<!--                tools:text="총상금"/>-->
-<!--            <TextView-->
-<!--                android:id="@+id/finalDateTextView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textSize="18sp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:singleLine="true"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:includeFontPadding="false"-->
-<!--                tools:text="입상자 발표."/>-->
-<!--        </LinearLayout>-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/registTextView"-->
-<!--            android:layout_width="160dp"-->
-<!--            android:layout_height="45dp"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:textSize="18sp"-->
-<!--            android:gravity="center"-->
-<!--            android:includeFontPadding="false"-->
-<!--            android:textColor="#f45786"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:background="@drawable/rounded_corner_box_white"-->
-<!--            android:text="@string/tab_name_participate"/>-->
-
-<!--    </LinearLayout>-->
 
     <ImageView
         android:layout_width="wrap_content"
