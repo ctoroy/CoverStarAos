@@ -104,9 +104,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<BaseResponse<ContestGroupDataList>> getContestLastList(@FieldMap(encoded = true) HashMap<String, String> body);
 
-    @POST("getHallOfFameList")
+    @POST("getStarList")
     @FormUrlEncoded
-    Call<BaseResponse<ContestDataList>> getHallOfFame(@FieldMap(encoded = true) HashMap<String, String> body);
+    Call<BaseResponse<ContestDataList>> getStarList(@FieldMap(encoded = true) HashMap<String, String> body);
 
     @POST("getLastList")
     @FormUrlEncoded

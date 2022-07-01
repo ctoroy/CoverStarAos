@@ -52,11 +52,9 @@ public class CoverStarListFragment extends BaseFragment {
     }
 
     private void requestData() {
-        // TODO API 연동 필요
         HashMap<String, String> param = new HashMap<>();
-        param.put("contestId", "3");
-//        param.put("temp", "a");
-        RetroClient.getApiInterface().getLastList(param).enqueue(new RetroCallback<ContestDataList>() {
+        param.put("temp", "a");
+        RetroClient.getApiInterface().getStarList(param).enqueue(new RetroCallback<ContestDataList>() {
             @Override
             public void onSuccess(BaseResponse<ContestDataList> receivedData) {
                 ProgressDialogHelper.dismiss();
