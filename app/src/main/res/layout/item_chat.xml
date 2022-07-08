@@ -205,7 +205,6 @@
                 android:includeFontPadding="false"
                 android:visibility="gone"
                 android:layout_marginRight="10dp"
-                android:text="재전송 | 삭제"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
         </LinearLayout>

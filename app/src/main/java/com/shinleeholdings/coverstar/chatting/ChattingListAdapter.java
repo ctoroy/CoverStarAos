@@ -94,6 +94,7 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
                 chattingItemViewHolder.sendFailImageView.setVisibility(View.VISIBLE);
                 chattingItemViewHolder.sendFailTempTextView.setVisibility(View.VISIBLE);
                 chattingItemViewHolder.sendFailTextView.setVisibility(View.VISIBLE);
+                chattingItemViewHolder.sendFailTextView.setText(mChatActivity.getString(R.string.resend) + " | " + mChatActivity.getString(R.string.delete));
                 chattingItemViewHolder.sendFailTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
