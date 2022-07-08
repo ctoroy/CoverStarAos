@@ -137,13 +137,11 @@ public class ChattingListFragment extends BaseFragment {
 
         @Override
         public void onChattingRoomDetailInfoChange(String chatId, ChatRoomItem item) {
-            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomDetailInfoChange chatId : " + chatId);
             updateChattingList();
         }
 
         @Override
         public void onChattingRoomAdded(String chatId, ChatRoomItem item) {
-            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomAdded chatId : " + chatId);
             if (listAdapter != null) {
                 listAdapter.notifyDataSetChanged();
             }
@@ -151,7 +149,6 @@ public class ChattingListFragment extends BaseFragment {
 
         @Override
         public void onChattingRoomInfoChanged(String chatId) {
-            DebugLogger.i("chattingRoomList", "requestChatList onChattingRoomInfoChanged chatId : " + chatId);
             if (listAdapter != null) {
                 listAdapter.notifyDataChanged(chatId);
             }
@@ -166,7 +163,6 @@ public class ChattingListFragment extends BaseFragment {
 
         @Override
         public void onMemberUpdate(String chatId) {
-            DebugLogger.i("chattingRoomList", "setChattingRoomListListener onMemberUpdate chatId : " + chatId);
             if (listAdapter != null) {
                 listAdapter.notifyDataChanged(chatId);
             }
@@ -179,7 +175,6 @@ public class ChattingListFragment extends BaseFragment {
         @Override
         public void run() {
             ArrayList<ChatRoomItem> chattingRoomList = ChatRoomListHelper.getSingleInstance().getChattingRoomList();
-            DebugLogger.i("chattingRoomList", "updateChattingRoomList : " + chattingRoomList.size());
 
             if (chattingRoomList.size() <= 0) {
                 binding.noChatRoomResultView.setVisibility(View.VISIBLE);
@@ -195,7 +190,6 @@ public class ChattingListFragment extends BaseFragment {
     };
 
     private void updateChattingList() {
-        DebugLogger.i("chattingRoomList", "updateChattingList");
         uiUpdateHandler.removeCallbacks(listUpdateRunnable);
         uiUpdateHandler.postDelayed(listUpdateRunnable, 150);
     }

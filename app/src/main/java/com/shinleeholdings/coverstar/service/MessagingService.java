@@ -38,7 +38,6 @@ public class MessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        DebugLogger.i("onMessageReceived : " + remoteMessage.toString());
         if (SharedPreferenceHelper.getInstance().getBooleanPreference(SharedPreferenceHelper.ALARM_IS_OFF)) {
             return;
         }
@@ -50,7 +49,6 @@ public class MessagingService extends FirebaseMessagingService {
 
     private void showNotification(RemoteMessage remoteMessage) {
         Map<String, String> messageData = remoteMessage.getData();
-        DebugLogger.i("onMessageReceived messageData : " + messageData);
 
         String type = messageData.get(AppConstants.EXTRA.PUSH_TYPE);
         String key = messageData.get(AppConstants.EXTRA.PUSH_KEY);

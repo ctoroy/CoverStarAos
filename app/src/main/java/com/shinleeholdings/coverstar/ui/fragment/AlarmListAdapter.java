@@ -46,8 +46,8 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
 
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
 
-        viewHolder.alarmTypeTextView.setText("Alarm");
-        viewHolder.alarmTitleTextView.setText("알림타이틀");
+        viewHolder.alarmTypeTextView.setText("");
+        viewHolder.alarmTitleTextView.setText("");
         viewHolder.arrowImageView.setSelected(isItemSelected);
         if (isItemSelected) {
             viewHolder.contentsLayout.setVisibility(View.VISIBLE);
@@ -58,7 +58,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter {
                 viewHolder.alarmImageView.setVisibility(View.VISIBLE);
                 ImageLoader.loadImage(viewHolder.alarmImageView, "");
             }
-            viewHolder.alarmContentsTextView.setText("알림컨텐츠");
+            viewHolder.alarmContentsTextView.setText("");
         } else {
             viewHolder.contentsLayout.setVisibility(View.GONE);
         }

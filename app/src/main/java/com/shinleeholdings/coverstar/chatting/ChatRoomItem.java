@@ -75,19 +75,19 @@ public class ChatRoomItem implements Comparable<ChatRoomItem> {
     }
 
     public String getLastMessage() {
-        if (TextUtils.isEmpty(lastMessage) == false && lastMessage.equals("삭제한 메세지 입니다.") == false) {
-            if (deleteInfoList != null && deleteInfoList.size() > 0) {
-                String loginUserSeq = LoginHelper.getSingleInstance().getLoginUserId();
-                for (String userSeq : deleteInfoList) {
-                    if (userSeq.equals(loginUserSeq)) {
-                        DebugLogger.i("test", "lastMessageTest getLastMessage deleteInfoList has mySeq");
-                        // 삭제한 사용자 목록에 내 아이디가 있을 경우
-                        lastMessage = "삭제한 메세지 입니다.";
-                        break;
-                    }
-                }
-            }
-        }
+//        if (TextUtils.isEmpty(lastMessage) == false && lastMessage.equals("삭제한 메세지 입니다.") == false) {
+//            if (deleteInfoList != null && deleteInfoList.size() > 0) {
+//                String loginUserSeq = LoginHelper.getSingleInstance().getLoginUserId();
+//                for (String userSeq : deleteInfoList) {
+//                    if (userSeq.equals(loginUserSeq)) {
+//                        DebugLogger.i("test", "lastMessageTest getLastMessage deleteInfoList has mySeq");
+//                        // 삭제한 사용자 목록에 내 아이디가 있을 경우
+//                        lastMessage = "삭제한 메세지 입니다.";
+//                        break;
+//                    }
+//                }
+//            }
+//        }
 
         return lastMessage;
     }

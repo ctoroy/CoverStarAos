@@ -207,7 +207,6 @@ public class PhoneCertActivity extends BaseActivity {
         String countryName = binding.ccp.getSelectedCountryName();
         String countryCode = binding.ccp.getSelectedCountryCodeWithPlus();
         String countryNameCode = binding.ccp.getSelectedCountryNameCode();
-        DebugLogger.i("selectedCountry : " + countryName + ", " + countryCode + " , " + countryNameCode);
         binding.selectedCountryTextView.setText(countryName + countryCode);
     }
 
@@ -263,7 +262,6 @@ public class PhoneCertActivity extends BaseActivity {
 //                                자동 검색(Auto-retrieval) : 일부 기기에서는 수신되는 인증 SMS를 Google Play 서비스가 자동으로 감지하여 사용자의 개입 없이 인증을 수행
 //                                일부 이동통신사에서는 이 기능을 제공하지 않을 수 있습니다. SMS 메시지 끝에 11자리 해시를 포함하는 SMS Retriever API를 사용
                     ProgressDialogHelper.dismiss();
-                    DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks Complete : " + phoneAuthCredential);
                     PhoneCertActivity.this.authCredential = phoneAuthCredential;
                     // 이미 코드 설정까지 된거라 이걸로 로그인?
                     startFirebaseUserAuth();
@@ -273,7 +271,6 @@ public class PhoneCertActivity extends BaseActivity {
                 public void onVerificationFailed(@NonNull FirebaseException e) {
                     ProgressDialogHelper.dismiss();
 
-                    DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks fail : " + e.getMessage());
                     if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     } else if (e instanceof FirebaseTooManyRequestsException) {
                     }
@@ -283,7 +280,6 @@ public class PhoneCertActivity extends BaseActivity {
                 public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
                     ProgressDialogHelper.dismiss();
 
-                    DebugLogger.i("PhoneAuth OnVerificationStateChangedCallbacks onCodeSent");
                     PhoneCertActivity.this.verificationId = verificationId;
                     // force re-sending another verification SMS before the auto-retrieval timeout.
                     PhoneCertActivity.this.token = token;
@@ -313,14 +309,12 @@ public class PhoneCertActivity extends BaseActivity {
 
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
-                DebugLogger.i("PhoneAuth signInWithCredential:success");
                 FirebaseUser user = task.getResult().getUser();
 
                 // Update UI
                 userAuthComplete();
             } else {
                 // Sign in failed, display a message and update the UI
-                DebugLogger.i("PhoneAuth signInWithCredential:failure");
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                     // The verification code entered was invalid
                 }

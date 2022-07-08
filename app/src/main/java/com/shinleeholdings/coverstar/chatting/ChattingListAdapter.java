@@ -87,7 +87,7 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
                 }
                 break;
             case SENDING:
-                chattingItemViewHolder.sendTimeTextView.setText("전송중...");
+                chattingItemViewHolder.sendTimeTextView.setText(mChatActivity.getString(R.string.sending));
                 break;
             case FAIL:
                 chattingItemViewHolder.sendTimeTextView.setText(msgDisplayTimeText);
@@ -97,7 +97,10 @@ public class ChattingListAdapter extends RecyclerView.Adapter {
                 chattingItemViewHolder.sendFailTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogHelper.showTwoButtonMessagePopup(mChatActivity, "안내", "재전송 하시겠습니까?", "재전송", "삭제", new View.OnClickListener() {
+                        DialogHelper.showTwoButtonMessagePopup(mChatActivity, mChatActivity.getString(R.string.information),
+                                mChatActivity.getString(R.string.resending_question),
+                                mChatActivity.getString(R.string.resend),
+                                mChatActivity.getString(R.string.delete), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (mChatActivity != null) {

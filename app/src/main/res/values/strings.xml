@@ -3,7 +3,11 @@
     <string name="scheme">coverstar</string>
     <string name="channel_name">알림</string>
     <string name="notification_channel_id">CoverStar</string>
+    <string name="media_link_hint">https://www.youtube.com/watch?v=aM9cPsVjOxQ</string>
+    <string name="coin_count_format">%sSTAR</string>
+    <string name="my_wallet">My Wallet</string>
 
+<!--    아래부터 번역 필요-->
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
     <string name="close">닫기</string>
@@ -14,7 +18,6 @@
     <string name="report_done">신고 되었습니다.</string>
     <string name="delete_done">삭제 되었습니다.</string>
     <string name="find_best_cover_star">최고의 커버스타를\n찾아라</string>
-    <string name="round_info">%d월 ROUND</string>
     <string name="original_singer_format">(원곡가수 : %s)</string>
     <string name="write_comment">댓글 추가</string>
     <string name="write_reply">답글 추가</string>
@@ -126,11 +129,9 @@
     <string name="singer_name">가수이름(서브타이틀)</string>
     <string name="singer_name_hint">이름을 입력해 주세요.</string>
     <string name="media_link">영상링크</string>
-    <string name="media_link_hint">https://www.youtube.com/watch?v=aM9cPsVjOxQ</string>
     <string name="mention">한마디</string>
     <string name="mention_hint">감사합니다.</string>
     <string name="participate_count">※ 참가 신청을 위해 %s가 사용됩니다.</string>
-    <string name="coin_count_format">%sSTAR</string>
     <string name="input_invite_code_reward">커버스타를 추천한 친구의 추천코드를 입력하면\n%s를 선물로 드립니다</string>
 
     <string name="select_season_round">참가신청할 시즌 라운드를 선택해 주세요</string>
@@ -154,7 +155,6 @@
     <string name="tab_name_participate">참가 신청</string>
     <string name="tab_name_mypage">마이페이지</string>
 
-    <string name="my_wallet">My Wallet</string>
     <string name="buy">구매</string>
     <string name="deposite">입금</string>
     <string name="withdraw">출금</string>
@@ -162,6 +162,8 @@
     <string name="playlist">재생목록</string>
     <string name="participate_media">참가영상</string>
 
+    <string name="sending">전송중...</string>
+    <string name="resending_question">재전송 하시겠습니까?</string>
 
     <string name="vote">투표하기</string>
     <string name="vote_complete">투표완료</string>
@@ -177,12 +179,6 @@
     <string name="unfollow">언팔로우</string>
     <string name="show_more">&#62; 더보기</string>
 
-    <string name="home_coverstar">Cover Star</string>
-    <string name="home_event">Event</string>
-
-    <string name="contest_term" formatted="false">참여기간 : %s~%s</string>
-    <string name="contest_total_price">총 상 금 : %s</string>
-    <string name="contest_final_date">입상자발표 : %s</string>
     <string name="price_display_format">%s원</string>
     <string name="discount_display_format">%s할인</string>
     <string name="has_point">보유 스타체인</string>

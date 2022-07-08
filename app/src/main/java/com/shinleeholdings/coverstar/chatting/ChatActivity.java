@@ -199,7 +199,6 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onSuccess(BaseResponse<String> receivedData) {
                 if (isFinishing()) {
-                    DebugLogger.e("test", "onMessage sended but chattingRoom is not showing");
                     ChatMessageListHelper.getSingleInstance().deleteChattingItem(item);
                 }
             }
@@ -288,7 +287,6 @@ public class ChatActivity extends BaseActivity {
         }
 
         if (TextUtils.isEmpty(lastLoadMoreMessageKey) == false && lastLoadMoreMessageKey.equals(firstItemKey)) {
-            DebugLogger.e("test", "already request prevMessage : " + firstItemKey);
             return;
         }
 
@@ -330,7 +328,6 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void addChattingEventListener() {
-        DebugLogger.i("test", "addChattingEventListener");
         initMyBadgeCount();
 
         final ChattingItem lastMessageItem = chattingListAdapter.getLastMessageItem();
@@ -366,7 +363,6 @@ public class ChatActivity extends BaseActivity {
                 if (isFinishing()) {
                     return;
                 }
-                DebugLogger.e("test", "onChattingItemChanged : " + item);
                 if (chattingListAdapter != null) {
                     chattingListAdapter.changeListItem(item);
                 }
@@ -389,7 +385,6 @@ public class ChatActivity extends BaseActivity {
 
             @Override
             public void onError(String message) {
-                DebugLogger.e("test", "onChattingItem onError : " + message);
             }
         });
     }

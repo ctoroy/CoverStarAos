@@ -112,7 +112,6 @@ public class ChatRoomListHelper {
     }
 
     private void addChatRoomItem(String chatId, Map<String, Object> data, boolean isAdded) {
-        DebugLogger.i(TAG, "chatRoomListHelper addChattingRoomItem chatId : " + chatId + " , data : " + data);
         long badgeCount = (Long) data.get(ChattingConstants.FIELDNAME_BADGE_CNT);
 
         ChatRoomItem item = new ChatRoomItem();
@@ -153,7 +152,6 @@ public class ChatRoomListHelper {
         getChatListCollectionRef().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                DebugLogger.i(TAG, "chatRoomListHelper onComplete task.isSuccessful() : " + task.isSuccessful());
                 if (task.isSuccessful() == false) {
                     chattingListLoadState = LISTLOADSTATE.FAIL;
                     return;
@@ -161,7 +159,6 @@ public class ChatRoomListHelper {
 
                 chattingListLoadState = LISTLOADSTATE.COMPLETED;
 
-                DebugLogger.i(TAG, "chatRoomListHelper onComplete chatRoomCount : " + task.getResult().getDocuments().size());
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     String chatId = doc.getId();
                     Map<String, Object> data = doc.getData();
@@ -181,7 +178,6 @@ public class ChatRoomListHelper {
                             String chatId = documentSnapshot.getId();
 
                             Map<String, Object> data = dc.getDocument().getData();
-                            DebugLogger.i(TAG, "chatRoomListHelper chatRoomChanged chatId : " + chatId + ", Type : " + dc.getType() + " , data : " + data);
 
                             switch (dc.getType()) {
                                 case ADDED:
@@ -232,7 +228,6 @@ public class ChatRoomListHelper {
 
     private void getChattingRoomDetailInfo(final ChatRoomItem chattingItem) {
         final String chatId = chattingItem.getChatId();
-        DebugLogger.e(TAG, "getChattingRoomDetailInfo chattingId : " + chatId);
 
         CollectionReference docuRef = getChatInfoDocuRef();
         getChattingRoomMemberInfo(chatId, docuRef);
@@ -240,7 +235,6 @@ public class ChatRoomListHelper {
         ListenerRegistration listener = docuRef.document(chatId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapShot, @Nullable FirebaseFirestoreException e) {
-                DebugLogger.i(TAG, "getChattingRoomDetailInfo onComplete getResult chatId : " + chatId + ",  data : " + snapShot);
                 chattingItem.setLastMessage((String) snapShot.get("last_message"));
                 chattingItem.setMessageDate((String) snapShot.get("mdate"));
                 chattingItem.setRoomName((String) snapShot.get("room_name"));
