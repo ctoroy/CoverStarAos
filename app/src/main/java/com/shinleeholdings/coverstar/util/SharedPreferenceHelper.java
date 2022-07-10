@@ -16,6 +16,7 @@ public class SharedPreferenceHelper {
     public static final String ALARM_IS_OFF = "ALARM_IS_OFF";
     public static final String LOGIN_USER_DATA = "LOGIN_USER_DATA";
     public static final String DISPLAY_WIDTH = "DISPLAY_WIDTH";
+    public static final String LANGUAGE = "LANGUAGE";
 
     private static volatile SharedPreferenceHelper instance;
     private SharedPreferences mShared;
@@ -24,17 +25,21 @@ public class SharedPreferenceHelper {
     private static Gson GSON = new Gson();
 
     public static SharedPreferenceHelper getInstance() {
+        return getInstance(MyApplication.getContext());
+    }
+
+    public static SharedPreferenceHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new SharedPreferenceHelper();
+            instance = new SharedPreferenceHelper(context);
         }
 
         return instance;
     }
 
-    private SharedPreferenceHelper() {
+    private SharedPreferenceHelper(Context context) {
         if (mShared == null) {
             String PREFERENCENAME = "PREF_" + AppConstants.APP_NAME;
-            mShared = MyApplication.getContext().getSharedPreferences(PREFERENCENAME, Context.MODE_PRIVATE);
+            mShared = context.getSharedPreferences(PREFERENCENAME, Context.MODE_PRIVATE);
             mEditor = mShared.edit();
         }
     }

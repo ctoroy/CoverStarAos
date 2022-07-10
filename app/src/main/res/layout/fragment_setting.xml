@@ -64,6 +64,32 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/languageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_menu_height"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="6dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/mainTextColor_0e0f0e"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="@string/change_language"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_outlined_directions_chevron_right"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/alarmLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_menu_height"

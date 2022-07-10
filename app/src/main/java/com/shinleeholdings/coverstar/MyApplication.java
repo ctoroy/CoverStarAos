@@ -10,6 +10,7 @@ import android.os.Handler;
 
 import com.google.firebase.FirebaseApp;
 import com.shinleeholdings.coverstar.service.MessagingService;
+import com.shinleeholdings.coverstar.util.LanguageHelper;
 
 public class MyApplication extends Application {
 
@@ -22,6 +23,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         init();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LanguageHelper.onAttach(base));
     }
 
     private void init() {

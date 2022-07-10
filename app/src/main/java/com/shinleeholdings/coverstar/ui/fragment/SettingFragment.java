@@ -49,6 +49,8 @@ public class SettingFragment extends BaseFragment {
 
         binding.noticeLayout.setOnClickListener(view -> addFragment(new NoticeListFragment()));
 
+        binding.languageLayout.setOnClickListener(view -> addFragment(new LanguageChangeFragment()));
+
         binding.alarmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

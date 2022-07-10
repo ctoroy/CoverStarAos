@@ -52,6 +52,14 @@ public class Util {
     private static final SimpleDateFormat castTimeFormat = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);
     private static final DecimalFormatSymbols decimalFormatSimbol = new DecimalFormatSymbols(Locale.KOREA);
 
+    public static void appExit(Activity activity) {
+        try {
+            activity.finishAffinity();
+            Process.killProcess(Process.myPid());
+        } catch (Exception e) {
+        }
+    }
+
     public static int getDisplayWidth(Activity activity) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

@@ -10,8 +10,8 @@
     <string name="english">English</string>
 
     <!--    아래부터 번역 필요-->
-    <string name="change_language">언어변경</string>
-    <string name="app_restart_need">언어변경을 위해 커버스타 앱을 재시작 해주세요.</string>
+    <string name="change_language">Change Language</string>
+    <string name="app_restart_need">Change language need to restart CoverStar App.</string>
 
     <string name="ok">확인</string>
     <string name="cancel">취소</string>

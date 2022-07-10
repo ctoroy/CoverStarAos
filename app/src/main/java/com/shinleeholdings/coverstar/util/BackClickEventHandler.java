@@ -20,8 +20,7 @@ public class BackClickEventHandler {
 		if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
 			try {
 				toast.cancel();
-				activity.finishAffinity();
-				Process.killProcess(Process.myPid());
+				Util.appExit(activity);
 			} catch (Exception e) {
 			}
 		}
